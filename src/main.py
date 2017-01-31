@@ -16,8 +16,9 @@ def main(dinto_file):
     logging.info('Finished Loading {}'.format(dinto_file))
 
     for s, p, o in islice(g, 10):
-        print(s, p, o)
+        print(f'Subject: {s}')
+        print(f'Predicate: {p}')
+        print(f'Object: {o}')
 
 if __name__ == '__main__':
     clize.run(main)
-
