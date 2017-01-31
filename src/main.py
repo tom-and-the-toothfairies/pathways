@@ -8,7 +8,8 @@ def main(dinto_file):
 
     """
 
-    owlready.get_ontology(dinto_file)
+    onto = owlready.get_ontology(dinto_file)
+    onto.load()
 
 
 if __name__ == '__main__':
