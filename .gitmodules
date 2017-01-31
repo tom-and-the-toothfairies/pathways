@@ -1,0 +1,3 @@
+[submodule "DINTO"]
+	path = DINTO
+	url = https://github.com/labda/DINTO.git
