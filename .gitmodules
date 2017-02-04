@@ -1,3 +1,6 @@
 [submodule "DINTO"]
 	path = DINTO
 	url = https://github.com/labda/DINTO.git
+[submodule "peos"]
+	path = peos
+	url = https://github.com/tom-and-the-toothfairies/peos
