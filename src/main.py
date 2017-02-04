@@ -1,7 +1,7 @@
 import clize
 import rdflib
 import logging
-from itertools import islice
+import os
 
 
 def load_from_file(dinto_file):
@@ -16,16 +16,15 @@ def load_from_file(dinto_file):
 
 
 def main(dinto_file):
-    """Perform pathway analysis given some Drug Interaction Ontology.
+    """Count the number of triples in the given ontology
 
     dinto_file: path to DINTO ontology OWL file
 
     """
     g = load_from_file(dinto_file)
-    for s, p, o in islice(g, 10):
-        print(f'Subject: {s}')
-        print(f'Predicate: {p}')
-        print(f'Object: {o}')
+
+    print("Ontology {} contains {} triples"
+          .format(os.path.basename(dinto_file), len(g)))
 
 
 if __name__ == '__main__':
