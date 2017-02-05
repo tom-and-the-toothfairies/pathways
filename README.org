@@ -1,1 +1,18 @@
 * Tom and the Toothfairies
+** Installation
+   This project includes a Dockerfile (targeting Ubuntu 16.0.4) for easy installation and testing. Installation instructions for Docker can be found [[https://www.docker.com/][here]].
+   1) Clone the Repo
+    #+BEGIN_SRC bash
+    $ git clone https://github.com/tom-and-the-toothfairies/pathways.git
+    #+END_SRC
+   2) Build with Docker
+    #+BEGIN_SRC bash
+    $ cd pathways
+    $ docker build -t pathways .
+    #+END_SRC
+    NOTE - [[https://github.com/jnoll/peos][peos]] builds on Ubuntu 16.0.4 but emits warnings which can be ignored.
+   3) Run the tests
+    #+BEGIN_SRC bash
+    $ docker run pathways
+    #+END_SRC
+    This will run pmlcheck on a [[https://github.com/jnoll/peos/blob/master/compiler/models/martini.pml][sample pml file]], then load a subset of DINTO and report the number of triples.
