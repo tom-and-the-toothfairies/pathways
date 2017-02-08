@@ -1,11 +1,15 @@
 * Tom and the Toothfairies
 ** Installation
-This project includes a Dockerfile (targeting Ubuntu 16.0.4) for easy installation and testing. Installation instructions for Docker can be found [[https://docs.docker.com/engine/installation/linux/ubuntu/][here]].
+This project includes a Dockerfile (targeting Ubuntu 16.0.4) for easy
+installation and testing. Installation instructions for Docker can be found
+[[https://docs.docker.com/engine/installation/linux/ubuntu/][here]].
 
-To run this without sudo add your user to the docker group as sh
-For docker installations on ubuntu sudo is required to run docker commands
-unless you add your user to the docker group as outlined
-[[http://askubuntu.com/a/477554][here]].
+For docker installations on Ubuntu sudo is required to run docker commands
+unless you add your user to the docker group as outlined [[http://askubuntu.com/a/477554][here]]. When running
+Ubuntu in a VM, misconfigured DNS may cause issues connecting to outside hosts
+in containers. This can be solved by editing
+~/etc/NetworkManager/NetworkManager~ and commenting out the line ~dns=dnsmasq~
+and then running ~sudo restart network-manager~
 
 1) Clone the Repo
    #+BEGIN_SRC bash
