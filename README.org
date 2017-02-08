@@ -49,7 +49,7 @@ $ sudo service docker restart
    NOTE - [[https://github.com/jnoll/peos][peos]] builds on Ubuntu 16.04 but emits warnings which can be ignored.
 3) Run the tests
    #+BEGIN_SRC bash
-   $ docker run pathways
+   $ docker run tomtoothfairies/pathways
    #+END_SRC
    This will run pmlcheck on a [[https://github.com/jnoll/peos/blob/master/compiler/models/martini.pml][sample pml file]], then load a subset of DINTO and
    report the number of triples.
