@@ -1,6 +1,42 @@
 * Tom and the Toothfairies
 ** Installation
-This project includes a Dockerfile (targeting Ubuntu 16.0.4) for easy installation and testing. Installation instructions for Docker can be found [[https://www.docker.com/][here]].
+This project includes a Dockerfile (targeting Ubuntu 16.04) for easy
+installation and testing. Installation instructions for Docker on your platform
+can be found [[https://www.docker.com/products/docker][here]].
+
+For Docker installations on Ubuntu sudo is required to run Docker commands
+unless you add your user to the docker group as outlined [[http://askubuntu.com/a/477554][here]].
+*** The Happy Path
+If you do not wish to build the Docker container yourself you can run it
+directly from the Docker registry. First, install the necessary Docker
+components for your operating system as outlined above.
+
+Then you can run the latest release from [[https://hub.docker.com/r/tomtoothfairies/pathways/][Docker Hub]]
+#+BEGIN_SRC bash
+$ docker pull tomtoothfairies/pathways:latest
+$ docker run tomtoothfairies/pathways
+#+END_SRC
+
+To run a release other than the current you may manually specify the Docker
+image release tag. For example:
+#+BEGIN_SRC bash
+$ docker run tomtoothfairies/pathways:0.0
+#+END_SRC
+
+*** Building Manually
+There are DNS problems when running containers in *Ubuntu* within the *TCD
+network*. This can be resolved while on the TCD network by editing the Docker
+DNS config.
+#+BEGIN_SRC bash
+$ echo "{\"dns\": [\"134.226.251.200\", \"134.226.251.100\"]}" | sudo tee -a /etc/docker/daemon.json
+$ sudo service docker restart
+#+END_SRC
+You should revert these settings when leaving the TCD network by running
+#+BEGIN_SRC bash
+$ sudo rm /etc/docker/daemon.json
+$ sudo service docker restart
+#+END_SRC
+
 1) Clone the Repo
    #+BEGIN_SRC bash
    $ git clone https://github.com/tom-and-the-toothfairies/pathways.git
@@ -8,11 +44,21 @@ This project includes a Dockerfile (targeting Ubuntu 16.0.4) for easy installati
 2) Build with Docker
    #+BEGIN_SRC bash
    $ cd pathways
-   $ docker build -t pathways .
+   $ docker build -t tomtoothfairies/pathways .
    #+END_SRC
-   NOTE - [[https://github.com/jnoll/peos][peos]] builds on Ubuntu 16.0.4 but emits warnings which can be ignored.
+   NOTE - [[https://github.com/jnoll/peos][peos]] builds on Ubuntu 16.04 but emits warnings which can be ignored.
 3) Run the tests
    #+BEGIN_SRC bash
-   $ docker run pathways
+   $ docker run tomtoothfairies/pathways
    #+END_SRC
-   This will run pmlcheck on a [[https://github.com/jnoll/peos/blob/master/compiler/models/martini.pml][sample pml file]], then load a subset of DINTO and report the number of triples.
+   This will run pmlcheck on a [[https://github.com/jnoll/peos/blob/master/compiler/models/martini.pml][sample pml file]], then load a subset of DINTO and
+   report the number of triples.
+
+** Development
+Docker can be used for development as follows:
+#+BEGIN_SRC bash
+$ cd pathways
+$ docker run -v $PWD:/code -it --rm tomtoothfairies/pathways bash
+#+END_SRC
+This will run ~bash~ in a container with the current working directory available
+at ~/code~ in the container
