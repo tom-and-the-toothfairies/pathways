@@ -1,6 +1,12 @@
 * Tom and the Toothfairies
 ** Installation
-This project includes a Dockerfile (targeting Ubuntu 16.0.4) for easy installation and testing. Installation instructions for Docker can be found [[https://www.docker.com/][here]].
+This project includes a Dockerfile (targeting Ubuntu 16.0.4) for easy installation and testing. Installation instructions for Docker can be found [[https://docs.docker.com/engine/installation/linux/ubuntu/][here]].
+
+To run this without sudo add your user to the docker group as sh
+For docker installations on ubuntu sudo is required to run docker commands
+unless you add your user to the docker group as outlined
+[[http://askubuntu.com/a/477554][here]].
+
 1) Clone the Repo
    #+BEGIN_SRC bash
    $ git clone https://github.com/tom-and-the-toothfairies/pathways.git
