@@ -17,11 +17,6 @@ defmodule Panacea.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-  end
-
-  scope "/api", Panacea do
-    pipe_through :api
-
-    post "/pml", PmlController, :upload
+    post "/api/pml", PmlController, :upload
   end
 end

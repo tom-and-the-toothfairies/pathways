@@ -1,4 +1,4 @@
-<form enctype="multipart/form-data" action="/api/pml" method="post">
-  <input type="file" name="pml"/>
-  <input type="submit" name="submit" value="Upload" />
-</form>
+<%= form_for @conn, pml_path(@conn, :upload), [name: :form_params, multipart: true], fn f -> %>
+  <%= file_input f, :file, class: "form-control" %>
+  <%= submit "Submit", class: "btn btn-primary" %>
+<% end %>
