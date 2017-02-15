@@ -15,9 +15,8 @@ RUN apt-get -qq update && apt-get -qq -y install \
     tcl \
     tcl-dev
 
-RUN mkdir -p /opt/pathways
-WORKDIR /opt/pathways
 COPY . /opt/pathways
+WORKDIR /opt/pathways
 
 RUN git submodule update --init --recursive
 RUN ./createvirtualenv.sh
