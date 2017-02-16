@@ -1,5 +1,11 @@
-Nonterminals pml primitive_block primitive_list primitive action_block action_attributes action_attribute.
-Terminals 'process' '{' '}' 'task' 'action' 'branch' 'selection' 'iteration' 'sequence' 'provides' 'requires' 'agent' 'script' 'tool'.
+Nonterminals
+
+pml primitive_block primitive_list primitive action_block action_attributes action_attribute.
+
+Terminals
+
+'process' '{' '}' 'task' 'action' 'branch' 'selection' 'iteration' 'sequence' 'provides' 'requires' 'agent' 'script' 'tool'.
+
 Rootsymbol pml.
 
 pml ->
