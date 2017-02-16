@@ -22,3 +22,7 @@ erl_crash.dump
 # secrets file as long as you replace its contents by environment
 # variables.
 /config/prod.secret.exs
+
+# the generated parser and lexer modules
+/src/pml_lexer.erl
+/src/pml_parser.erl
