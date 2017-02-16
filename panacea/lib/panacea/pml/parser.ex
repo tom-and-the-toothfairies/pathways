@@ -6,7 +6,7 @@ defmodule Panacea.Pml.Parser do
     |> do_parse()
   end
 
-  defp tokens(str) do
+  def tokens(str) do
     :pml_lexer.string(str)
   end
 

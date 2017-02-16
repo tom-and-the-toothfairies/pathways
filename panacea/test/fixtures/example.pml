@@ -1,61 +1,57 @@
-process martini {
-  iteration martini_loop {
-    branch mix_and_pour {
-      sequence mix {
-	action add_ice manual {
-	  requires {"ice"}
-	  requires {"shaker"}
-	  provides {"shaker"}
-	  agent {"bartender"}
-	  script {"add enough ice to shaker so that the gin will just barely cover it."}
-	}
-	action add_vermouth manual {
-	  requires {"vermouth"}
-	  requires {"shaker"}
-	  provides {"shaker"}
-	  agent {"bartender"}
-	  script {"add generous amount of vermouth, swirl in shaker so ice and sides are coated, then discard."}
-	}
-	action add_gin manual {
-	  requires {"gin"}
-	  requires {"shaker"}
-	  provides {"shaker"}
-	  agent {"bartender"}
-	  script {"add appropriate amount of gin (preferably Beefeaters), about two ounces per martini."}
-	}
-	action shake manual {
-	  requires {"shaker"}
-	  provides {"shaker"}
-	  agent {"bartender"}
-	  script {"shake gently until ingredients are well chilled.  The shaking should not be so violent that it breaks chips off the ice; a vigourous swirling motion can be substituted."}
-	}
-      }
+/* Example pml process, 
+specifying the "Graduate Student Development Process" */
 
-      iteration prepare_loop {
-	action wash_olive manual {
-	  requires {"olive"}
-	  provides {"olive"}
-	  agent {"bartender"}
-	  script {"if you are not using olives packed in vermouth, wash one or two olives per martini under tap to remove the brine"}
-	}
-	action skewer_olive manual {
-	  requires {"olive"}
-	  requires {"martini-glass"}
-	  requires {"toothpick"}
-	  provides {"martini-glass"}
-	  agent {"bartender"}
-	  script {"place one or two olives on a toothpick and insert into well chilled martini glass"}
+process example {
+
+  task analyze {
+    iteration {
+      action understand_req executable {
+	requires { "req.html" }
+	agent { "programmer" }
+      }
+      action develop_solution manual {
+	requires { "req.html" }
+	agent { "programmer" }
+      }
+      action analyze_impact manual {
+	requires { "req.html" }
+	agent { "programmer" }
+      }
+    }
+  }
+
+  task develop {
+    iteration {
+      action edit manual {
+	requires { "main.c" }
+	provides { "main.c" }
+	tool { "xedit %s" }
+	agent { "programmer" }
+      }
+      action compile manual {
+	requires { "main.c" }
+	provides { "hello" }
+	tool { "cc %s -o %s" }
+	agent { "programmer" }
+      }
+      action test manual {
+	requires { "hello" }
+	tool { "exec %s" }
+	agent { "programmer" }
+      }
+      branch {
+	action debug manual {
+	  requires { "main.c" }
+	  requires { "hello" }
+	  tool { "xdbx %s" }
+	  agent { "programmer" }
 	}
       }
-    } /* end branch */
-}
-  iteration pour_loop {
-    action pour manual {
-      requires {"martini-glass"}
-      requires {"pitcher"}
-      provides {"martini"}
-      agent {"bartender"}
-      script {"pour an appropriate amount into a prepared martini glass.  Appropriate is enough so that all glasses end up with the same amount."}
+    }
+    action check_in manual {
+      requires { "main.c" }
+      tool { "ci %s" }
+      agent { "programmer" }
     }
   }
 }
