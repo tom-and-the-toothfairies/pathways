@@ -1,10 +1,12 @@
 Nonterminals
 
-pml primitive_block primitive_list primitive action_block action_attributes action_attribute.
+pml primitive_block primitive_list primitive
+action_block action_attributes action_attribute.
 
 Terminals
 
-'process' '{' '}' 'task' 'action' 'branch' 'selection' 'iteration' 'sequence' 'provides' 'requires' 'agent' 'script' 'tool'.
+'process' '{' '}' 'task' 'action' 'branch' 'selection'
+'iteration' 'sequence' 'provides' 'requires' 'agent' 'script' 'tool' 'string'.
 
 Rootsymbol pml.
 
@@ -41,14 +43,14 @@ action_attributes ->
     action_attribute action_attributes : ['$1'|'$2'].
 
 action_attribute ->
-    'requires' '{' '}' : 'requires'.
+    'requires' '{' 'string' '}' : 'requires'.
 action_attribute ->
-    'provides' '{' '}' : 'provides'.
+    'provides' '{' 'string' '}' : 'provides'.
 action_attribute ->
-    'agent' '{' '}'  : 'agent'.
+    'agent' '{' 'string' '}'  : 'agent'.
 action_attribute ->
-    'script' '{' '}'  : 'script'.
+    'script' '{' 'string' '}'  : 'script'.
 action_attribute ->
-    'tool' '{' '}'  : 'tool'.
+    'tool' '{' 'string' '}'  : 'tool'.
 
 Erlang code.

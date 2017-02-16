@@ -8,11 +8,11 @@ defmodule Panacea.Pml.ParserTest do
       process foo {
         task bar {
           action baz {
-            tool {}
-            script {}
-            agent {}
-            requires {}
-            provides {}
+            tool { "drill" }
+            script { "drill a hole" }
+            agent { "driller" }
+            requires { "wall" }
+            provides { "a hole" }
           }
         }
       }

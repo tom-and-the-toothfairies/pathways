@@ -2,6 +2,7 @@ Definitions.
 
 IDENT = [a-zA-z_]+
 WS    = [\s\t\n\r]+
+STRING = ".*"
 ACTION_TYPE  = (manual|executable)
 
 Rules.
@@ -20,6 +21,7 @@ provides                        : {token, {provides, TokenLine}}.
 agent                           : {token, {agent, TokenLine}}.
 script                          : {token, {script, TokenLine}}.
 tool                            : {token, {tool, TokenLine}}.
+{STRING}                        : {token, {string, TokenLine}}.
 {WS}                            : skip_token.
 
 Erlang code.
