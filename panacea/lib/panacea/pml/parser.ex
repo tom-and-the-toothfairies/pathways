@@ -11,12 +11,7 @@ defmodule Panacea.Pml.Parser do
   end
 
   defp do_parse({:ok, tokens, _}) do
-    case :pml_parser.parse(tokens) do
-      {:ok, result} ->
-        {:ok, result}
-      {:error, reason} ->
-        {:error, reason}
-    end
+    :pml_parser.parse(tokens)
   end
   defp do_parse(error_reason) do
     {:error, error_reason}
