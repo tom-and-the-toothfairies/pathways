@@ -4,6 +4,7 @@ IDENT = [a-zA-z_]+
 WS    = [\s\t\n\r]+
 STRING = ".*"
 ACTION_TYPE  = (manual|executable)
+COMMENT = \/\*(.|[\r\n])*\*\/
 
 Rules.
 
@@ -22,6 +23,7 @@ agent                           : {token, {agent, TokenLine}}.
 script                          : {token, {script, TokenLine}}.
 tool                            : {token, {tool, TokenLine}}.
 {STRING}                        : {token, {string, TokenLine}}.
+{COMMENT}                       : skip_token.
 {WS}                            : skip_token.
 
 Erlang code.
