@@ -4,8 +4,7 @@ This project includes a Dockerfile (targeting Ubuntu 16.04) for easy
 installation and testing. Installation instructions for Docker on your platform
 can be found [[https://www.docker.com/products/docker][here]].
 
-For Docker installations on Ubuntu sudo is required to run Docker commands
-unless you add your user to the docker group as outlined [[http://askubuntu.com/a/477554][here]].
+For Docker installations on Ubuntu ~sudo~ is required to run Docker commands.
 *** The Happy Path
 If you do not wish to build the Docker container yourself you can run it
 directly from the Docker registry. First, install the necessary Docker
