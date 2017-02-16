@@ -17,6 +17,9 @@ iteration{WS}{IDENT}?           : {token, {iteration, TokenLine}}.
 sequence{WS}{IDENT}?            : {token, {sequence, TokenLine}}.
 requires                        : {token, {requires, TokenLine}}.
 provides                        : {token, {provides, TokenLine}}.
+agent                           : {token, {agent, TokenLine}}.
+script                          : {token, {script, TokenLine}}.
+tool                            : {token, {tool, TokenLine}}.
 {WS}                            : skip_token.
 
 Erlang code.
