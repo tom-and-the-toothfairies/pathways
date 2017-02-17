@@ -34,6 +34,8 @@ defmodule Panacea.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
-     {:phoenix_integration, "~> 0.2", only: :test}]
+     {:phoenix_integration, "~> 0.2", only: :test},
+     {:junit_formatter, ">= 0.0.0", only: :test}
+   ]
   end
 end
