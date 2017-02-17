@@ -1,17 +1,14 @@
 machine:
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
   services:
     - docker
 
 dependencies:
-  cache_directories:
-    - "~/docker"
   override:
-    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
     - docker build --rm=false -t panacea panacea
-    - mkdir -p ~/docker; docker save panacea > ~/docker/image.tar
 
 test:
   override:
     - mkdir -p $CIRCLE_TEST_REPORTS/exunit
-    - docker run -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports panacea /bin/bash -c "mix test; cp _build/test/lib/panacea/test-junit-report.xml /test-reports"
-
+    - docker run -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports panacea /bin/sh -c "mix test; cp _build/test/lib/panacea/test-junit-report.xml /test-reports"
