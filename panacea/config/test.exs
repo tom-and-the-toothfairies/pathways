@@ -8,3 +8,6 @@ config :panacea, Panacea.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :phoenix_integration,
+  endpoint: Panacea.Endpoint
