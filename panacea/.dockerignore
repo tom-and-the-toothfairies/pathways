@@ -25,3 +25,7 @@ erl_crash.dump
 
 .dockerignore
 Dockerfile
+
+# the generated parser and lexer modules
+/src/pml_lexer.erl
+/src/pml_parser.erl
