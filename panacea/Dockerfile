@@ -23,7 +23,7 @@ ENV LC_ALL en_US.UTF-8
 ENV MIX_ENV prod
 
 RUN mix local.hex --force && mix local.rebar --force
-RUN mix deps.get --only prod && mix compile && npm install
+RUN mix deps.get && mix compile && npm install
 RUN ./node_modules/brunch/bin/brunch build --production && mix phoenix.digest
 
 CMD ["mix", "phoenix.server"]
