@@ -12,5 +12,6 @@ dependencies:
 
 test:
   override:
-    - docker run -e "MIX_ENV=test" panacea mix test
+    - mkdir -p $CIRCLE_TEST_REPORTS/exunit
+    - docker run -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports panacea /bin/bash -c "mix test; cp _build/test/lib/panacea/test-junit-report.xml /test-reports"
 
