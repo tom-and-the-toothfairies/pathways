@@ -6,7 +6,7 @@ defmodule Panacea.PmlControllerTest do
     # TODO flash message on page (instead of error)
     test "without file", %{conn: conn} do
       assert_raise Phoenix.ActionClauseError, fn ->
-        conn = post conn, "/api/pml"
+        post conn, "/api/pml"
       end
     end
 
