@@ -5,7 +5,7 @@ import os
 __all__ = ['dinto']
 
 ONTOLOGY_FILE = (os.environ.get('ASCLEPIUS_ONTOLOGY_FILE') or
-                 "../DINTO/DINTO 1/DINTO_1.owl")
+                 "DINTO/DINTO 1/DINTO_1.owl")
 
 class Dinto():
     def __init__(self, owl_filepath=ONTOLOGY_FILE):

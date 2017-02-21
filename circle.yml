@@ -4,11 +4,13 @@ machine:
   services:
     - docker
 
-dependencies:
+compile:
   override:
     - docker build --rm=false -t panacea panacea
+    - docker build --rm=false -t pathways asclepius
 
 test:
-  override:
+  pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/exunit
+  override:
     - docker run -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports panacea /bin/sh -c "mix test; cp _build/test/lib/panacea/test-junit-report.xml /test-reports"

@@ -1,6 +1,0 @@
-clize==3.1.0
-isodate==0.5.4
-pyparsing==2.1.10
-rdflib==4.2.2
-sigtools==2.0.1
-six==1.10.0
