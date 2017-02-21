@@ -7,7 +7,7 @@ machine:
 compile:
   override:
     - docker build --rm=false -t panacea panacea
-    - docker build --rm=false -t pathways asclepius
+    - docker build --rm=false -t asclepius asclepius
 
 test:
   pre:

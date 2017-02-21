@@ -48,7 +48,7 @@ $ sudo service docker restart
 2) Build with Docker
    #+BEGIN_SRC bash
    $ cd pathways/asclepius
-   $ docker build -t tomtoothfairies/pathways .
+   $ docker build -t tomtoothfairies/asclepius .
    $ cd ../panacea
    $ docker build -t tomtoothfairies/panacea .
    #+END_SRC
