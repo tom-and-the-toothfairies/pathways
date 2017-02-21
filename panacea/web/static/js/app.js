@@ -3,7 +3,11 @@ import "phoenix_html"
 const file_form = document.getElementById('file-form')
 const file_input = document.getElementById('file-input')
 const submit_button = document.getElementById('file-submit')
-const parse_result_div = document.getElementById('parse-result')
+
+const success_result_message = document.getElementById('success-result-message')
+const error_result_message = document.getElementById('error-result-message')
+const success_panel = document.getElementById('success-panel')
+const error_panel = document.getElementById('error-panel')
 
 submit_button.addEventListener('click', (e) => {
   e.preventDefault()
@@ -31,8 +35,12 @@ const submit_file = () => {
 
 const render_file_response = (data) => {
   if (data.status == "error"){
-    parse_result_div.innerHTML = `Error parsing pml: ${data.message}`
+    error_result_message.innerHTML = data.message
+    error_panel.style.display = "block";
+    success_panel.style.display = "none";
   } else {
-    parse_result_div.innerHTML = `We have found the following drugs: ${JSON.stringify(data.drugs)}`
+    success_result_message.innerHTML = JSON.stringify(data.drugs)
+    error_panel.style.display = "none";
+    success_panel.style.display = "block";
   }
 }

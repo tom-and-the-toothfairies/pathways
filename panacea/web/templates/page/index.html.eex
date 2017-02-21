@@ -1,5 +1,17 @@
 <%= form_tag "/api/noop", method: :post, id: "file-form" do %>
-  <input type="file" id="file-input" class="form-control">
-  <input type="submit" id="file-submit" class="btn btn-success">
+  <div class="form-group">
+    <label for="file-input">PML file input</label>
+    <input type="file" id="file-input" class="form-control">
+  </div>
+  <div class="form-group">
+    <input type="submit" id="file-submit" class="btn btn-success btn-lg">
+  </div>
 <% end %>
-<div id="parse-result"><div>
+<div class="panel panel-success panel-hidden" id="success-panel">
+  <div class="panel-heading">Drugs Found</div>
+  <div class="panel-body" id="success-result-message"></div>
+</div>
+<div class="panel panel-danger panel-hidden" id="error-panel">
+  <div class="panel-heading">PML Parsing Error</div>
+  <div class="panel-body" id="error-result-message"></div>
+</div>
