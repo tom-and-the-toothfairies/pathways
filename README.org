@@ -1,26 +1,30 @@
 * Tom and the Toothfairies
-[[https://github.com/syl20bnr/spacemacs][file:https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg]] [[https://circleci.com/gh/tom-and-the-toothfairies/pathways][https://img.shields.io/circleci/project/github/tom-and-the-toothfairies/pathways.svg]]
+[[https://github.com/syl20bnr/spacemacs][https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg]] [[https://circleci.com/gh/tom-and-the-toothfairies/pathways][https://img.shields.io/circleci/project/github/tom-and-the-toothfairies/pathways.svg]]
 ** Installation
-This project includes a Dockerfile (targeting Ubuntu 16.04) for easy
-installation and testing. Installation instructions for Docker on your platform
-can be found [[https://www.docker.com/products/docker][here]].
+This project includes a Docker Compose file for easy installation and testing.
+Installation instructions for Docker on your platform can be found [[https://www.docker.com/products/docker][here]].
 
 For Docker installations on Ubuntu ~sudo~ is required to run Docker commands.
 *** The Happy Path
-If you do not wish to build the Docker container yourself you can run it
+If you do not wish to build the Docker containers yourself you can run it
 directly from the Docker registry. First, install the necessary Docker
 components for your operating system as outlined above.
 
 Then you can run the latest release from [[https://hub.docker.com/r/tomtoothfairies/pathways/][Docker Hub]]
 #+BEGIN_SRC bash
-$ docker pull tomtoothfairies/pathways:latest
-$ docker run tomtoothfairies/pathways
+$ docker-compose up -d
+#+END_SRC
+You will then be able to access the web interface at ~http://localhost:4000~
+You can stop the Docker containers with:
+#+BEGIN_SRC bash
+$ docker-compose down
 #+END_SRC
 
-To run a release other than the current you may manually specify the Docker
-image release tag. For example:
+To run a release other than the current you may manually checkout the release
+tag and run ~docker-compose~
 #+BEGIN_SRC bash
-$ docker run tomtoothfairies/pathways:0.0
+$ git checkout 0.2
+$ docker-compose up -d
 #+END_SRC
 
 *** Building Manually
@@ -43,16 +47,15 @@ $ sudo service docker restart
    #+END_SRC
 2) Build with Docker
    #+BEGIN_SRC bash
-   $ cd pathways
+   $ cd pathways/asclepius
    $ docker build -t tomtoothfairies/pathways .
+   $ cd ../panacea
+   $ docker build -t tomtoothfairies/panacea .
    #+END_SRC
-   NOTE - [[https://github.com/jnoll/peos][peos]] builds on Ubuntu 16.04 but emits warnings which can be ignored.
 3) Run the tests
    #+BEGIN_SRC bash
-   $ docker run tomtoothfairies/pathways
+   $ docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test
    #+END_SRC
-   This will run pmlcheck on a [[https://github.com/jnoll/peos/blob/master/compiler/models/martini.pml][sample pml file]], then load a subset of DINTO and
-   report the number of triples.
 
 ** Development
 Docker can be used for development as follows:
