@@ -13,5 +13,9 @@ def ddis():
     return jsonify(dinto.all_ddis)
 
 
+@app.route("/ping")
+def ping():
+    return '', 204
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
