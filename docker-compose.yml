@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  asclepius:
+    image: tomtoothfairies/pathways:latest
+
+  panacea:
+    image: tomtoothfairies/panacea:latest
+    ports:
+      - '4000:4000'
