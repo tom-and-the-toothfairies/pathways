@@ -17,7 +17,15 @@ defmodule Panacea.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Panacea, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext]]
+     applications: [
+       :phoenix,
+       :phoenix_pubsub,
+       :phoenix_html,
+       :cowboy,
+       :logger,
+       :httpoison,
+       :gettext]
+    ]
   end
 
   # Specifies which paths to compile per environment.
@@ -31,9 +39,10 @@ defmodule Panacea.Mixfile do
     [{:phoenix, "~> 1.2.1"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_html, "~> 2.6"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
+     {:httpoison, "~> 0.10.0"},
+     {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:phoenix_integration, "~> 0.2", only: :test},
      {:junit_formatter, ">= 0.0.0", only: :test}
    ]
