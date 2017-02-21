@@ -11,14 +11,12 @@ RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
 # Cache DINTO
-RUN git clone https://github.com/labda/DINTO.git
+RUN git clone https://github.com/labda/DINTO.git && cd DINTO && git checkout 68a29b5
 
 # Cache python deps
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-
-RUN cd DINTO && git checkout 68a29b568d6690fd04284feb06d152ca6e1e2e46
 
 CMD ["flask", "run", "--host", "0.0.0.0"]
