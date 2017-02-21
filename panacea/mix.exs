@@ -43,7 +43,6 @@ defmodule Panacea.Mixfile do
      {:cowboy, "~> 1.0"},
      {:httpoison, "~> 0.10.0"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:phoenix_integration, "~> 0.2", only: :test},
      {:junit_formatter, ">= 0.0.0", only: :test}
    ]
   end

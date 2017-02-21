@@ -1,4 +1,5 @@
-<%= form_for @conn, pml_path(@conn, :upload), [as: :form_params, multipart: true], fn f -> %>
-  <%= file_input f, :file, class: "form-control" %>
-  <%= submit "Submit", class: "btn btn-primary" %>
+<%= form_tag "/api/noop", method: :post, id: "file-form" do %>
+  <input type="file" id="file-input" class="form-control">
+  <input type="submit" id="file-submit" class="btn btn-success">
 <% end %>
+<div id="parse-result"><div>
