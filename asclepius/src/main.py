@@ -13,6 +13,9 @@ def ddis():
     return jsonify(dinto.all_ddis)
 
 
+@app.post("/ddi")
+
+
 @app.route("/ping")
 def ping():
     return '', 204

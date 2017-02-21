@@ -1,5 +1,4 @@
 from rdflib.plugins.sparql import prepareQuery
-import functools
 import re
 
 __all__ = ['all_drugs', 'all_ddis', 'ddi_from_drugs']
@@ -48,7 +47,7 @@ def ddi_from_drugs(drug_a, drug_b):
 
     q = f'''
     {PREFIXES}
-    SELECT ?ddi
+    SELECT ?ddi ?label
     WHERE {{
         ?ddi rdfs:label ?label.
         ?ddi rdfs:subClassOf {DDI} .
