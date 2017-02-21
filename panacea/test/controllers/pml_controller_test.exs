@@ -33,7 +33,7 @@ defmodule Panacea.PmlControllerTest do
 
       conn = post conn, "/api/pml", %{ file: upload }
 
-      assert response(conn, 200) =~ ~s("drugs":["chebi:1234","dinto:1234"])
+      assert response(conn, 200) =~ ~s("drugs":["chebi:1234","dinto:DB1234"])
     end
   end
 end

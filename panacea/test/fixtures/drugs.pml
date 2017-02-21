@@ -11,7 +11,7 @@ process foo {
       tool { "pills" }
       script { "eat the pills" }
       agent { "patient" }
-      requires { "dinto:1234" }
+      requires { "dinto:DB1234" }
       provides { "a cured patient" }
     }
   }
