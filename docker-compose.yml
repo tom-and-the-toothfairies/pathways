@@ -2,7 +2,7 @@ version: '2'
 
 services:
   asclepius:
-    image: tomtoothfairies/pathways:latest
+    image: tomtoothfairies/asclepius:latest
 
   panacea:
     image: tomtoothfairies/panacea:latest

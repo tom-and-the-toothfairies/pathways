@@ -1,21 +1,46 @@
-// Brunch automatically concatenates all files in your
-// watched paths. Those paths can be configured at
-// config.paths.watched in "brunch-config.js".
-//
-// However, those files will only be executed if
-// explicitly imported. The only exception are files
-// in vendor, which are never wrapped in imports and
-// therefore are always executed.
-
-// Import dependencies
-//
-// If you no longer want to use a dependency, remember
-// to also remove its path from "config.paths.watched".
 import "phoenix_html"
 
-// Import local files
-//
-// Local files can be imported directly using relative
-// paths "./socket" or full ones "web/static/js/socket".
+const file_form = document.getElementById('file-form')
+const file_input = document.getElementById('file-input')
+const submit_button = document.getElementById('file-submit')
 
-// import socket from "./socket"
+const success_result_message = document.getElementById('success-result-message')
+const error_result_message = document.getElementById('error-result-message')
+const success_panel = document.getElementById('success-panel')
+const error_panel = document.getElementById('error-panel')
+
+submit_button.addEventListener('click', (e) => {
+  e.preventDefault()
+  submit_file()
+})
+
+const submit_file = () => {
+  let file = file_input.files[0]
+
+  var formData = new FormData(file_form)
+
+  formData.append("file", file)
+
+  var request = new XMLHttpRequest()
+  request.open("POST", `/api/pml`, true)
+  request.onreadystatechange = () => {
+    if (request.readyState == 4 && request.status == 200) {
+      var decoded_response = JSON.parse(request.response)
+      render_file_response(decoded_response)
+    }
+  }
+  request.send(formData)
+  file_form.reset()
+}
+
+const render_file_response = (data) => {
+  if (data.status == "error"){
+    error_result_message.innerHTML = data.message
+    error_panel.style.display = "block";
+    success_panel.style.display = "none";
+  } else {
+    success_result_message.innerHTML = JSON.stringify(data.drugs)
+    error_panel.style.display = "none";
+    success_panel.style.display = "block";
+  }
+}

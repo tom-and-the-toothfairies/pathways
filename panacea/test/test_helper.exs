@@ -5,6 +5,3 @@ if System.get_env("CI") do
 else
   ExUnit.start formatters: formatters
 end
-
-ExUnit.start
-

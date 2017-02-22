@@ -1,6 +1,6 @@
 Definitions.
 
-DRUG  = "(chebi|dinto):[0-9]+"
+DRUG  = "(chebi:|dinto:DB)[0-9]+"
 IDENT = [a-zA-Z0-9_]+
 WS    = [\s\t\n\r]+
 STRING = "[^"]*"
