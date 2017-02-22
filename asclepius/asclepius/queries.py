@@ -42,14 +42,16 @@ def _valid_drug(drug_identifier):
   pattern = re.compile('(dinto:DB)|(chebi:)\d+')
   return pattern.match(drug_identifier) is not None
 
-def ddi_from_drugs(*drugs):
-    if len(drugs) != 2:
-        raise NotImplementedError("We can only do 2 drugs at the moment")
+def ddi_from_drugs(drugs):
+    if len(drugs) < 2:
+        raise ValueError("Need at least 2 drugs to find interactions")
 
     if not all(_valid_drug(drug) for drug in drugs):
         raise ValueError("Drugs must be specified as chebi:123 or dinto:DB123")
 
-    drug_a, drug_b = drugs
+
+    drug_search_space = ', '.join(drugs)
+
     q = f'''
     {PREFIXES}
     SELECT ?ddi ?label
@@ -63,15 +65,13 @@ def ddi_from_drugs(*drugs):
         ?restrictions rdf:first ?drug1Restriction .
         ?restrictions rdf:rest  ?tail .
 
-        ?tail rdf:first ?drug2Restriction
+        ?tail rdf:first ?drug2Restriction .
 
-        {{
-            ?drug1Restriction owl:someValuesFrom {drug_a} .
-            ?drug2Restriction owl:someValuesFrom {drug_b}
-        }} UNION {{
-            ?drug1Restriction owl:someValuesFrom {drug_b} .
-            ?drug2Restriction owl:someValuesFrom {drug_a}
-        }}
+        ?drug1Restriction owl:someValuesFrom ?drug_a .
+        ?drug2Restriction owl:someValuesFrom ?drug_b .
+
+        FILTER (?drug_a in ({drug_search_space}) &&
+                ?drug_b in ({drug_search_space})    )
 
     }}'''
     return prepareQuery(q)

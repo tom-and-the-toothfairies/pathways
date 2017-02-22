@@ -56,8 +56,8 @@ def ddis():
     drugs = params['drugs']
 
     try:
-        dinto_res = dinto.ddi_from_drugs(*drugs)
-    except (ValueError, NotImplementedError) as e:
+        dinto_res = dinto.ddi_from_drugs(sorted(drugs))
+    except ValueError as e:
         raise InvalidUsage(str(e))
 
     res = [{'uri': uri, 'label': label} for (uri, label) in dinto_res]

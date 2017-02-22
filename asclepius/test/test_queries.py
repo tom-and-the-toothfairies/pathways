@@ -25,10 +25,10 @@ def test_all_drugs_compiles():
 
 
 def test_ddi_from_drugs_compiles_with_correct_drug_identifiers():
-    assert type(ddi_from_drugs('dinto:DB123', 'chebi:123')) == Query
+    assert type(ddi_from_drugs(['dinto:DB123', 'chebi:123'])) == Query
 
 
 def test_ddi_from_drugs_raises_with_incorrect_drug_identifiers():
     with pytest.raises(ValueError):
-        ddi_from_drugs('dinto:123', 'chebi:123')
-        ddi_from_drugs('garbage', 'rubbish')
+        ddi_from_drugs(['dinto:123', 'chebi:123'])
+        ddi_from_drugs(['garbage', 'rubbish'])

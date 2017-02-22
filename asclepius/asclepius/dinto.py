@@ -28,8 +28,8 @@ class Dinto():
         return self._listify(res)
 
     @functools.lru_cache()
-    def ddi_from_drugs(self, *drugs):
-        res = self.graph.query(queries.ddi_from_drugs(*drugs))
+    def ddi_from_drugs(self, drugs):
+        res = self.graph.query(queries.ddi_from_drugs(drugs))
         return self._listify(res)
 
 
