@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from dinto import dinto
+
 app = Flask(__name__)
 
 
@@ -19,6 +20,13 @@ class InvalidUsage(Exception):
         return rv
 
 
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
+
 @app.route("/drugs")
 def drugs():
     return jsonify([x[0] for x in dinto.all_drugs()])
@@ -32,10 +40,14 @@ def all_ddis():
 @app.route('/ddis', methods=['POST'])
 def ddis():
     params = request.get_json()
+
+    if params is None or 'drugs' not in params or len(params['drugs']) < 2:
+        raise InvalidUsage("Expecting {'drugs': [...]} with at least two drugs")
+
     drugs = params['drugs']
 
     try:
-        dinto_res = dinto.ddis(*drugs)
+        dinto_res = dinto.ddi_from_drugs(*drugs)
     except ValueError as e:
         raise InvalidUsage(str(e))
 
