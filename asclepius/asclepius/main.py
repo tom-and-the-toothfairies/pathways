@@ -27,18 +27,27 @@ def handle_invalid_usage(error):
     return response
 
 
-@app.route("/drugs")
+@app.route("/all_drugs", methods=['GET'])
 def drugs():
+    """Return a list of all drugs listed in DINTO"""
     return jsonify([x[0] for x in dinto.all_drugs()])
 
 
-@app.route("/all_ddis")
+@app.route("/all_ddis", methods=['GET'])
 def all_ddis():
+    """Return a list of all drug-drug interactions listed identified in DINTO"""
     return jsonify([x[0] for x in dinto.all_ddis()])
 
 
 @app.route('/ddis', methods=['POST'])
 def ddis():
+    """Return all of the Drug-Drug interactions involving the given list of (at least 2) drugs
+
+    post parameters:
+      drugs: [<drug_a>, <drug_b>, ... ]]
+
+    Drugs are identified as either 'dinto:DB123' or 'chebi:123'"""
+
     params = request.get_json()
 
     if params is None or 'drugs' not in params or len(params['drugs']) < 2:
