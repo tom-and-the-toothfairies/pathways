@@ -18,10 +18,10 @@ DDI = 'dinto:00010'
 def all_drugs():
     q = f'''
     {PREFIXES}
-    SELECT ?l
+    SELECT ?drug ?label
     WHERE {{
         ?drug rdfs:subClassOf {PHARMACOLOGICAL_ENTITY}.
-        ?drug rdfs:label ?l
+        ?drug rdfs:label ?label
     }}
     '''
     return prepareQuery(q)
@@ -29,10 +29,10 @@ def all_drugs():
 def all_ddis():
     q = f'''
     {PREFIXES}
-    SELECT ?l
+    SELECT ?interaction ?label
     WHERE {{
         ?interaction rdfs:subClassOf {DDI}.
-        ?interaction rdfs:label ?l
+        ?interaction rdfs:label ?label
     }}
     '''
     return prepareQuery(q)

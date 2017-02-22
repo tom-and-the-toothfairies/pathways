@@ -27,16 +27,20 @@ def handle_invalid_usage(error):
     return response
 
 
+def to_labelled(query_result):
+    return [{'uri': uri, 'label': label} for (uri, label) in query_result]
+
+
 @app.route("/all_drugs", methods=['GET'])
 def drugs():
     """Return a list of all drugs listed in DINTO"""
-    return jsonify([x[0] for x in dinto.all_drugs()])
+    return jsonify(to_labelled(dinto.all_drugs()))
 
 
 @app.route("/all_ddis", methods=['GET'])
 def all_ddis():
     """Return a list of all drug-drug interactions listed identified in DINTO"""
-    return jsonify([x[0] for x in dinto.all_ddis()])
+    return jsonify(to_labelled(dinto.all_ddis()))
 
 
 @app.route('/ddis', methods=['POST'])
@@ -60,9 +64,7 @@ def ddis():
     except ValueError as e:
         raise InvalidUsage(str(e))
 
-    res = [{'uri': uri, 'label': label} for (uri, label) in dinto_res]
-
-    return jsonify(res)
+    return jsonify(to_labelled(dinto_res))
 
 
 @app.route("/ping")
