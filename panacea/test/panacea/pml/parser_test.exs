@@ -3,7 +3,7 @@ defmodule Panacea.Pml.ParserTest do
   alias Panacea.Pml.Parser
 
   @root_dir File.cwd!
-  @fixtures_dir Path.join(~w(#{@root_dir} test fixtures))
+  @fixtures_dir Path.join(~w(#{@root_dir} test fixtures jnolls_pml))
 
   describe "parse/1" do
     test "it parses correct pml" do
@@ -57,14 +57,14 @@ defmodule Panacea.Pml.ParserTest do
               tool { "pills" }
               script { "eat the pills" }
               agent { "patient" }
-              requires { "dinto:1234" }
+              requires { "dinto:DB1234" }
               provides { "a cured patient" }
             }
           }
         }
       """
 
-      assert Parser.parse(pml) == {:ok, ["chebi:1234","dinto:1234"]}
+      assert Parser.parse(pml) == {:ok, ["chebi:1234","dinto:DB1234"]}
     end
   end
 end
