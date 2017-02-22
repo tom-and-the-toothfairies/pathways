@@ -38,13 +38,18 @@ def all_ddis():
     return prepareQuery(q)
 
 
-_valid_drug = re.compile('(dinto:DB\d+)|(chebi:\d+)')
+def _valid_drug(drug_identifier):
+  pattern = re.compile('(dinto:DB)|(chebi:)\d+')
+  return pattern.match(drug_identifier) is not None
 
-def ddi_from_drugs(drug_a, drug_b):
-    if not all(_valid_drug.match(arg) is not None
-               for arg in (drug_a, drug_b)):
+def ddi_from_drugs(*drugs):
+    if len(drugs) != 2:
+        raise NotImplementedError("We can only do 2 drugs at the moment")
+
+    if not all(_valid_drug(drug) for drug in drugs):
         raise ValueError("Drugs must be specified as chebi:123 or dinto:DB123")
 
+    drug_a, drug_b = drugs
     q = f'''
     {PREFIXES}
     SELECT ?ddi ?label

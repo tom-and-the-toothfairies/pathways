@@ -21,12 +21,12 @@ class InvalidUsage(Exception):
 
 @app.route("/drugs")
 def drugs():
-    return jsonify([x[0]] for x in dinto.all_drugs())
+    return jsonify([[x[0]] for x in dinto.all_drugs()])
 
 
 @app.route("/all_ddis")
 def all_ddis():
-    return jsonify(x[0] for x in dinto.all_ddis())
+    return jsonify([x[0] for x in dinto.all_ddis()])
 
 
 @app.route('/ddis', methods=['POST'])
