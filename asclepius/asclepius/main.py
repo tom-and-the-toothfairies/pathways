@@ -21,7 +21,7 @@ class InvalidUsage(Exception):
 
 @app.route("/drugs")
 def drugs():
-    return jsonify([[x[0]] for x in dinto.all_drugs()])
+    return jsonify([x[0] for x in dinto.all_drugs()])
 
 
 @app.route("/all_ddis")
