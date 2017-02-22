@@ -1,3 +1,6 @@
+import pytest
+from rdflib.plugins.sparql.sparql import Query
+
 from asclepius.queries import (
         _valid_drug,
         all_drugs,
@@ -5,7 +8,6 @@ from asclepius.queries import (
         ddi_from_drugs,
     )
 
-from rdflib.plugins.sparql.sparql import Query
 
 def test_valid_drug():
     assert _valid_drug('chebi:123')
@@ -14,7 +16,19 @@ def test_valid_drug():
     assert not _valid_drug('chebi:DB123')
 
 
-def test_they_all_compile():
+def test_all_ddis_compiles():
     assert type(all_ddis()) == Query
+
+
+def test_all_drugs_compiles():
     assert type(all_drugs()) == Query
+
+
+def test_ddi_from_drugs_compiles_with_correct_drug_identifiers():
     assert type(ddi_from_drugs('dinto:DB123', 'chebi:123')) == Query
+
+
+def test_ddi_from_drugs_raises_with_incorrect_drug_identifiers():
+    with pytest.raises(ValueError):
+        ddi_from_drugs('dinto:123', 'chebi:123')
+        ddi_from_drugs('garbage', 'rubbish')
