@@ -7,10 +7,12 @@ machine:
 compile:
   override:
     - docker build --rm=false -t panacea panacea
-    - docker build --rm=false -t pathways asclepius
+    - docker build --rm=false -t asclepius asclepius
 
 test:
   pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/exunit
+    - mkdir -p $CIRCLE_TEST_REPORTS/pytest
   override:
     - docker run -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports panacea /bin/sh -c "mix test; cp _build/test/lib/panacea/test-junit-report.xml /test-reports"
+    - docker run -v $CIRCLE_TEST_REPORTS/pytest:/test-reports asclepius pytest --junitxml=/test-reports/test-junit-report.xml
