@@ -12,5 +12,7 @@ compile:
 test:
   pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/exunit
+    - mkdir -p $CIRCLE_TEST_REPORTS/pytest
   override:
     - docker run -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports panacea mix test
+    - docker run -v $CIRCLE_TEST_REPORTS/pytest:/test-reports asclepius pytest --junitxml=/test-reports/test-junit-report.xml

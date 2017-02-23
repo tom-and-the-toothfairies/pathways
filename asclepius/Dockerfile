@@ -3,7 +3,9 @@ MAINTAINER Eoin Houlihan <ehoulih@tcd.ie>
 
 # Set exposed ports
 EXPOSE 5000
-ENV FLASK_APP=src/main.py
+
+ENV PYTHONPATH=asclepius
+ENV FLASK_APP=asclepius/main.py
 
 RUN apk add --update git
 
