@@ -60,7 +60,7 @@ def ddis():
     drugs = params['drugs']
 
     try:
-        dinto_res = dinto.ddi_from_drugs(sorted(drugs))
+        dinto_res = dinto.ddi_from_drugs(frozenset(drugs))
     except ValueError as e:
         raise InvalidUsage(str(e))
 
