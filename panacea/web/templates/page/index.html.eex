@@ -12,6 +12,6 @@
   <div class="panel-body" id="success-result-message"></div>
 </div>
 <div class="panel panel-danger panel-hidden" id="error-panel">
-  <div class="panel-heading">PML Parsing Error</div>
+  <div class="panel-heading">PML Error</div>
   <div class="panel-body" id="error-result-message"></div>
 </div>

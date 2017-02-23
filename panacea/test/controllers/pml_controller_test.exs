@@ -26,6 +26,16 @@ defmodule Panacea.PmlControllerTest do
       assert response(conn, 200) =~ ~s("status":"error")
     end
 
+    test "returns an error for incorrect filetype", %{conn: conn} do
+      filename = "example.png"
+      file_path = Path.join(@fixtures_dir, filename)
+      upload = %Plug.Upload{path: file_path, filename: filename}
+
+      conn = post conn, "/api/pml", %{ file: upload }
+
+      assert response(conn, 200) =~ ~s("status":"error")
+    end
+
     test "identifies the drugs in correct pml", %{conn: conn} do
       filename = "drugs.pml"
       file_path = Path.join(@fixtures_dir, filename)
