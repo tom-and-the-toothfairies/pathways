@@ -1,46 +1,45 @@
-import "phoenix_html"
+import "babel-polyfill";
+import "phoenix_html";
 
-const file_form = document.getElementById('file-form')
-const file_input = document.getElementById('file-input')
-const submit_button = document.getElementById('file-submit')
+document.getElementById('file-form').addEventListener('submit', e => {
+  e.preventDefault();
+  submitFile.bind(e.target)();
+});
 
-const success_result_message = document.getElementById('success-result-message')
-const error_result_message = document.getElementById('error-result-message')
-const success_panel = document.getElementById('success-panel')
-const error_panel = document.getElementById('error-panel')
+async function submitFile() {
+  try {
+    const response = await fetch(this.action, {
+      method: 'POST',
+      body: new FormData(this),
+      credentials: 'same-origin'
+    });
 
-submit_button.addEventListener('click', (e) => {
-  e.preventDefault()
-  submit_file()
-})
-
-const submit_file = () => {
-  let file = file_input.files[0]
-
-  var formData = new FormData(file_form)
-
-  formData.append("file", file)
-
-  var request = new XMLHttpRequest()
-  request.open("POST", `/api/pml`, true)
-  request.onreadystatechange = () => {
-    if (request.readyState == 4 && request.status == 200) {
-      var decoded_response = JSON.parse(request.response)
-      render_file_response(decoded_response)
+    if (response.ok) {
+      renderFileResponse(await response.json());
+      this.reset();
+    } else {
+      // TODO: When API stops sending 200s change this to do the 'error' bit below
+      console.log('Request failed');
     }
+  } catch (err) {
+    console.log(err);
   }
-  request.send(formData)
-  file_form.reset()
 }
 
-const render_file_response = (data) => {
-  if (data.status == "error"){
-    error_result_message.innerHTML = data.message
-    error_panel.style.display = "block";
-    success_panel.style.display = "none";
+const renderFileResponse = data => {
+  const successResultMessage = document.getElementById('success-result-message');
+  const errorResultMessage = document.getElementById('error-result-message');
+  const successPanel = document.getElementById('success-panel');
+  const errorPanel = document.getElementById('error-panel');
+
+  if (data.status === 'error') {
+      // TODO: When API stops sending 200s change this
+    errorResultMessage.innerHTML = data.message
+    errorPanel.style.display = 'block';
+    successPanel.style.display = 'none';
   } else {
-    success_result_message.innerHTML = JSON.stringify(data.drugs)
-    error_panel.style.display = "none";
-    success_panel.style.display = "block";
+    successResultMessage.innerHTML = JSON.stringify(data.drugs)
+    errorPanel.style.display = 'none';
+    successPanel.style.display = 'block';
   }
 }
