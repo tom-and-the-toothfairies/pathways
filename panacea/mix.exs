@@ -24,6 +24,7 @@ defmodule Panacea.Mixfile do
        :cowboy,
        :logger,
        :httpoison,
+       :poison,
        :gettext]
     ]
   end
@@ -42,6 +43,7 @@ defmodule Panacea.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:httpoison, "~> 0.10.0"},
+     {:poison, "~> 2.0"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:junit_formatter, ">= 0.0.0", only: :test}
    ]

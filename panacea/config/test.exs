@@ -11,3 +11,6 @@ config :junit_formatter,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :panacea, :asclepius,
+  api: Panacea.Asclepius.Remote.Mock

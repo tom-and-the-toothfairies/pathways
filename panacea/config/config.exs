@@ -19,8 +19,8 @@ config :logger, :console,
   metadata: [:request_id]
 
 config :panacea, :asclepius,
-  host: "asclepius",
-  port: 5000
+  uri: URI.parse("http://asclepius:5000"),
+  api: Panacea.Asclepius.Remote.HTTP
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

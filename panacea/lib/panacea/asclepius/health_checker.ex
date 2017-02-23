@@ -5,7 +5,6 @@ defmodule Panacea.Asclepius.HealthChecker do
 
   @name __MODULE__
   @check_interval 5000
-  @options [recv_timeout: 50]
 
   def start_link do
     GenServer.start_link(__MODULE__, [], name: @name)
@@ -13,10 +12,10 @@ defmodule Panacea.Asclepius.HealthChecker do
 
   def init(_) do
     schedule_check()
-    {:ok, false}
+    {:ok, :no_response}
   end
 
-  def handle_info(:check_health, true), do: {:noreply, true}
+  def handle_info(:check_health, :ok), do: {:noreply, :ok}
   def handle_info(:check_health, _) do
     health = check_health()
     update_readiness(health)
@@ -26,23 +25,15 @@ defmodule Panacea.Asclepius.HealthChecker do
 
   defp check_health() do
     Logger.info("Pinging Asclepius")
-    case HTTPoison.get(asclepius_uri(), @options) do
-      {:ok, _} ->
-        Logger.info("Asclepius is up")
-        true
-      _ ->
-        Logger.info("Asclepius is down")
-        false
-    end
+    {health, _} = Asclepius.Remote.ping()
+    health
   end
 
-  defp asclepius_uri do
-    [host: host, port: port] = Application.get_env(:panacea, :asclepius)
-    "http://#{host}:#{port}/ping"
+  defp update_readiness(:ok) do
+    Logger.info("Asclepius is ready.")
+    Asclepius.set_readiness(true)
   end
-
-  defp update_readiness(true), do: Asclepius.set_readiness(true)
-  defp update_readiness(_), do: nil
+  defp update_readiness(_), do: Logger.info("Asclepius is not responding.")
 
   defp schedule_check do
     Process.send_after(self(), :check_health, @check_interval)
