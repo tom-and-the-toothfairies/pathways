@@ -1,10 +1,11 @@
-<%= form_tag "/api/pml", method: :post, id: "file-form" do %>
+<%= form_for @conn, pml_path(@conn, :upload), [as: :upload, multipart: true, id: "file-form"], fn f -> %>
   <div class="form-group">
-    <label for="file-input">PML file input</label>
-    <input name="file" type="file" id="file-input" class="form-control" required>
+    <label>
+      PML file input <%= file_input f, :file, class: "form-control" %>
+    </label>
   </div>
   <div class="form-group">
-    <input type="submit" class="btn btn-success btn-lg">
+    <%= submit "Submit", class: "btn btn-success btn-lg" %>
   </div>
 <% end %>
 <div class="panel panel-success panel-hidden" id="success-panel">

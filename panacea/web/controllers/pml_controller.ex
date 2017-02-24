@@ -1,7 +1,7 @@
 defmodule Panacea.PmlController do
   use Panacea.Web, :controller
 
-  def upload(conn, %{"file" => %Plug.Upload{path: path}}) do
+  def upload(conn, %{"upload" => %{"file" => %Plug.Upload{path: path}}}) do
     path
     |> File.read
     |> validate
@@ -13,7 +13,7 @@ defmodule Panacea.PmlController do
     if String.valid?(str) do
       {:ok, str}
     else
-      {:error, "invalid filetype"}
+      {:error, "Invalid filetype"}
     end
   end
 
@@ -25,9 +25,13 @@ defmodule Panacea.PmlController do
   end
 
   defp respond({:ok, drugs}, conn) do
-    json conn, %{status: :ok, drugs: drugs}
+    conn
+    |> put_status(:ok)
+    |> json(%{drugs: drugs})
   end
   defp respond({:error, message}, conn) do
-    json conn, %{status: :error, message: message}
+    conn
+    |> put_status(:unprocessable_entity)
+    |> json(%{message: message})
   end
 end
