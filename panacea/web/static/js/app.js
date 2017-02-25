@@ -1,21 +1,43 @@
-// Brunch automatically concatenates all files in your
-// watched paths. Those paths can be configured at
-// config.paths.watched in "brunch-config.js".
-//
-// However, those files will only be executed if
-// explicitly imported. The only exception are files
-// in vendor, which are never wrapped in imports and
-// therefore are always executed.
+import "babel-polyfill";
+import "phoenix_html";
 
-// Import dependencies
-//
-// If you no longer want to use a dependency, remember
-// to also remove its path from "config.paths.watched".
-import "phoenix_html"
+document.getElementById('file-form').addEventListener('submit', e => {
+  e.preventDefault();
+  submitFile.bind(e.target)();
+});
 
-// Import local files
-//
-// Local files can be imported directly using relative
-// paths "./socket" or full ones "web/static/js/socket".
+async function submitFile() {
+  try {
+    const response = await fetch(this.action, {
+      method: 'POST',
+      body: new FormData(this),
+      credentials: 'same-origin'
+    });
 
-// import socket from "./socket"
+    if (response.ok) {
+      renderFileResponse(await response.json());
+    } else {
+      renderFileError(await response.json());
+    }
+    this.reset();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const successPanel = document.getElementById('success-panel');
+const errorPanel = document.getElementById('error-panel');
+
+const renderFileResponse = data => {
+  const successResultMessage = document.getElementById('success-result-message');
+  successResultMessage.innerHTML = JSON.stringify(data.drugs);
+  errorPanel.style.display = 'none';
+  successPanel.style.display = 'block';
+};
+
+const renderFileError = data => {
+  const errorResultMessage = document.getElementById('error-result-message');
+  errorResultMessage.innerHTML = data.message;
+  errorPanel.style.display = 'block';
+  successPanel.style.display = 'none';
+};

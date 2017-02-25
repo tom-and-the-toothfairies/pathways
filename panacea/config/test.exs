@@ -6,5 +6,11 @@ config :panacea, Panacea.Endpoint,
   http: [port: 4001],
   server: false
 
+config :junit_formatter,
+  report_dir: "/test-reports"
+
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :panacea, :asclepius,
+  api: Panacea.Asclepius.Remote.Mock

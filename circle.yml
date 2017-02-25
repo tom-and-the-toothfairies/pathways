@@ -1,0 +1,18 @@
+machine:
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+  services:
+    - docker
+
+compile:
+  override:
+    - docker build --rm=false -t panacea panacea
+    - docker build --rm=false -t asclepius asclepius
+
+test:
+  pre:
+    - mkdir -p $CIRCLE_TEST_REPORTS/exunit
+    - mkdir -p $CIRCLE_TEST_REPORTS/pytest
+  override:
+    - docker run -t -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports panacea mix test
+    - docker run -t -v $CIRCLE_TEST_REPORTS/pytest:/test-reports asclepius pytest --junitxml=/test-reports/test-junit-report.xml
