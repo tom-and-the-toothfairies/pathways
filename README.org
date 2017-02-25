@@ -4,7 +4,12 @@
 This project includes a Docker Compose file for easy installation and testing.
 Installation instructions for Docker on your platform can be found [[https://www.docker.com/products/docker][here]].
 
-For Docker installations on Ubuntu ~sudo~ is required to run Docker commands.
+For Docker installations on Ubuntu ~sudo~ is required to run Docker and Docker
+Compose commands. You will also need to install ~docker-compose~ separately with
+#+BEGIN_SRC bash
+$ sudo curl -o /usr/local/bin/docker-compose -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m`
+$ sudo chmod +x /usr/local/bin/docker-compose
+#+END_SRC
 *** The Happy Path
 If you do not wish to build the Docker containers yourself you can run it
 directly from the Docker registry. First, install the necessary Docker
