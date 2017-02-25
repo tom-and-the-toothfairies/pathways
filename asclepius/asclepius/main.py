@@ -1,5 +1,10 @@
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 from flask import Flask, jsonify, request
+
 from dinto import dinto
+
 
 app = Flask(__name__)
 
@@ -73,4 +78,5 @@ def ping():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    logging.info('Finished')
+    app.run(debug=False, host='0.0.0.0')
