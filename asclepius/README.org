@@ -14,6 +14,7 @@ This can be overriden by setting the ~ASCLEPIUS_ONTOLOGY_FILE~ environment varia
 | Methods     | ~GET~                       |
 | Parameters  | None                        |
 | Returns     | HTTP 204 (No Content)       |
+
 *** ~/all_drugs~
 | Description | Find all drugs in the DINTO ontology                                                  |
 | Methods     | ~GET~                                                                                 |
@@ -21,20 +22,24 @@ This can be overriden by setting the ~ASCLEPIUS_ONTOLOGY_FILE~ environment varia
 | Returns     | A list containing pairs of the canonical URI for a drug, as well as its English Label |
 
 **** Example
-***** Response Body
+***** Response Body (Truncated)
 #+BEGIN_SRC json
 [
   {
-    "label" : "tranylcypromine",
-    "uri" : "http://purl.obolibrary.org/obo/DINTO_DB0001"
+    "label": "carbapenem MM22383",
+    "uri": "http://purl.obolibrary.org/obo/CHEBI_58998"
   },
   {
-    "label" : "methysergide",
-    "uri" : "http://purl.obolibrary.org/obo/DINTO_DB0002"
+    "label": "adenosine-5'-ditungstate",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_DB02183"
   },
   {
-    "label" : "drospirenone",
-    "uri" : "http://purl.obolibrary.org/obo/DINTO_DB9999"
+    "label": "(5z)-13-chloro-14,16-dihydroxy-3,4,7,8,9,10-hexahydro-1h-2-benzoxacyclotetradecine-1,11(12h)-dione",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_DB08346"
+  },
+  {
+    "label": "etoposide",
+    "uri": "http://purl.obolibrary.org/obo/CHEBI_4911"
   }
 ]
 #+END_SRC
@@ -46,20 +51,20 @@ This can be overriden by setting the ~ASCLEPIUS_ONTOLOGY_FILE~ environment varia
 | Returns     | A list containing pairs of the canonical URI for a drug-drug interaction, as well as its English Label |
 
 **** Example
-***** Response Body
+***** Response Body (Truncated)
 #+BEGIN_SRC json
 [
   {
-    "label" : "tranylcypromine/vilazodone DDI",
-    "uri" : "http://purl.obolibrary.org/obo/DINTO_08338"
+    "label": "torasemide/trandolapril DDI",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_11031"
   },
   {
-    "label" : "penbutolol/methysergide DDI",
-    "uri" : "http://purl.obolibrary.org/obo/DINTO_07540"
+    "label": "cimetidine/heroin DDI",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_02733"
   },
   {
-    "label" : "drospirenone/heparin DDI",
-    "uri" : "http://purl.obolibrary.org/obo/DINTO_03086"
+    "label": "methylergonovine/telithromycin DDI",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_10154"
   }
 ]
 #+END_SRC
@@ -73,30 +78,18 @@ This can be overriden by setting the ~ASCLEPIUS_ONTOLOGY_FILE~ environment varia
 **** Example
 ***** Request Body
  #+BEGIN_SRC json
- {
-   "drugs": [
-     "dinto:db0021",
-     "dinto:db3040",
-     "chebi:43259",
-     "dinto:db2304909",
-     "chebi:01342"
-   ]
- }
+{"drugs": ["chebi:421707", "chebi:465284", "dinto:DB00503", "chebi:9342"]}
  #+END_SRC
 ***** Response Body
  #+BEGIN_SRC json
- [
-   {
-     "label" : "tranylcypromine/vilazodone DDI",
-     "uri" : "http://purl.obolibrary.org/obo/DINTO_08338"
-   },
-   {
-     "label" : "penbutolol/methysergide DDI",
-     "uri" : "http://purl.obolibrary.org/obo/DINTO_07540"
-   },
-   {
-     "label" : "drospirenone/heparin DDI",
-     "uri" : "http://purl.obolibrary.org/obo/DINTO_03086"
-   }
- ]
+[
+  {
+    "label": "abacavir/ganciclovir DDI",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_05759"
+  },
+  {
+    "label": "abacavir/ritonavir DDI",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_11043"
+  }
+]
  #+END_SRC
