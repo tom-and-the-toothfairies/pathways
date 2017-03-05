@@ -1,0 +1,112 @@
+import re
+import requests
+from functools import lru_cache
+
+__all__ = ['all_drugs', 'all_ddis', 'ddi_from_drugs']
+
+SPARQL_ENDPOINT = 'http://localhost:3030/dinto/query'
+DRUG_PATTERN = re.compile('(dinto:DB)|(chebi:)\d+')
+
+PREFIXES = '''
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX dinto: <http://purl.obolibrary.org/obo/DINTO_>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX chebi: <http://purl.obolibrary.org/obo/CHEBI_>
+'''
+
+PHARMACOLOGICAL_ENTITY = 'dinto:000055'
+DDI = 'dinto:00010'
+
+
+def sparql(qfunction):
+    """
+    Cause a function which returns a sparql query to actually run that query.
+
+    Assumes that the arguments that the qfunction takes are all hashabled, to
+    make use of the handy-dandy lru cache transparently
+    """
+
+    def _do_sparql(query):
+        payload = {'query': query}
+        response = requests.post(SPARQL_ENDPOINT, data=payload)
+
+        if response.status_code != 200:
+            response.raise_for_status()
+        else:
+            result = response.json()
+
+        return [{v: entry[v]['value'] for v in result['head']['vars']}
+                for entry in result['results']['bindings']]
+
+    @lru_cache()
+    def sparqled(*args, **kwargs):
+        query = qfunction(*args, **kwargs)
+        return _do_sparql(query)
+
+    return sparqled
+
+
+@sparql
+def all_drugs():
+    return f'''
+    {PREFIXES}
+    SELECT ?uri ?label
+    WHERE {{
+        ?uri rdfs:subClassOf {PHARMACOLOGICAL_ENTITY}.
+        ?uri rdfs:label ?label
+    }}
+    '''
+
+
+@sparql
+def all_ddis():
+    return f'''
+    {PREFIXES}
+    SELECT ?uri ?label
+    WHERE {{
+        ?uri rdfs:subClassOf {DDI}.
+        ?uri rdfs:label ?label
+    }}
+    '''
+
+
+@sparql
+def ddi_from_drugs(drugs):
+    def _valid_drug(drug_identifier):
+        return DRUG_PATTERN.match(drug_identifier) is not None
+
+    if not isinstance(drugs, frozenset):
+        raise ValueError("for cachability, `drugs` must be given as a frozenset")
+
+    if len(drugs) < 2:
+        raise ValueError("Need at least 2 drugs to find interactions")
+
+    if not all(_valid_drug(drug) for drug in drugs):
+        raise ValueError("Drugs must be specified as chebi:123 or dinto:DB123")
+
+    drug_search_space = ', '.join(drugs)
+
+    return f'''
+    {PREFIXES}
+    SELECT ?uri ?label
+    WHERE {{
+        ?uri rdfs:label ?label.
+        ?uri rdfs:subClassOf {DDI} .
+
+        ?uri owl:equivalentClass ?equivalance .
+        ?equivalance owl:intersectionOf ?restrictions .
+
+        ?restrictions rdf:first ?drug1Restriction .
+        ?restrictions rdf:rest  ?tail .
+
+        ?tail rdf:first ?drug2Restriction .
+
+        ?drug1Restriction owl:someValuesFrom ?drug_a .
+        ?drug2Restriction owl:someValuesFrom ?drug_b .
+
+        FILTER (?drug_a in ({drug_search_space}) &&
+                ?drug_b in ({drug_search_space})    )
+
+    }}'''
