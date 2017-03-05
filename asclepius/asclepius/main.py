@@ -1,3 +1,4 @@
+import socket
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -71,7 +72,12 @@ def ddis():
 
 @app.route("/ping")
 def ping():
-    return '', 204
+    address, port = dinto.SPARQL_ADDRESS.split(':')
+    try:
+        socket.socket().connect((address, int(port)))
+        return '', 204
+    except socket.error as e:
+        return 'Fuseki not reachable', 503
 
 
 if __name__ == '__main__':
