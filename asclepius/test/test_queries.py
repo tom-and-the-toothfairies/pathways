@@ -1,5 +1,4 @@
 import pytest
-from rdflib.plugins.sparql.sparql import Query
 
 from asclepius.dinto import (
         _valid_drug,
@@ -17,5 +16,9 @@ def test_valid_drug():
 def test_ddi_from_drugs_raises_with_incorrect_drug_identifiers():
     with pytest.raises(ValueError):
         ddi_from_drugs(frozenset([]))
-        ddi_from_drugs(['dinto:db123', 'chebi:123'])
+
+    with pytest.raises(ValueError):
         ddi_from_drugs(frozenset(['garbage', 'rubbish']))
+
+    with pytest.raises(TypeError):
+        ddi_from_drugs(['dinto:db123', 'chebi:123'])
