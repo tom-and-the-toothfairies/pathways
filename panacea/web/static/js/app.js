@@ -25,12 +25,18 @@ async function submitFile() {
   }
 }
 
-const successPanel = document.getElementById('success-panel');
+const successPanel = document.getElementById('success');
 const errorPanel = document.getElementById('error-panel');
 
 const renderFileResponse = data => {
-  const successResultMessage = document.getElementById('success-result-message');
-  successResultMessage.innerHTML = JSON.stringify(data.drugs);
+  // Parsed drugs
+  const drugsResultMessage = document.getElementById('success-result-message');
+  drugsResultMessage.innerHTML = JSON.stringify(data.drugs);
+
+  // DDIS
+  const ddisResultMessage = document.getElementById('success-ddis-message');
+  ddisResultMessage.innerHTML = JSON.stringify(data.ddis);
+
   errorPanel.style.display = 'none';
   successPanel.style.display = 'block';
 };

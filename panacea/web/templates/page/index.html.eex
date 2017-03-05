@@ -8,9 +8,15 @@
     <%= submit "Submit", class: "btn btn-success btn-lg" %>
   </div>
 <% end %>
-<div class="panel panel-success panel-hidden" id="success-panel">
-  <div class="panel-heading">Drugs Found</div>
-  <div class="panel-body" id="success-result-message"></div>
+<div id="success">
+  <div class="panel panel-success" id="success-panel-drugs">
+    <div class="panel-heading">Drugs Found</div>
+    <div class="panel-body" id="success-result-message"></div>
+  </div>
+  <div class="panel panel-success" id="success-panel-ddis">
+    <div class="panel-heading">DDIs Found</div>
+    <div class="panel-body" id="success-ddis-message"></div>
+  </div>
 </div>
 <div class="panel panel-danger panel-hidden" id="error-panel">
   <div class="panel-heading">PML Error</div>

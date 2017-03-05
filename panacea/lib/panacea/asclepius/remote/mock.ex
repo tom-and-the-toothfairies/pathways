@@ -4,16 +4,12 @@ defmodule Panacea.Asclepius.Remote.Mock do
   def ddis(_drugs) do
     {:ok, [
       %{
-        "label" => "tranylcypromine/vilazodone DDI",
-        "uri" => "http://purl.obolibrary.org/obo/DINTO_08338"
+        "label" => "abacavir/ritonavir DDI",
+        "uri" => "http://purl.obolibrary.org/obo/DINTO_11043"
       },
       %{
-        "label" => "penbutolol/methysergide DDI",
-        "uri" => "http://purl.obolibrary.org/obo/DINTO_07540"
-      },
-      %{
-        "label" => "drospirenone/heparin DDI",
-        "uri" => "http://purl.obolibrary.org/obo/DINTO_03086"
+        "label" => "abacavir/ganciclovir DDI",
+        "uri" => "http://purl.obolibrary.org/obo/DINTO_05759"
       }
     ]}
   end

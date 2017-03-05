@@ -6,6 +6,7 @@ defmodule Panacea.PmlController do
     |> File.read
     |> validate
     |> parse
+    |> get_ddis
     |> respond(conn)
   end
 
@@ -24,10 +25,18 @@ defmodule Panacea.PmlController do
     {:error, message}
   end
 
-  defp respond({:ok, drugs}, conn) do
+  defp get_ddis({:ok, drugs}) do
+    {:ok, ddis} = Panacea.Asclepius.ddis(drugs)
+    {:ok, %{drugs: drugs, ddis: ddis}}
+  end
+  defp get_ddis({:error, message}) do
+    {:error, message}
+  end
+
+  defp respond({:ok, response}, conn) do
     conn
     |> put_status(:ok)
-    |> json(%{drugs: drugs})
+    |> json(response)
   end
   defp respond({:error, message}, conn) do
     conn

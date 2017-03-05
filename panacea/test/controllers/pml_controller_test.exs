@@ -43,13 +43,23 @@ defmodule Panacea.PmlControllerTest do
     end
 
     test "identifies the drugs in correct pml", %{conn: conn} do
-      filename = "drugs.pml"
+      filename = "no_ddis.pml"
       file_path = Path.join(@fixtures_dir, filename)
       upload = %Plug.Upload{path: file_path, filename: filename}
 
       conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
 
       assert response(conn, 200) =~ ~s("drugs":["chebi:1234","dinto:DB1234"])
+    end
+
+    @tag :identify_ddis
+    test "identifies DDIs with the drugs from the pml", %{conn: conn} do
+      filename = "ddis.pml"
+      file_path = Path.join(@fixtures_dir, filename)
+      upload = %Plug.Upload{path: file_path, filename: filename}
+
+      conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
+      assert response(conn, 200) =~ ~s([{"uri":"http://purl.obolibrary.org/obo/DINTO_11043","label":"abacavir/ritonavir DDI"},{"uri":"http://purl.obolibrary.org/obo/DINTO_05759","label":"abacavir/ganciclovir DDI"}])
     end
   end
 end

@@ -99,12 +99,12 @@ Noll's sample pml from the PEOS project, and reject bad PML.
 **** PML Error & Warning Highlights
 The results of the analysis are sent back to the user interface and presented to
 the user. This feature can be tested manually by uploading files for analysis.
-In ~panacea/test/fixtures~ there files to cover each of the possible cases.
-~bad.pml~ is a PML file that is not well-structured. ~drugs.pml~ contains
+In ~panacea/test/fixtures~ there are files to cover each of the possible cases.
+~bad.pml~ is a PML file that is not well-structured. ~no_ddis.pml~ and ~ddis.pml~ contain
 well-structured PML. There is also PNG which can be submitted to verify that the
 system rejects non UTF-8 encoded files.
 
-Automated tests exists to exercise each of these possible cases and can be found
+Automated tests exist to exercise each of these possible cases and can be found
 in: ~panacea/test/controllers/pml_controller_test.exs~.
 **** Identifying Drugs in PML
 From our investigations, CHEBI and DINTO identifiers seem to be the simplest way
@@ -117,11 +117,20 @@ When a PML file is successfully analysed, any drugs found in ~requires~ blocks
 are reported back to the user as 'identified drugs'.
 
 Again, this feature can be manually tested by uploading a file.
-~panacea/test/fixtures/drugs.pml~ is a well-structured PML document containing
+~panacea/test/fixtures/no_ddis.pml~ is a well-structured PML document containing
 some drug identifiers.
 
 Automated tests for the parser and web interface also ensure that this feature
 works as intended.
+
+**** Identifying DDIs
+The drugs identified in the PML file are sent to Asclepius to check for DDIs.
+Again, this feature can be manually tested by uploading a file.
+~panacea/test/fixtures/ddis.pml~ is a well-structured PML document containing
+some drug identifiers that result in DDIs.
+
+Automated tests confirm that this feature works as intended. You can run the tests
+specific to this feature by running ~docker run -t -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_ddis~.
 
 *** DINTO - Asclepius ⚕
   Asclepius provides an endpoint for querying DINTO. It supports querying for
