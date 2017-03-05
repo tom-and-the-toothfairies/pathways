@@ -1,5 +1,5 @@
 defmodule Panacea.Pml.Parser do
-  alias Panacea.Pml.Parser.Error
+  alias Panacea.Pml.Parser.{Logger, Error}
 
   @type drug :: String.t
 
@@ -24,9 +24,14 @@ defmodule Panacea.Pml.Parser do
   end
 
   defp to_result({:error, reason}) do
-    {:error, Error.format(reason)}
+    formatted = Error.format(reason)
+    Logger.error("PML Parsing error: #{formatted}")
+
+    {:error, formatted}
   end
   defp to_result({:ok, drugs}) do
+    Logger.info("PML Parsing success: #{Enum.join(drugs, " ")}")
+
     {:ok, drugs}
   end
 end

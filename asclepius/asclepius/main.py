@@ -1,12 +1,12 @@
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
-from flask import Flask, jsonify, request
+from flask import jsonify, request
+from app import app
 
-from dinto import dinto
+import dinto
 
 
-app = Flask(__name__)
 
 
 class InvalidUsage(Exception):
@@ -32,29 +32,23 @@ def handle_invalid_usage(error):
     return response
 
 
-def to_labelled(query_result):
-    return [{'uri': uri, 'label': label} for (uri, label) in query_result]
-
-
 @app.route("/all_drugs", methods=['GET'])
-def drugs():
+def all_drugs():
     """Return a list of all drugs listed in DINTO"""
-    return jsonify(to_labelled(dinto.all_drugs()))
+    return jsonify(dinto.all_drugs())
 
 
 @app.route("/all_ddis", methods=['GET'])
 def all_ddis():
     """Return a list of all drug-drug interactions listed identified in DINTO"""
-    return jsonify(to_labelled(dinto.all_ddis()))
+    return jsonify(dinto.all_ddis())
 
 
 @app.route('/ddis', methods=['POST'])
 def ddis():
     """Return all of the Drug-Drug interactions involving the given list of (at least 2) drugs
-
     post parameters:
       drugs: [<drug_a>, <drug_b>, ... ]]
-
     Drugs are identified as either 'dinto:DB123' or 'chebi:123'"""
 
     params = request.get_json()
@@ -69,14 +63,15 @@ def ddis():
     except ValueError as e:
         raise InvalidUsage(str(e))
 
-    return jsonify(to_labelled(dinto_res))
+    for ddi in dinto_res:
+        for drug in ('drug_a', 'drug_b'):
+            if ddi[drug].startswith(dinto.DINTO_PREFIX):
+                ddi[drug] = ddi[drug].replace(dinto.DINTO_PREFIX, 'dinto:')
+            elif ddi[drug].startswith(dinto.CHEBI_PREFIX):
+                ddi[drug] = ddi[drug].replace(dinto.CHEBI_PREFIX, 'chebi:')
 
-
-@app.route("/ping")
-def ping():
-    return '', 204
+    return jsonify(dinto_res)
 
 
 if __name__ == '__main__':
-    logging.info('Finished')
-    app.run(debug=False, host='0.0.0.0')
+    app.run()

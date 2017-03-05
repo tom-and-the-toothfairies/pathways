@@ -5,6 +5,6 @@
   margin-top: -10px;
 }
 
-.panel-hidden {
+.panel-hidden, #success {
   display: none;
 }

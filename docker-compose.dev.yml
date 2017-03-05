@@ -3,8 +3,15 @@ version: '2'
 services:
   asclepius:
     image: tomtoothfairies/asclepius:latest
+    ports:
+      - '5000:5000'
 
   panacea:
     image: tomtoothfairies/panacea:latest
     ports:
       - '4000:4000'
+
+  chiron:
+    image: tomtoothfairies/chiron:latest
+    ports:
+      - '3030:3030'

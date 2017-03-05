@@ -19,6 +19,9 @@ config :panacea, Panacea.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :panacea, :asclepius,
+  uri: URI.parse("http://asclepius:5000")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

@@ -2,21 +2,12 @@ defmodule Panacea.Asclepius.Remote.HTTP do
   @behaviour Panacea.Asclepius.Remote
 
   @asclepius_uri Keyword.get(Application.get_env(:panacea, :asclepius), :uri)
-  @ping_timeout 50
-  # one minute timeout for now
-  @ddi_timeout 60 * 1000
   @default_headers [{"Content-Type", "application/json"}]
-
-  def ping do
-    asclepius_uri("/ping")
-    |> HTTPoison.get([recv_timeout: @ping_timeout])
-    |> decode_response()
-  end
 
   def ddis(drugs) do
     {:ok, body} = %{drugs: drugs} |> Poison.encode
     asclepius_uri("/ddis")
-    |> HTTPoison.post(body, @default_headers, [recv_timeout: @ddi_timeout])
+    |> HTTPoison.post(body, @default_headers)
     |> decode_response()
   end
 

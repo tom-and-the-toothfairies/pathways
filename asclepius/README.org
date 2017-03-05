@@ -1,20 +1,11 @@
 * Asclepius ⚕
-Flask endpoint for querying DINTO. Supports querying for all drugs listed, as well as finding all, or specific drug-drug interactions.
+Flask endpoint for querying DINTO. Supports querying for all drugs listed, as
+well as finding all, or specific drug-drug interactions.
 
-** Setup
-*** DINTO Ontology Selection
-By default, the application uses ~DINTO/DINTO 1/DINTO_1.owl~ as its ontology.
-This can be overriden by setting the ~ASCLEPIUS_ONTOLOGY_FILE~ environment variable.
-
-*Note*: As the ontology is rather large, startup can take upwards of 3 minutes.
+This application acts as an adaptor to Chiron - an instance of Apache Fuseki,
+Chiron must be running before any queries can be served.
 
 ** Endpoints
-*** ~/ping~
-| Description | Check endpoint availability |
-| Methods     | ~GET~                       |
-| Parameters  | None                        |
-| Returns     | HTTP 204 (No Content)       |
-
 *** ~/all_drugs~
 | Description | Find all drugs in the DINTO ontology                                                  |
 | Methods     | ~GET~                                                                                 |
@@ -73,23 +64,27 @@ This can be overriden by setting the ~ASCLEPIUS_ONTOLOGY_FILE~ environment varia
 | Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the /given/ drugs                                 |
 | Methods      | ~POST~                                                                                                                           |
 | Request Body | An object containing a list of /drug references/, named ~drugs~, where a /drug reference/ is either ~dinto:DB123~ or ~chebi:123~ |
-| Returns      | A list containing pairs of the canonical URI for a drug-drug interaction, as well as its English Label                           |
+| Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved                                         |
 
 **** Example
 ***** Request Body
- #+BEGIN_SRC json
+#+BEGIN_SRC json
 {"drugs": ["chebi:421707", "chebi:465284", "dinto:DB00503", "chebi:9342"]}
- #+END_SRC
+#+END_SRC
 ***** Response Body
- #+BEGIN_SRC json
+#+BEGIN_SRC json
 [
   {
+    "drug_a": "chebi:421707",
+    "drug_b": "chebi:465284",
     "label": "abacavir/ganciclovir DDI",
     "uri": "http://purl.obolibrary.org/obo/DINTO_05759"
   },
   {
+    "drug_a": "chebi:421707",
+    "drug_b": "dinto:DB00503",
     "label": "abacavir/ritonavir DDI",
     "uri": "http://purl.obolibrary.org/obo/DINTO_11043"
   }
 ]
- #+END_SRC
+#+END_SRC
