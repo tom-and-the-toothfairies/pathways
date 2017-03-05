@@ -2,7 +2,7 @@ defmodule Panacea.Asclepius.Remote.HTTP do
   @behaviour Panacea.Asclepius.Remote
 
   @asclepius_uri Keyword.get(Application.get_env(:panacea, :asclepius), :uri)
-  @ping_timeout 50
+  @ping_timeout 500
   # one minute timeout for now
   @ddi_timeout 60 * 1000
   @default_headers [{"Content-Type", "application/json"}]
