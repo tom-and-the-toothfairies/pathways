@@ -13,10 +13,6 @@ defmodule Panacea.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :requires_asclepius do
-    plug Panacea.Plugs.RequireAsclepius, []
-  end
-
   scope "/", Panacea do
     pipe_through :browser # Use the default browser stack
 
@@ -29,9 +25,5 @@ defmodule Panacea.Router do
     pipe_through :browser
 
     post "/pml", PmlController, :upload
-
-    scope "/asclepius", Panacea do
-      pipe_through :requires_asclepius
-    end
   end
 end

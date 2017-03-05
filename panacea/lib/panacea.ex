@@ -6,7 +6,6 @@ defmodule Panacea do
 
     children = [
       supervisor(Panacea.Endpoint, []),
-      supervisor(Panacea.Asclepius.Supervisor, [])
     ]
 
     opts = [strategy: :one_for_one, name: Panacea.Supervisor]
