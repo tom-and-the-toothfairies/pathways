@@ -6,14 +6,12 @@ EXPOSE 5000
 
 ENV PYTHONPATH=asclepius
 ENV FLASK_APP=asclepius/main.py
+ENV ASCLEPIUS_FUSEKI_ADDRESS=chiron:3030
 
 RUN apk add --update git
 
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
-
-# Cache DINTO
-RUN git clone https://github.com/labda/DINTO.git && cd DINTO && git checkout 68a29b5
 
 # Cache python deps
 COPY requirements.txt .
