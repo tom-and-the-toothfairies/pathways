@@ -8,3 +8,6 @@ services:
     image: tomtoothfairies/panacea:0.2
     ports:
       - '4000:4000'
+
+  chiron:
+    image: tomtoothfairies/chiron:latest

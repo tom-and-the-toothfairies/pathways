@@ -55,6 +55,7 @@ $ sudo service docker restart
    $ cd pathways
    $ docker build -t tomtoothfairies/asclepius asclepius
    $ docker build -t tomtoothfairies/panacea panacea
+   $ docker built -t tomtoothfairies/chiron chiron
    #+END_SRC
 3) Run the tests
    #+BEGIN_SRC bash
@@ -123,12 +124,14 @@ Automated tests for the parser and web interface also ensure that this feature
 works as intended.
 
 *** DINTO - Asclepius ⚕
-  Asclepius provides an endpoint for querying DINTO. It supports querying for all drugs listed within its given Ontology, as well as finding all, or specific drug-drug interactions.
+  Asclepius provides an endpoint for querying DINTO. It supports querying for
+  all drugs listed within its given Ontology, as well as finding all, or
+  specific drug-drug interactions.
 **** Setup
 ***** DINTO Ontology SPARQL Endpoint
-This application acts as an adaptor to an instance of Apache Fuseki which can serve SPARQL queries on a DINTO ontology. Fuseki must be running before any queries can be served.
-By default, Asclepius calls an endpoint at ~localhost:3030~
-This can be overriden by setting the ~ASCLEPIUS_FUSEKI_ADDRESS~ environment variable.
+This application acts as an adaptor to an instance of Apache Fuseki which can
+serve SPARQL queries on a DINTO ontology. Fuseki must be running before any
+queries can be served.
 
 **** Endpoints
 ***** ~/all_drugs~

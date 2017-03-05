@@ -5,10 +5,9 @@ MAINTAINER Eoin Houlihan <ehoulih@tcd.ie>
 EXPOSE 5000
 
 ENV PYTHONPATH=asclepius
-ENV FLASK_APP=asclepius/main.py
-ENV ASCLEPIUS_FUSEKI_ADDRESS=chiron:3030
+ENV FLASK_CONFIGURATION=production
 
-RUN apk add --update git
+RUN apk --no-cache add git gcc musl-dev
 
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
@@ -19,4 +18,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["flask", "run", "--host", "0.0.0.0"]
+CMD ["gunicorn", "-w", "9", "-b", ":5000", "-k", "eventlet", "--log-config", "asclepius/gunicorn_logging.conf", "main:app"]

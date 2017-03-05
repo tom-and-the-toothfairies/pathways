@@ -4,9 +4,11 @@ import os
 import logging
 from functools import lru_cache
 
+from app import app
+
 __all__ = ['all_drugs', 'all_ddis', 'ddi_from_drugs']
 
-SPARQL_ADDRESS = os.getenv('ASCLEPIUS_FUSEKI_ADDRESS', 'localhost:3030')
+SPARQL_ADDRESS = app.config['FUSEKI_ADDRESS']
 
 SPARQL_ENDPOINT = f'http://{SPARQL_ADDRESS}/dinto/query'
 logging.info(f"Using Fuseki server at {SPARQL_ADDRESS}")

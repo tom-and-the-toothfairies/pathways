@@ -1,15 +1,10 @@
-import socket
-import requests
 import logging
 logging.basicConfig(level=logging.INFO)
 
-from flask import Flask, jsonify, request
+from flask import jsonify, request
 
+from app import app
 import dinto
-
-
-app = Flask(__name__)
-
 
 class InvalidUsage(Exception):
     status_code = 400
@@ -35,7 +30,7 @@ def handle_invalid_usage(error):
 
 
 @app.route("/all_drugs", methods=['GET'])
-def drugs():
+def all_drugs():
     """Return a list of all drugs listed in DINTO"""
     return jsonify(dinto.all_drugs())
 
@@ -70,5 +65,4 @@ def ddis():
     return jsonify(dinto_res)
 
 if __name__ == '__main__':
-    logging.info('Finished')
-    app.run(debug=False, host='0.0.0.0')
+    app.run()
