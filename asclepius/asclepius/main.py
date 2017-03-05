@@ -1,4 +1,5 @@
 import socket
+import requests
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -72,12 +73,18 @@ def ddis():
 
 @app.route("/ping")
 def ping():
-    address, port = dinto.SPARQL_ADDRESS.split(':')
+    DUMMY_REQUEST = 'SELECT * WHERE {?s ?p ?o} LIMIT 0'
+    DUMMY_RESPONSE = {"head": {"vars": ["s", "p", "o"]},
+                      "results": {"bindings": []}}
     try:
-        socket.socket().connect((address, int(port)))
+        resp = requests.post(dinto.SPARQL_ENDPOINT, data={'query': DUMMY_REQUEST})
+    except requests.exceptions.ConnectionError:
+        return 'Unable to connect to Fuseki', 503
+
+    if resp.status_code == 200 and resp.json() == DUMMY_RESPONSE:
         return '', 204
-    except socket.error as e:
-        return 'Fuseki not reachable', 503
+    else:
+        return 'Fuseki is not ready', 503
 
 
 if __name__ == '__main__':
