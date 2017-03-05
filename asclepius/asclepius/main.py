@@ -3,9 +3,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 from flask import Flask, jsonify, request
 
-from dinto import dinto
-
-
 app = Flask(__name__)
 
 

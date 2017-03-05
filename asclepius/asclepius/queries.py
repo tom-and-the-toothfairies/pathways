@@ -1,4 +1,3 @@
-from rdflib.plugins.sparql import prepareQuery
 import re
 
 __all__ = ['all_drugs', 'all_ddis', 'ddi_from_drugs']
@@ -24,7 +23,7 @@ def all_drugs():
         ?drug rdfs:label ?label
     }}
     '''
-    return prepareQuery(q)
+    return q
 
 def all_ddis():
     q = f'''
@@ -35,7 +34,7 @@ def all_ddis():
         ?interaction rdfs:label ?label
     }}
     '''
-    return prepareQuery(q)
+    return q
 
 
 def _valid_drug(drug_identifier):
@@ -74,4 +73,4 @@ def ddi_from_drugs(drugs):
                 ?drug_b in ({drug_search_space})    )
 
     }}'''
-    return prepareQuery(q)
+    return q
