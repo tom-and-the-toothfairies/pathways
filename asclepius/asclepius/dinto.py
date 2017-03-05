@@ -78,11 +78,11 @@ def all_ddis():
     '''
 
 
+def _valid_drug(drug_identifier):
+    return DRUG_PATTERN.match(drug_identifier) is not None
+
 @sparql
 def ddi_from_drugs(drugs):
-    def _valid_drug(drug_identifier):
-        return DRUG_PATTERN.match(drug_identifier) is not None
-
     if not isinstance(drugs, frozenset):
         raise ValueError("for cachability, `drugs` must be given as a frozenset")
 
