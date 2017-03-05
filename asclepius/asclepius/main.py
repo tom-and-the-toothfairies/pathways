@@ -37,7 +37,6 @@ def handle_invalid_usage(error):
 @app.route("/all_drugs", methods=['GET'])
 def drugs():
     """Return a list of all drugs listed in DINTO"""
-    resp = dinto.all_drugs()
     return jsonify(dinto.all_drugs())
 
 
@@ -69,23 +68,6 @@ def ddis():
         raise InvalidUsage(str(e))
 
     return jsonify(dinto_res)
-
-
-@app.route("/ping")
-def ping():
-    DUMMY_REQUEST = 'SELECT * WHERE {?s ?p ?o} LIMIT 0'
-    DUMMY_RESPONSE = {"head": {"vars": ["s", "p", "o"]},
-                      "results": {"bindings": []}}
-    try:
-        resp = requests.post(dinto.SPARQL_ENDPOINT, data={'query': DUMMY_REQUEST})
-    except requests.exceptions.ConnectionError:
-        return 'Unable to connect to Fuseki', 503
-
-    if resp.status_code == 200 and resp.json() == DUMMY_RESPONSE:
-        return '', 204
-    else:
-        return 'Fuseki is not ready', 503
-
 
 if __name__ == '__main__':
     logging.info('Finished')
