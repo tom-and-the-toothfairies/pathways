@@ -201,7 +201,7 @@ queries can be served.
 | Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the /given/ drugs                                 |
 | Methods      | ~POST~                                                                                                                           |
 | Request Body | An object containing a list of /drug references/, named ~drugs~, where a /drug reference/ is either ~dinto:DB123~ or ~chebi:123~ |
-| Returns      | A list containing pairs of the canonical URI for a drug-drug interaction, as well as its English Label                           |
+| Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved                                         |
 
 ****** Example
 ******* Request Body
@@ -212,10 +212,14 @@ queries can be served.
  #+BEGIN_SRC json
 [
   {
+    "drug_a": "chebi:421707",
+    "drug_b": "chebi:465284",
     "label": "abacavir/ganciclovir DDI",
     "uri": "http://purl.obolibrary.org/obo/DINTO_05759"
   },
   {
+    "drug_a": "chebi:421707",
+    "drug_b": "dinto:DB00503",
     "label": "abacavir/ritonavir DDI",
     "uri": "http://purl.obolibrary.org/obo/DINTO_11043"
   }

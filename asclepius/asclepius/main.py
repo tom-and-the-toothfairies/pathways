@@ -2,9 +2,12 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 from flask import jsonify, request
-
 from app import app
+
 import dinto
+
+
+
 
 class InvalidUsage(Exception):
     status_code = 400
@@ -44,10 +47,8 @@ def all_ddis():
 @app.route('/ddis', methods=['POST'])
 def ddis():
     """Return all of the Drug-Drug interactions involving the given list of (at least 2) drugs
-
     post parameters:
       drugs: [<drug_a>, <drug_b>, ... ]]
-
     Drugs are identified as either 'dinto:DB123' or 'chebi:123'"""
 
     params = request.get_json()
@@ -62,7 +63,15 @@ def ddis():
     except ValueError as e:
         raise InvalidUsage(str(e))
 
+    for ddi in dinto_res:
+        for drug in ('drug_a', 'drug_b'):
+            if ddi[drug].startswith(dinto.DINTO_PREFIX):
+                ddi[drug] = ddi[drug].replace(dinto.DINTO_PREFIX, 'dinto:')
+            elif ddi[drug].startswith(dinto.CHEBI_PREFIX):
+                ddi[drug] = ddi[drug].replace(dinto.CHEBI_PREFIX, 'chebi:')
+
     return jsonify(dinto_res)
+
 
 if __name__ == '__main__':
     app.run()
