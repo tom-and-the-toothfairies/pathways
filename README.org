@@ -135,7 +135,7 @@ This can be overriden by setting the ~ASCLEPIUS_FUSEKI_ADDRESS~ environment vari
 | Description | Check endpoint availability |
 | Methods     | ~GET~                       |
 | Parameters  | None                        |
-| Returns     | HTTP 204 (No Content)       |
+| Returns     | If Asclepius is ready to receive requests, HTTP 204 (No Content), otherwise HTTP 503 (Service Unavailable) |
 
 ***** ~/all_drugs~
 | Description | Find all drugs in the DINTO ontology                                                  |
