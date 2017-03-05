@@ -1,10 +1,11 @@
 import logging
+logging.basicConfig(level=logging.INFO)
 
 from flask import Flask, jsonify, request
 
 import dinto
 
-logging.basicConfig(level=logging.DEBUG)
+
 app = Flask(__name__)
 
 

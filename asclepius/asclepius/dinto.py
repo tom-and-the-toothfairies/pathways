@@ -1,10 +1,16 @@
 import re
 import requests
+import os
+import logging
 from functools import lru_cache
 
 __all__ = ['all_drugs', 'all_ddis', 'ddi_from_drugs']
 
-SPARQL_ENDPOINT = 'http://localhost:3030/dinto/query'
+SPARQL_ADDRESS = os.getenv('ASCLEPIUS_FUSEKI_ADDRESS', 'localhost:3030')
+
+SPARQL_ENDPOINT = f'http://{SPARQL_ADDRESS}/dinto/query'
+logging.info(f"Using Fuseki server at {SPARQL_ADDRESS}")
+
 DRUG_PATTERN = re.compile('(dinto:DB)|(chebi:)\d+')
 
 PREFIXES = '''
