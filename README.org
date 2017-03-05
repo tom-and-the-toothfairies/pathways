@@ -28,7 +28,7 @@ $ docker-compose down
 To run a release other than the current you may manually checkout the release
 tag and run ~docker-compose~
 #+BEGIN_SRC bash
-$ git checkout 0.2
+$ git checkout 0.3
 $ docker-compose up -d
 #+END_SRC
 

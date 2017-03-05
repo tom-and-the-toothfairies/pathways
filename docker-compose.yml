@@ -2,10 +2,10 @@ version: '2'
 
 services:
   asclepius:
-    image: tomtoothfairies/asclepius:0.2
+    image: tomtoothfairies/asclepius:0.3
 
   panacea:
-    image: tomtoothfairies/panacea:0.2
+    image: tomtoothfairies/panacea:0.3
     ports:
       - '4000:4000'
 

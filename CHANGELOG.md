@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.3] 2017-03-05
 
 ### Added
 - Created Chiron: a new service for Querying DINTO built
@@ -72,7 +72,8 @@ All notable changes to this project will be documented in this file.
   docker service: pathways.
 - Installation instructions in README
 
-[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.2...iteration-3
+[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.3...release-1
+[0.3]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.2...0.3
 [0.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.1...0.2
 [0.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.0...0.1
 [0.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/faf0500c792aebbee26541ea2c25ad6ae274b2d5...0.0
