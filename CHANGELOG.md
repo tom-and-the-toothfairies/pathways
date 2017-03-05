@@ -1,0 +1,78 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+### Added
+- Created Chiron: a new service for Querying DINTO built
+  with [Apache Jena](https://jena.apache.org/). DINTO is turned into a triple
+  store at compile time, so boot time is greatly improved. Similarly, query
+  times are much improved by the triple store
+- DDI analysis is now presented to users. After validating a PML file, Panacea
+  queries Asclepius to find any DDIs between drugs in the file. This is then
+  displayed to the user in the UI.
+
+### Removed
+- DINTO from Asclepius. Chiron houses DINTO data now. Asclepius now proxies
+  queries to Chiron.
+- Removed code that waited for DINTO to be loaded. Previously, Asclepius would
+  take several minutes to load DINTO into memory so Panacea would have to poll
+  it to see if it was ready. Chiron can load DINTO from its triple store
+  instantly, so the waiting is no longer required.
+  
+## [0.2] 2017-02-26
+
+### Added
+- docker-compose. As we now have more than one docker service docker-compose is
+  used to easily coordinate them. docker-compose can be installed as per the
+  installation instructions in the README
+- Panacea: a new docker service that is responsible for validating PML and
+  serving the UI. The UI is a web app
+- Parser for PML. Added a custom lexer and parser for PML. Panacea will expose a
+  HTTP API for uploading files to be parsed.
+- [Continuous Integration testing](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
+  Automated testing has been added. CI runs whenever a commit is pushed. Merging
+  into master and our iteration branches requires CI to pass.
+- Asclepius: a new service for querying DINTO. This service loads DINTO into
+  memory when it boots and exposes a HTTP API for making queries. Panacea will
+  use this API to provide users with DDI feedback.
+- PML upload. Added a form that allows users to upload a file. The file is sent to Panacea for analysis.
+- PML error & warning highlights. The results of file analysis are now reported back to the user.
+- Asclepius DDI endpoint. Asclepius now exposes an endpoint that takes a list of
+  drugs and returns any DDIs between those drugs.
+
+### Removed
+- Removed Pathways. The old docker service that
+  contained [peos](https://github.com/jnoll/peos) has been removed. It is
+  replaced by Asclepius and Panacea.
+- Removed submodules. Previously Pathways used submodules as part of its docker
+  build process. Now Asclepius clones DINTO and checks out a specific revision
+  instead.
+
+  
+## [0.1] 2017-02-12
+
+### Fixed
+- Fixed installation instructions. Added a workaround for a DNS issue on the TCD network.
+
+### Added
+- Instructions on how to run docker without sudo on Ubuntu.
+
+## [0.0] 2017-02-05
+
+### Added
+- Peos submodule. For now we'll use Peos to interact with PML. This will
+  probably be replaced by a custom parser later as we really only need the
+  parsing.
+- DINTO submodule. The project depends
+  on [DINTO](https://github.com/labda/DINTO) to provide information about
+  drug-drug interactions (DDIs)
+- Dockerfile for building project. At the moment, the project consists of one
+  docker service: pathways.
+- Installation instructions in README
+
+[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.2...iteration-3
+[0.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.1...0.2
+[0.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.0...0.1
+[0.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/faf0500c792aebbee26541ea2c25ad6ae274b2d5...0.0

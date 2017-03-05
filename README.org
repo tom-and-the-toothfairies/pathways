@@ -64,164 +64,26 @@ $ sudo service docker restart
    #+END_SRC
 
 ** Features
-At the time of writing - iteration 2 - the following features are implemented
-and testable. Continuous integration testing has been set up for the project and
-can be tracked [[https://circleci.com/gh/tom-and-the-toothfairies/pathways][here]].
-*** PML - Panacea
-The PML and DINTO features are split into to separate services. The PML
-service - Panacea - is responsible for the user interface and the analysis of
-PML. The user interface is a web application. With the project running:
-#+BEGIN_SRC bash
-$ docker-compose up -d
-#+END_SRC
-the interface is accessible at ~http://localhost:4000~. The automated tests for
-the PML service can be found in ~panacea/test~. To run the tests locally:
-#+BEGIN_SRC bash
-$ docker run -t -e "MIX_ENV=test" tomtoothfairies/panacea mix test
-#+END_SRC
-**** PML File Selection
-The home page of the application contains a file selector. To test this feature,
-click the ~choose file~ button and you can then browse the file system and
-select a PML file.
-**** PML File Loading
-Once a file has been selected, it can be loaded into the system by clicking the
-~Submit~ button.
-**** Running PML Analysis
-When a file is submitted, it is sent to the Panacea server for analysis. The
-file's type and encoding are verified, then the files contents are run through a
-lexer and parser to ensure the PML is well structured. This feature can be
-tested manually by selecting and uploading a file. Some sample PML files can be
-found in the ~panacea/test/fixtures~ directory. There are also extensive unit
-tests for the components of this feature's implementation.
+The feature list for the project can be found [[./FEATURES.md][here]].
+** Change Log
+The project's change log can be found [[./CHANGELOG.md][here]]
+** Architecture Overview
+The system is split into three distinct services, Pancea, Asclepius and Chiron.
+They each run inside a docker container. The containers can be easily managed
+using ~docker-compose~ as mentioned earlier.
+*** Panacea
+Panacea is responsible for the UI and PML analysis. It is a web application that
+serves the UI and exposes an API for uploading PML files for analysis.
 
-Automated tests ensure that the lexer and parser can correctly parse all of John
-Noll's sample pml from the PEOS project, and reject bad PML.
-**** PML Error & Warning Highlights
-The results of the analysis are sent back to the user interface and presented to
-the user. This feature can be tested manually by uploading files for analysis.
-In ~panacea/test/fixtures~ there are files to cover each of the possible cases.
-~bad.pml~ is a PML file that is not well-structured. ~no_ddis.pml~ and ~ddis.pml~ contain
-well-structured PML. There is also PNG which can be submitted to verify that the
-system rejects non UTF-8 encoded files.
+More information about Panacea can be found [[./panacea/README.md][here]].
+*** Chiron
+Chiron houses the DINTO data. The data is compiled into a triple store, Chiron
+exposes a HTTP API for querying the triple store.
 
-Automated tests exist to exercise each of these possible cases and can be found
-in: ~panacea/test/controllers/pml_controller_test.exs~.
-**** Identifying Drugs in PML
-From our investigations, CHEBI and DINTO identifiers seem to be the simplest way
-to easily identify a drug. These identifiers take the form ~chebi:\d+~ or
-~dinto:DB\d+~ where ~\d+~ is any sequence of digits. As such, the lexer and
-parser will identify any string in this format as a drug. A drug that is to be
-administered to a patient should be placed in a ~requires~ block.
+More information about Chiron can be found [[./chiron/REAME.md][here]].
+*** Asclepius
+Asclepius acts as an intermediary between Panacea and Chiron. It accepts
+requests to identify DDIs from Panacea, creates the necessary SPARQL query and
+passes it on to Chiron.
 
-When a PML file is successfully analysed, any drugs found in ~requires~ blocks
-are reported back to the user as 'identified drugs'.
-
-Again, this feature can be manually tested by uploading a file.
-~panacea/test/fixtures/no_ddis.pml~ is a well-structured PML document containing
-some drug identifiers.
-
-Automated tests for the parser and web interface also ensure that this feature
-works as intended.
-
-**** Identifying DDIs
-The drugs identified in the PML file are sent to Asclepius to check for DDIs.
-Again, this feature can be manually tested by uploading a file.
-~panacea/test/fixtures/ddis.pml~ is a well-structured PML document containing
-some drug identifiers that result in DDIs.
-
-Automated tests confirm that this feature works as intended. You can run the tests
-specific to this feature by running ~docker run -t -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_ddis~.
-
-*** DINTO - Asclepius ⚕
-  Asclepius provides an endpoint for querying DINTO. It supports querying for
-  all drugs listed within its given Ontology, as well as finding all, or
-  specific drug-drug interactions.
-**** Setup
-***** DINTO Ontology SPARQL Endpoint
-This application acts as an adaptor to an instance of Apache Fuseki which can
-serve SPARQL queries on a DINTO ontology. Fuseki must be running before any
-queries can be served.
-
-**** Endpoints
-***** ~/all_drugs~
-| Description | Find all drugs in the DINTO ontology                                                  |
-| Methods     | ~GET~                                                                                 |
-| Parameters  | None                                                                                  |
-| Returns     | A list containing pairs of the canonical URI for a drug, as well as its English Label |
-
-****** Example
-******* Response Body (Truncated)
-#+BEGIN_SRC json
-[
-  {
-    "label": "carbapenem MM22383",
-    "uri": "http://purl.obolibrary.org/obo/CHEBI_58998"
-  },
-  {
-    "label": "adenosine-5'-ditungstate",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_DB02183"
-  },
-  {
-    "label": "(5z)-13-chloro-14,16-dihydroxy-3,4,7,8,9,10-hexahydro-1h-2-benzoxacyclotetradecine-1,11(12h)-dione",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_DB08346"
-  },
-  {
-    "label": "etoposide",
-    "uri": "http://purl.obolibrary.org/obo/CHEBI_4911"
-  }
-]
-#+END_SRC
-
-***** ~/all_ddis~
-| Description | Find all drug-drug interactions (DDIs) in the DINTO ontology                                           |
-| Methods     | ~GET~                                                                                                  |
-| Parameters  | None                                                                                                   |
-| Returns     | A list containing pairs of the canonical URI for a drug-drug interaction, as well as its English Label |
-
-****** Example
-******* Response Body (Truncated)
-#+BEGIN_SRC json
-[
-  {
-    "label": "torasemide/trandolapril DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_11031"
-  },
-  {
-    "label": "cimetidine/heroin DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_02733"
-  },
-  {
-    "label": "methylergonovine/telithromycin DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_10154"
-  }
-]
-#+END_SRC
-
-***** ~/ddis~
-| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the /given/ drugs                                 |
-| Methods      | ~POST~                                                                                                                           |
-| Request Body | An object containing a list of /drug references/, named ~drugs~, where a /drug reference/ is either ~dinto:DB123~ or ~chebi:123~ |
-| Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved                                         |
-
-****** Example
-******* Request Body
- #+BEGIN_SRC json
-{"drugs": ["chebi:421707", "chebi:465284", "dinto:DB00503", "chebi:9342"]}
- #+END_SRC
-******* Response Body
- #+BEGIN_SRC json
-[
-  {
-    "drug_a": "chebi:421707",
-    "drug_b": "chebi:465284",
-    "label": "abacavir/ganciclovir DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_05759"
-  },
-  {
-    "drug_a": "chebi:421707",
-    "drug_b": "dinto:DB00503",
-    "label": "abacavir/ritonavir DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_11043"
-  }
-]
- #+END_SRC
+More information about Asclepius can be found [[./asclepius/README.org][here]].

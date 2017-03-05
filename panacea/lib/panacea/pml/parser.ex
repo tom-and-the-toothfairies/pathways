@@ -1,6 +1,5 @@
 defmodule Panacea.Pml.Parser do
-  alias Panacea.Pml.Parser.Error
-  require Logger
+  alias Panacea.Pml.Parser.{Logger, Error}
 
   @type drug :: String.t
 
