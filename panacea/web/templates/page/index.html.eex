@@ -1,7 +1,7 @@
 <%= form_for @conn, pml_path(@conn, :upload), [as: :upload, multipart: true, id: "file-form"], fn f -> %>
   <div class="form-group">
     <label>
-      PML file input <%= file_input f, :file, class: "form-control" %>
+      PML file input <%= file_input f, :file, class: "form-control", required: true %>
     </label>
   </div>
   <div class="form-group">
