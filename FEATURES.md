@@ -30,7 +30,7 @@ Once a file has been selected, users must be able to load it into the system for
 This feature has automated tests which can be run with the following command
 
 ```bash
-$ docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only pml_loading
+$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only pml_loading
 ```
 
 This feature can also be tested manually. Visit the [homepage] and
@@ -49,7 +49,7 @@ about the encountered error must be readily available.
 This feature has automated tests which can be run with the following command
 
 ```bash
-$ docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only pml_analysis
+$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only pml_analysis
 ```
 
 This feature can also be tested manually. Visit the [homepage] and select a
@@ -68,7 +68,7 @@ must be easily identified, and the error messages must be useful.
 This feature has automated tests which can be run with the following command
 
 ```bash
-$ docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only err_highlights
+$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only err_highlights
 ```
 
 This feature can also be tested manually. Visit the [homepage] and select a
@@ -81,7 +81,7 @@ valid PML and should result in a successful analysis.
 ## PML Log-file Generation - Complete
 
 ### Description
-The successful or insuccessful loading of PML files into the system is output
+The successful or unsuccessful loading of PML files into the system is output
 to the console logs of the panacea service.
 
 ### Testing
@@ -89,7 +89,7 @@ This feature is tested manually.
 
 First, open up the tail of the panacea logs:
 ```bash
-$ docker-compose logs -f panacea
+$ sudo docker-compose logs -f panacea
 ```
 Visit the [homepage] and select a file. Some useful files can be found in the
 [fixtures directory]. Press the `Submit` button. You should see log entries
@@ -132,7 +132,7 @@ must be reported back to the user as `identified drugs`.
 This feature has automated tests which can be run with the following command
 
 ```bash
-$ docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_drugs
+$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_drugs
 ```
 
 This feature can also be manually tested by uploading files. Some useful files
@@ -157,7 +157,7 @@ uploaded PML files. The drug-drug interactions are contained in DINTO.
 This feature has automated tests which can be run with the following command
 
 ```bash
-$ docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_ddis
+$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_ddis
 ```
 
 This feature can also be manually tested by uploading files. Some usefull files

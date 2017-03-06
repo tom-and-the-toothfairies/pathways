@@ -1,20 +1,27 @@
-* Asclepius ⚕
-Flask endpoint for querying DINTO. Supports querying for all drugs listed, as
-well as finding all, or specific drug-drug interactions.
+Asclepius ⚕
+===========
 
-This application acts as an adaptor to Chiron - an instance of Apache Fuseki,
-Chiron must be running before any queries can be served.
+Flask endpoint for querying DINTO. Supports querying for all drugs listed, as well as finding all, or specific drug-drug interactions.
 
-** Endpoints
-*** ~/all_drugs~
+This application acts as an adaptor to Chiron - an instance of Apache Fuseki, Chiron must be running before any queries can be served.
+
+Endpoints
+---------
+
+### `/all_drugs`
+
+|             |                                                                                       |
+|-------------|---------------------------------------------------------------------------------------|
 | Description | Find all drugs in the DINTO ontology                                                  |
-| Methods     | ~GET~                                                                                 |
+| Methods     | `GET`                                                                                 |
 | Parameters  | None                                                                                  |
 | Returns     | A list containing pairs of the canonical URI for a drug, as well as its English Label |
 
-**** Example
-***** Response Body (Truncated)
-#+BEGIN_SRC json
+#### Example
+
+##### Response Body (Truncated)
+
+```json
 [
   {
     "label": "carbapenem MM22383",
@@ -33,17 +40,22 @@ Chiron must be running before any queries can be served.
     "uri": "http://purl.obolibrary.org/obo/CHEBI_4911"
   }
 ]
-#+END_SRC
+```
 
-*** ~/all_ddis~
+### `/all_ddis`
+
+|             |                                                                                                        |
+|-------------|--------------------------------------------------------------------------------------------------------|
 | Description | Find all drug-drug interactions (DDIs) in the DINTO ontology                                           |
-| Methods     | ~GET~                                                                                                  |
+| Methods     | `GET`                                                                                                  |
 | Parameters  | None                                                                                                   |
 | Returns     | A list containing pairs of the canonical URI for a drug-drug interaction, as well as its English Label |
 
-**** Example
-***** Response Body (Truncated)
-#+BEGIN_SRC json
+#### Example
+
+##### Response Body (Truncated)
+
+```json
 [
   {
     "label": "torasemide/trandolapril DDI",
@@ -58,21 +70,28 @@ Chiron must be running before any queries can be served.
     "uri": "http://purl.obolibrary.org/obo/DINTO_10154"
   }
 ]
-#+END_SRC
+```
 
-*** ~/ddis~
-| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the /given/ drugs                                 |
-| Methods      | ~POST~                                                                                                                           |
-| Request Body | An object containing a list of /drug references/, named ~drugs~, where a /drug reference/ is either ~dinto:DB123~ or ~chebi:123~ |
+### `/ddis`
+
+|              |                                                                                                                                  |
+|--------------|----------------------------------------------------------------------------------------------------------------------------------|
+| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the *given* drugs                                 |
+| Methods      | `POST`                                                                                                                           |
+| Request Body | An object containing a list of *drug references*, named `drugs`, where a *drug reference* is either `dinto:DB123` or `chebi:123` |
 | Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved                                         |
 
-**** Example
-***** Request Body
-#+BEGIN_SRC json
+#### Example
+
+##### Request Body
+
+```json
 {"drugs": ["chebi:421707", "chebi:465284", "dinto:DB00503", "chebi:9342"]}
-#+END_SRC
-***** Response Body
-#+BEGIN_SRC json
+```
+
+##### Response Body
+
+```json
 [
   {
     "drug_a": "chebi:421707",
@@ -87,4 +106,4 @@ Chiron must be running before any queries can be served.
     "uri": "http://purl.obolibrary.org/obo/DINTO_11043"
   }
 ]
-#+END_SRC
+```

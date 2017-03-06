@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## Changed
+- Clarified installation instructions after feedback from client. Client left
+  feedback after release 0.3 indicating that our current README was unhelpful.
+  We have greatly simplified it and moved more non-essential information into
+  separate documents.
+
+## Added
+- install-docker.sh for easy docker installation on Ubuntu 16.0.4. Part of
+  simplifying the installation steps.
+
 ## [0.3] 2017-03-05
 
 ### Added
