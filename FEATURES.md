@@ -175,6 +175,6 @@ result in DDIs being reported to the user.
 
 ## DINTO Error and Warning highlights
 
-[README]: ./README.org
+[README]: ./README.md
 [homepage]: http://localhost:4000
 [fixtures directory]: ./panacea/test/fixtures

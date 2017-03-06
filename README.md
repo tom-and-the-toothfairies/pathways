@@ -74,7 +74,7 @@ Asclepius acts as an intermediary between Panacea and Chiron. It accepts
 requests to identify DDIs from Panacea, creates the necessary SPARQL query and
 passes it on to Chiron.
 
-More information about Asclepius can be found [here](./asclepius/README.org).
+More information about Asclepius can be found [here](./asclepius/README.md).
 
 ## Building Manually
 
