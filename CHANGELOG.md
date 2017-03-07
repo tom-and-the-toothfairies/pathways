@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
   feedback after release 0.3 indicating that our current README was unhelpful.
   We have greatly simplified it and moved more non-essential information into
   separate documents.
+- Updated user interface with loading icon to provide visual representation of
+  the request's duration.
 
 ## Added
 - install-docker.sh for easy docker installation on Ubuntu 16.0.4. Part of
@@ -32,7 +34,7 @@ All notable changes to this project will be documented in this file.
   take several minutes to load DINTO into memory so Panacea would have to poll
   it to see if it was ready. Chiron can load DINTO from its triple store
   instantly, so the waiting is no longer required.
-  
+
 ## [0.2] 2017-02-26
 
 ### Added
@@ -62,7 +64,7 @@ All notable changes to this project will be documented in this file.
   build process. Now Asclepius clones DINTO and checks out a specific revision
   instead.
 
-  
+
 ## [0.1] 2017-02-12
 
 ### Fixed

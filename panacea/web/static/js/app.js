@@ -9,6 +9,8 @@ document.getElementById('file-form').addEventListener('submit', e => {
 });
 
 async function submitFile() {
+  hideFileForm();
+  hideResults();
   try {
     const response = await fetch(this.action, {
       method: 'POST',
@@ -18,35 +20,61 @@ async function submitFile() {
     });
 
     if (response.ok) {
-      renderFileResponse(await response.json());
+      renderSuccess(await response.json());
     } else {
-      renderFileError(await response.json());
+      renderError(await response.json());
     }
     this.reset();
   } catch (err) {
     console.log(err);
   }
+  restoreFileForm();
 }
 
-const successPanel = document.getElementById('success');
-const errorPanel = document.getElementById('error-panel');
+const successElement = document.getElementById('success');
+const errorElement = document.getElementById('error');
 
-const renderFileResponse = data => {
-  // Parsed drugs
+const hideResults = () => {
+  errorElement.classList.add('hidden');
+  successElement.classList.add('hidden');
+}
+
+const renderSuccess = data => {
   const drugsResultMessage = document.getElementById('success-result-message');
-  drugsResultMessage.innerHTML = JSON.stringify(data.drugs);
-
-  // DDIS
   const ddisResultMessage = document.getElementById('success-ddis-message');
+
+  drugsResultMessage.innerHTML = JSON.stringify(data.drugs);
   ddisResultMessage.innerHTML = JSON.stringify(data.ddis);
 
-  errorPanel.style.display = 'none';
-  successPanel.style.display = 'block';
+  errorElement.classList.add('hidden');
+  successElement.classList.remove('hidden');
 };
 
-const renderFileError = data => {
+const renderError = data => {
   const errorResultMessage = document.getElementById('error-result-message');
   errorResultMessage.innerHTML = data.message;
-  errorPanel.style.display = 'block';
-  successPanel.style.display = 'none';
+
+  errorElement.classList.remove('hidden');
+  successElement.classList.add('hidden');
 };
+
+const formElement = document.getElementById('file-form');
+const loadingElement = document.getElementById('loading-container');
+
+const hideFileForm = () => {
+  formElement.classList.add('hidden');
+  loadingElement.classList.remove('hidden');
+}
+
+const restoreFileForm = () => {
+  formElement.classList.remove('hidden');
+  loadingElement.classList.add('hidden');
+}
+
+// to make the file input pretty take the filename from the form
+// and place it in a disabled input box right beside it :art:
+const filenameDisplayElement = document.getElementById('filename-display');
+const fileInputElement = document.getElementById('file-input');
+fileInputElement.addEventListener('change', function(e) {
+  filenameDisplayElement.value = this.files[0].name;
+});
