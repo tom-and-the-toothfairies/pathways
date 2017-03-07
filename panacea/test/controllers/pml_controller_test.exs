@@ -1,5 +1,5 @@
 defmodule Panacea.PmlControllerTest do
-  use Panacea.ConnCase
+  use Panacea.AuthorizedConnCase
 
   @fixtures_dir "test/fixtures/"
 

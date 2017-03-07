@@ -11,6 +11,7 @@ defmodule Panacea.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Panacea.Plugs.RequireAccessToken, []
   end
 
   scope "/", Panacea do
@@ -20,9 +21,7 @@ defmodule Panacea.Router do
   end
 
   scope "/api", Panacea do
-    # use browser pipeline until we add some simple
-    # auth to api pipeline
-    pipe_through :browser
+    pipe_through :api
 
     post "/pml", PmlController, :upload
   end

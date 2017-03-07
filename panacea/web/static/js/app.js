@@ -1,6 +1,8 @@
 import "babel-polyfill";
 import "phoenix_html";
 
+const apiAccessToken = document.getElementById('api-access-token').content;
+
 document.getElementById('file-form').addEventListener('submit', e => {
   e.preventDefault();
   submitFile.bind(e.target)();
@@ -11,7 +13,8 @@ async function submitFile() {
     const response = await fetch(this.action, {
       method: 'POST',
       body: new FormData(this),
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: new Headers({authorization: apiAccessToken})
     });
 
     if (response.ok) {

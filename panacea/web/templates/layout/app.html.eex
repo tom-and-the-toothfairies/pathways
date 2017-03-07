@@ -7,6 +7,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <%= tag :meta, name: "api-access-token", id: "api-access-token", content: @token %>
+
     <title>Panacea Pathways</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
