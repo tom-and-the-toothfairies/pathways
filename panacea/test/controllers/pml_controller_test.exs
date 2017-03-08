@@ -3,10 +3,6 @@ defmodule Panacea.PmlControllerTest do
 
   @fixtures_dir "test/fixtures/"
 
-  defp response_body(conn) do
-    Poison.decode!(conn.resp_body)
-  end
-
   describe "PmlController.upload/2" do
     @tag :err_highlights
     @tag :pml_loading
@@ -62,33 +58,10 @@ defmodule Panacea.PmlControllerTest do
       conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
 
       assert conn.status == 200
-      assert response_body(conn) |> Map.get("drugs") == ["chebi:1234", "dinto:DB1234"]
-    end
-
-    @tag :identify_ddis
-    @tag :pml_loading
-    test "identifies DDIs with the drugs from the pml", %{conn: conn} do
-      filename = "ddis.pml"
-      file_path = Path.join(@fixtures_dir, filename)
-      upload = %Plug.Upload{path: file_path, filename: filename}
-
-      conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
-
-      assert conn.status == 200
-      assert response_body(conn) |> Map.get("ddis") == [
-          %{
-            "drug_a" => "chebi:421707",
-            "drug_b" => "chebi:465284",
-            "label" => "abacavir/ganciclovir DDI",
-            "uri" => "http://purl.obolibrary.org/obo/DINTO_05759"
-          },
-          %{
-            "drug_a" => "chebi:421707",
-            "drug_b" => "dinto:DB00503",
-            "label" => "abacavir/ritonavir DDI",
-            "uri" => "http://purl.obolibrary.org/obo/DINTO_11043"
-          }
-        ]
+      assert response_body(conn) |> Map.get("drugs") == [
+        "paracetamol",
+        "cocaine"
+      ]
     end
   end
 end

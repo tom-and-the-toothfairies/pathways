@@ -12,17 +12,47 @@ async function submitFile() {
   hideFileForm();
   hideResults();
   try {
-    const response = await fetch(this.action, {
+    const drugs_response = await fetch(this.action, {
       method: 'POST',
       body: new FormData(this),
       credentials: 'same-origin',
       headers: new Headers({authorization: apiAccessToken})
     });
 
-    if (response.ok) {
-      renderSuccess(await response.json());
+    if (drugs_response.ok) {
+      const data = await drugs_response.json();
+      const drugs = data.drugs;
+
+      const uris_response = await fetch("/api/uris", {
+        method: 'POST',
+        body: JSON.stringify({labels: drugs}),
+        credentials: 'same-origin',
+        headers: new Headers({authorization: apiAccessToken, "Content-Type": "application/json"})
+      });
+
+      if (uris_response.ok) {
+        const data = await uris_response.json();
+        const uris = Object.keys(data.uris.found);
+
+        const ddis_response = await fetch("/api/ddis", {
+          method: 'POST',
+          body: JSON.stringify({drugs: uris}),
+          credentials: 'same-origin',
+          headers: new Headers({authorization: apiAccessToken, "Content-Type": "application/json"})
+        });
+
+        if (ddis_response.ok) {
+          const data = await ddis_response.json();
+          const ddis = data.ddis;
+          renderSuccess(drugs, ddis);
+        } else {
+        renderError(await ddis_response.json());
+        }
+      } else {
+        renderError(await uris_response.json());
+      }
     } else {
-      renderError(await response.json());
+      renderError(await drugs_response.json());
     }
     this.reset();
   } catch (err) {
@@ -39,12 +69,12 @@ const hideResults = () => {
   successElement.classList.add('hidden');
 }
 
-const renderSuccess = data => {
+const renderSuccess = (drugs, ddis) => {
   const drugsResultMessage = document.getElementById('success-result-message');
   const ddisResultMessage = document.getElementById('success-ddis-message');
 
-  drugsResultMessage.innerHTML = JSON.stringify(data.drugs);
-  ddisResultMessage.innerHTML = JSON.stringify(data.ddis);
+  drugsResultMessage.innerHTML = JSON.stringify(drugs);
+  ddisResultMessage.innerHTML = JSON.stringify(ddis);
 
   errorElement.classList.add('hidden');
   successElement.classList.remove('hidden');
@@ -77,4 +107,5 @@ const filenameDisplayElement = document.getElementById('filename-display');
 const fileInputElement = document.getElementById('file-input');
 fileInputElement.addEventListener('change', function(e) {
   filenameDisplayElement.value = this.files[0].name;
+  hideResults();
 });

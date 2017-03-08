@@ -24,5 +24,7 @@ defmodule Panacea.Router do
     pipe_through :api
 
     post "/pml", PmlController, :upload
+    post "/uris", AsclepiusController, :uris_for_labels
+    post "/ddis", AsclepiusController, :ddis
   end
 end
