@@ -77,4 +77,5 @@ const filenameDisplayElement = document.getElementById('filename-display');
 const fileInputElement = document.getElementById('file-input');
 fileInputElement.addEventListener('change', function(e) {
   filenameDisplayElement.value = this.files[0].name;
+  hideResults();
 });
