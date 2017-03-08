@@ -17,24 +17,19 @@
   </div>
 <% end %>
 
+<div class="panel panel-success hidden fades-in" id="drugs-panel">
+  <div class="panel-heading">Drugs Found</div>
+  <div class="panel-body" id="drugs-text"></div>
+</div>
+<div class="panel panel-success hidden fades-in" id="ddis-panel">
+  <div class="panel-heading">Drug-Drug Interactions Found</div>
+  <div class="panel-body" id="ddis-text"></div>
+</div>
+<div class="panel panel-danger hidden fades-in" id="error-panel">
+  <div class="panel-heading">PML Error</div>
+  <div class="panel-body" id="error-text"></div>
+</div>
+
 <div id="loading-container" class="center hidden fades-in">
   <%= img_tag(static_path(@conn, "/images/heart.svg"), class: "loading-icon") %>
-</div>
-
-<div id="success" class="hidden fades-in">
-  <div class="panel panel-success" id="success-panel-drugs">
-    <div class="panel-heading">Drugs Found</div>
-    <div class="panel-body" id="success-result-message"></div>
-  </div>
-  <div class="panel panel-success" id="success-panel-ddis">
-    <div class="panel-heading">Drug-Drug Interactions Found</div>
-    <div class="panel-body" id="success-ddis-message"></div>
-  </div>
-</div>
-
-<div id="error" class="hidden fades-in">
-  <div class="panel panel-danger" id="error-panel">
-    <div class="panel-heading">PML Error</div>
-    <div class="panel-body" id="error-result-message"></div>
-  </div>
 </div>
