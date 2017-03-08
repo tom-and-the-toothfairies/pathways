@@ -96,16 +96,20 @@ Endpoints
 ##### Request Body
 
 ```json
-{"drugs": [ "paracetamol",,,]}
+{"labels": [ "paracetamol", "flat seven up", "cocaine"]}
 ```
 
 ##### Response Body
 
 ```json
-[
-  "not_found": ['flat seven up'],
+{
   "found": {
-    "paracetamol": "dinto:db12345"
-  }
-]
+    "cocaine": "http://purl.obolibrary.org/obo/CHEBI_27958",
+    "paracetamol": "http://purl.obolibrary.org/obo/CHEBI_46195"
+  },
+  "not_found": [
+    "flat seven up"
+  ]
+}
+
 ```

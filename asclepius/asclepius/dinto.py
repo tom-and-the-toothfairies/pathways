@@ -57,6 +57,7 @@ def sparql(qfunction):
     return sparqled
 
 
+@lru_cache()
 @sparql
 def drugs(labels=None):
 
