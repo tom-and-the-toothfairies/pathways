@@ -22,6 +22,7 @@ async function submitFile() {
     if (drugs_response.ok) {
       const data = await drugs_response.json();
       const drugs = data.drugs;
+      displayDrugs(drugs);
 
       const uris_response = await fetch("/api/uris", {
         method: 'POST',
@@ -44,15 +45,15 @@ async function submitFile() {
         if (ddis_response.ok) {
           const data = await ddis_response.json();
           const ddis = data.ddis;
-          renderSuccess(drugs, ddis);
+          displayDdis(ddis);
         } else {
-        renderError(await ddis_response.json());
+        displayError(await ddis_response.json());
         }
       } else {
-        renderError(await uris_response.json());
+        displayError(await uris_response.json());
       }
     } else {
-      renderError(await drugs_response.json());
+      displayError(await drugs_response.json());
     }
     this.reset();
   } catch (err) {
@@ -61,32 +62,42 @@ async function submitFile() {
   restoreFileForm();
 }
 
-const successElement = document.getElementById('success');
-const errorElement = document.getElementById('error');
+const drugsPanel = document.getElementById('drugs-panel');
+const ddisPanel = document.getElementById('ddis-panel');
+const errorPanel = document.getElementById('error-panel');
 
 const hideResults = () => {
-  errorElement.classList.add('hidden');
-  successElement.classList.add('hidden');
+  drugsPanel.classList.add('hidden');
+  ddisPanel.classList.add('hidden');
+  errorPanel.classList.add('hidden');
 }
 
-const renderSuccess = (drugs, ddis) => {
-  const drugsResultMessage = document.getElementById('success-result-message');
-  const ddisResultMessage = document.getElementById('success-ddis-message');
+const displayDrugs = drugs => {
+  const drugsTextElement = document.getElementById('drugs-text');
+  drugsTextElement.innerHTML = JSON.stringify(drugs);
 
-  drugsResultMessage.innerHTML = JSON.stringify(drugs);
-  ddisResultMessage.innerHTML = JSON.stringify(ddis);
+  errorPanel.classList.add('hidden');
+  drugsPanel.classList.remove('hidden');
+  ddisPanel.classList.add('hidden');
+}
 
-  errorElement.classList.add('hidden');
-  successElement.classList.remove('hidden');
-};
+const displayDdis = ddis => {
+  const ddisTextElement = document.getElementById('ddis-text');
+  ddisTextElement.innerHTML = JSON.stringify(ddis);
 
-const renderError = data => {
-  const errorResultMessage = document.getElementById('error-result-message');
-  errorResultMessage.innerHTML = data.message;
+  errorPanel.classList.add('hidden');
+  drugsPanel.classList.remove('hidden');
+  ddisPanel.classList.remove('hidden');
+}
 
-  errorElement.classList.remove('hidden');
-  successElement.classList.add('hidden');
-};
+const displayError = error => {
+  const errorTextElement = document.getElementById('error-text');
+  errorTextElement.innerHTML = JSON.stringify(error);
+
+  errorPanel.classList.remove('hidden');
+  drugsPanel.classList.add('hidden');
+  ddisPanel.classList.add('hidden');
+}
 
 const formElement = document.getElementById('file-form');
 const loadingElement = document.getElementById('loading-container');
