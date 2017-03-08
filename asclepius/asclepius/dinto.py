@@ -58,13 +58,23 @@ def sparql(qfunction):
 
 
 @sparql
-def all_drugs():
+def drugs(labels=None):
+
+    if labels is not None:
+        if not isinstance(labels, frozenset):
+            raise ValueError("for cachability, `labels` must be given as a frozenset")
+        label_str_literals = [f'"{label}"' for label in labels]
+        filter = f'FILTER (?label in ({", ".join(label_str_literals)}))'
+    else:
+        filter = ''
+
     return f'''
     {PREFIXES}
     SELECT ?uri ?label
     WHERE {{
-        ?uri rdfs:subClassOf {PHARMACOLOGICAL_ENTITY}.
+        ?uri rdfs:subClassOf {PHARMACOLOGICAL_ENTITY} .
         ?uri rdfs:label ?label
+        {filter}
     }}
     '''
 
@@ -79,7 +89,6 @@ def all_ddis():
         ?uri rdfs:label ?label
     }}
     '''
-
 
 def _valid_drug(drug_identifier):
     return DRUG_PATTERN.match(drug_identifier) is not None

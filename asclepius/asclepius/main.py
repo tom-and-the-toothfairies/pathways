@@ -73,5 +73,17 @@ def ddis():
     return jsonify(dinto_res)
 
 
+@app.route('/uris')
+def uris():
+    """
+    """
+    params = request.get_json()
+    if params is None or 'labels' not in params or not params['labels']:
+        raise InvalidUsage("Expecting {'labels': [...]} with at least two labels")
+
+    labels = params['labels']
+    drugs = dinto.drugs(labels)
+
+        drugs = dinto.drugs(labels)
 if __name__ == '__main__':
     app.run()
