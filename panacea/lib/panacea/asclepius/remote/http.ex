@@ -15,7 +15,7 @@ defmodule Panacea.Asclepius.Remote.HTTP do
 
   def uris_for_labels(labels) do
     {:ok, body} = %{labels: labels} |> Poison.encode
-    asclepius_uri("/drugs")
+    asclepius_uri("/uris")
     |> HTTPoison.post(body, @default_headers)
     |> decode_response()
   end
