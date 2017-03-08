@@ -81,29 +81,31 @@ Endpoints
 | Request Body | An object containing a list of *drug references*, named `drugs`, where a *drug reference* is either `dinto:DB123` or `chebi:123` |
 | Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved                                         |
 
+
+### `/uris`
+
+|              |                                                                                                                  |
+|--------------|------------------------------------------------------------------------------------------------------------------|
+| Description  | For a given list of drug labels, find their `chebi:123/dinto:db123` identifier (to be used when calling `/ddis`) |
+| Methods      | `POST`                                                                                                           |
+| Request Body | An object containing a list of drug labels, named `labels`                                                       |
+| Returns      | See below                                     |
+
 #### Example
 
 ##### Request Body
 
 ```json
-{"drugs": ["chebi:421707", "chebi:465284", "dinto:DB00503", "chebi:9342"]}
+{"drugs": [ "paracetamol",,,]}
 ```
 
 ##### Response Body
 
 ```json
 [
-  {
-    "drug_a": "chebi:421707",
-    "drug_b": "chebi:465284",
-    "label": "abacavir/ganciclovir DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_05759"
-  },
-  {
-    "drug_a": "chebi:421707",
-    "drug_b": "dinto:DB00503",
-    "label": "abacavir/ritonavir DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_11043"
+  "not_found": ['flat seven up'],
+  "found": {
+    "paracetamol": "dinto:db12345"
   }
 ]
 ```
