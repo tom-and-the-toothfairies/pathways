@@ -27,35 +27,49 @@ async function submitFile() {
     if (drugsResponse.ok) {
       const data = await drugsResponse.json();
       const drugs = data.drugs;
-      displayDrugs(drugs);
+      if (drugs.length > 0){
+        displayDrugs(drugs);
 
-      const urisResponse = await fetch("/api/uris", {
-        method: 'POST',
-        body: JSON.stringify({labels: drugs}),
-        credentials: 'same-origin',
-        headers: defaultHeaders
-      });
-
-      if (urisResponse.ok) {
-        const data = await urisResponse.json();
-        const uris = Object.keys(data.uris.found);
-
-        const ddisResponse = await fetch("/api/ddis", {
+        const urisResponse = await fetch("/api/uris", {
           method: 'POST',
-          body: JSON.stringify({drugs: uris}),
+          body: JSON.stringify({labels: drugs}),
           credentials: 'same-origin',
           headers: defaultHeaders
         });
 
-        if (ddisResponse.ok) {
-          const data = await ddisResponse.json();
-          const ddis = data.ddis;
-          displayDdis(ddis);
+        if (urisResponse.ok) {
+          const data = await urisResponse.json();
+          const uris = Object.keys(data.uris.found);
+          const unidentifiedDrugs = Object.values(data.uris.not_found);
+          if (unidentifiedDrugs.length > 0){
+            displayUnidentifiedDrugs(unidentifiedDrugs);
+          }
+          if (uris.length >= 2){
+            const ddisResponse = await fetch("/api/ddis", {
+              method: 'POST',
+              body: JSON.stringify({drugs: uris}),
+              credentials: 'same-origin',
+              headers: defaultHeaders
+            });
+
+            if (ddisResponse.ok) {
+              const data = await ddisResponse.json();
+              const ddis = data.ddis;
+              displayDdis(ddis);
+            } else {
+              displayError(await ddisResponse.json());
+            }
+          }
+          else {
+            // TODO: ddis require more than one drug by definition
+            console.log("less than two identified drugs, no ddis")
+          }
         } else {
-        displayError(await ddisResponse.json());
+          displayError(await urisResponse.json());
         }
-      } else {
-        displayError(await urisResponse.json());
+      }
+      else {
+        displayError({"message": "No drugs found"});
       }
     } else {
       displayError(await drugsResponse.json());
@@ -68,11 +82,13 @@ async function submitFile() {
 }
 
 const drugsPanel = document.getElementById('drugs-panel');
+const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel');
 const ddisPanel = document.getElementById('ddis-panel');
 const errorPanel = document.getElementById('error-panel');
 
 const hideResults = () => {
   drugsPanel.classList.add('hidden');
+  unidentifiedDrugsPanel.classList.add('hidden');
   ddisPanel.classList.add('hidden');
   errorPanel.classList.add('hidden');
 }
@@ -81,17 +97,20 @@ const displayDrugs = drugs => {
   const drugsTextElement = document.getElementById('drugs-text');
   drugsTextElement.innerHTML = JSON.stringify(drugs);
 
-  errorPanel.classList.add('hidden');
   drugsPanel.classList.remove('hidden');
-  ddisPanel.classList.add('hidden');
+}
+
+const displayUnidentifiedDrugs = drugs => {
+  const unidentifiedDrugsTextElement = document.getElementById('unidentified-drugs-text');
+  unidentifiedDrugsTextElement.innerHTML = JSON.stringify(drugs);
+
+  unidentifiedDrugsPanel.classList.remove('hidden');
 }
 
 const displayDdis = ddis => {
   const ddisTextElement = document.getElementById('ddis-text');
   ddisTextElement.innerHTML = JSON.stringify(ddis);
 
-  errorPanel.classList.add('hidden');
-  drugsPanel.classList.remove('hidden');
   ddisPanel.classList.remove('hidden');
 }
 
@@ -100,8 +119,6 @@ const displayError = error => {
   errorTextElement.innerHTML = JSON.stringify(error);
 
   errorPanel.classList.remove('hidden');
-  drugsPanel.classList.add('hidden');
-  ddisPanel.classList.add('hidden');
 }
 
 const formElement = document.getElementById('file-form');

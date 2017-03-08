@@ -21,6 +21,10 @@
   <div class="panel-heading">Drugs Found</div>
   <div class="panel-body" id="drugs-text"></div>
 </div>
+<div class="panel panel-warning hidden fades-in" id="unidentified-drugs-panel">
+  <div class="panel-heading">Unidentified Drugs Found</div>
+  <div class="panel-body" id="unidentified-drugs-text"></div>
+</div>
 <div class="panel panel-success hidden fades-in" id="ddis-panel">
   <div class="panel-heading">Drug-Drug Interactions Found</div>
   <div class="panel-body" id="ddis-text"></div>
