@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
   separate documents.
 - Updated user interface with loading icon to provide visual representation of
   the request's duration.
+- The representation of drugs in PML. Our initial representation meant that
+  users had to look up the CHEBI/DINTO identifier for a drug. Now users can
+  specify drugs with a new `drug { "name" }` construct.
 
 ## Added
 - install-docker.sh for easy docker installation on Ubuntu 16.0.4. Part of
