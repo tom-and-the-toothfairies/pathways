@@ -2,6 +2,11 @@ import "babel-polyfill";
 import "phoenix_html";
 
 const apiAccessToken = document.getElementById('api-access-token').content;
+const defaultHeaders = new Headers({
+  "Authorization": apiAccessToken,
+  "Content-Type": "application/json",
+  "Accept": "application/json, text/plain, */*"
+});
 
 document.getElementById('file-form').addEventListener('submit', e => {
   e.preventDefault();
@@ -12,47 +17,47 @@ async function submitFile() {
   hideFileForm();
   hideResults();
   try {
-    const drugs_response = await fetch(this.action, {
+    const drugsResponse = await fetch(this.action, {
       method: 'POST',
       body: new FormData(this),
       credentials: 'same-origin',
       headers: new Headers({authorization: apiAccessToken})
     });
 
-    if (drugs_response.ok) {
-      const data = await drugs_response.json();
+    if (drugsResponse.ok) {
+      const data = await drugsResponse.json();
       const drugs = data.drugs;
 
-      const uris_response = await fetch("/api/uris", {
+      const urisResponse = await fetch("/api/uris", {
         method: 'POST',
         body: JSON.stringify({labels: drugs}),
         credentials: 'same-origin',
-        headers: new Headers({authorization: apiAccessToken, "Content-Type": "application/json"})
+        headers: defaultHeaders
       });
 
-      if (uris_response.ok) {
-        const data = await uris_response.json();
+      if (urisResponse.ok) {
+        const data = await urisResponse.json();
         const uris = Object.keys(data.uris.found);
 
-        const ddis_response = await fetch("/api/ddis", {
+        const ddisResponse = await fetch("/api/ddis", {
           method: 'POST',
           body: JSON.stringify({drugs: uris}),
           credentials: 'same-origin',
-          headers: new Headers({authorization: apiAccessToken, "Content-Type": "application/json"})
+          headers: defaultHeaders
         });
 
-        if (ddis_response.ok) {
-          const data = await ddis_response.json();
+        if (ddisResponse.ok) {
+          const data = await ddisResponse.json();
           const ddis = data.ddis;
           renderSuccess(drugs, ddis);
         } else {
-        renderError(await ddis_response.json());
+        renderError(await ddisResponse.json());
         }
       } else {
-        renderError(await uris_response.json());
+        renderError(await urisResponse.json());
       }
     } else {
-      renderError(await drugs_response.json());
+      renderError(await drugsResponse.json());
     }
     this.reset();
   } catch (err) {
