@@ -56,21 +56,25 @@ defmodule Panacea.Pml.ParserTest do
               tool { "pills" }
               script { "eat the pills" }
               agent { "patient" }
-              requires { "chebi:1234" }
+              requires {
+                drug { "paracetamol" }
+              }
               provides { "a cured patient" }
             }
             action baz2 {
               tool { "pills" }
               script { "eat the pills" }
               agent { "patient" }
-              requires { "dinto:DB1234" }
+              requires {
+                drug { "cocaine" }
+              }
               provides { "a cured patient" }
             }
           }
         }
       """
 
-      assert Parser.parse(pml) == {:ok, ["chebi:1234","dinto:DB1234"]}
+      assert Parser.parse(pml) == {:ok, ["paracetamol", "cocaine"]}
     end
   end
 end

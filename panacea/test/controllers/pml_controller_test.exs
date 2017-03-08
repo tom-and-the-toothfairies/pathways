@@ -58,7 +58,10 @@ defmodule Panacea.PmlControllerTest do
       conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
 
       assert conn.status == 200
-      assert response_body(conn) |> Map.get("drugs") == ["chebi:1234", "dinto:DB1234"]
+      assert response_body(conn) |> Map.get("drugs") == [
+        "paracetamol",
+        "cocaine"
+      ]
     end
   end
 end

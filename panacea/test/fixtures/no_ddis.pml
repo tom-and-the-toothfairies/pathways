@@ -4,14 +4,18 @@ process foo {
       tool { "pills" }
       script { "eat the pills" }
       agent { "patient" }
-      requires { "chebi:1234" }
+      requires {
+        drug { "paracetamol" }
+      }
       provides { "a cured patient" }
     }
     action baz2 {
       tool { "pills" }
       script { "eat the pills" }
       agent { "patient" }
-      requires { "dinto:DB1234" }
+      requires {
+        drug { "cocaine" }
+      }
       provides { "a cured patient" }
     }
   }
