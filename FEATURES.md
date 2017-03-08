@@ -110,9 +110,9 @@ See [On-Screen PML Reporting](#on-screen-pml-reporting---complete)
 ### Description
 The system must identify drug-drug interactions between any drugs in a PML
 file. To do this the system must be able to identify drugs in a given PML file.
-We have chosen to use CHEBI and DINTO identifiers to denote drugs in PML. These
-identifiers take the form `chebi:\d+` or `dinto:DB\d+` where `\d+` is any
-sequence of digits.
+Users can specify a drug using the following construct:
+
+`drug { "drug_name" }`
 
 Drugs to be administered to patients must be placed in `requires` blocks within
 the PML document. For example
@@ -120,7 +120,7 @@ the PML document. For example
 ```
 process foo {
   task bar {
-    requires { "chebi:1234" }
+    requires { drug { "paracetamol" } }
   }
 }
 ```
