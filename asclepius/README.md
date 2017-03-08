@@ -81,7 +81,29 @@ Endpoints
 | Request Body | An object containing a list of *drug references*, named `drugs`, where a *drug reference* is either `dinto:DB123` or `chebi:123` |
 | Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved                                         |
 
+#### Example
+##### Request Body
+```json
+{
+  "drugs": [
+    "http://purl.obolibrary.org/obo/DINTO_DB00214",
+    "http://purl.obolibrary.org/obo/DINTO_DB00519"
+  ]
+}
+```
 
+##### Response Body
+
+```json
+[
+  {
+    "drug_a": "http://purl.obolibrary.org/obo/DINTO_DB00214",
+    "drug_b": "http://purl.obolibrary.org/obo/DINTO_DB00519",
+    "label": "torasemide/trandolapril DDI",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_11031"
+  }
+]
+```
 ### `/uris`
 
 |              |                                                                                                                  |
@@ -104,8 +126,9 @@ Endpoints
 ```json
 {
   "found": {
-    "cocaine": "http://purl.obolibrary.org/obo/CHEBI_27958",
-    "paracetamol": "http://purl.obolibrary.org/obo/CHEBI_46195"
+    "http://purl.obolibrary.org/obo/CHEBI_27958": "cocaine",
+    "http://purl.obolibrary.org/obo/CHEBI_46195": "paracetamol",
+
   },
   "not_found": [
     "flat seven up"

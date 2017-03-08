@@ -91,22 +91,17 @@ def all_ddis():
     }}
     '''
 
-def _valid_drug(drug_identifier):
-    return DRUG_PATTERN.match(drug_identifier) is not None
-
 
 @sparql
 def ddi_from_drugs(drugs):
     if not isinstance(drugs, frozenset):
         raise ValueError("for cachability, `drugs` must be given as a frozenset")
-
+    print(drugs)
     if len(drugs) < 2:
         raise ValueError("Need at least 2 drugs to find interactions")
 
-    if not all(_valid_drug(drug) for drug in drugs):
-        raise ValueError("Drugs must be specified as chebi:123 or dinto:DB123")
-
-    drug_search_space = ', '.join(drugs)
+    quoted = (f'<{uri}>' for uri in drugs)
+    drug_search_space = ', '.join(quoted)
 
     return f'''
     {PREFIXES}

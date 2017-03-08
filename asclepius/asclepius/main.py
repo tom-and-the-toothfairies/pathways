@@ -63,13 +63,6 @@ def ddis():
     except ValueError as e:
         raise InvalidUsage(str(e))
 
-    for ddi in dinto_res:
-        for drug in ('drug_a', 'drug_b'):
-            if ddi[drug].startswith(dinto.DINTO_PREFIX):
-                ddi[drug] = ddi[drug].replace(dinto.DINTO_PREFIX, 'dinto:')
-            elif ddi[drug].startswith(dinto.CHEBI_PREFIX):
-                ddi[drug] = ddi[drug].replace(dinto.CHEBI_PREFIX, 'chebi:')
-
     return jsonify(dinto_res)
 
 
@@ -84,15 +77,15 @@ def uris():
     labels = frozenset(params['labels'])
     drugs = dinto.drugs(labels)
 
-    to_uri = {}
+    to_label = {}
     for entry in drugs:
-        to_uri[entry['label']] = entry['uri']
+        to_label[entry['uri']] = entry['label']
 
-    missing = labels - set(to_uri.keys())
+    missing = labels - set(to_label.values())
 
     result = {
         'not_found': list(missing),
-        'found': to_uri,
+        'found': to_label,
     }
     return jsonify(result)
 
