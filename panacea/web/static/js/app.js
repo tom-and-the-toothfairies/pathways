@@ -33,7 +33,6 @@ async function submitFile() {
       if (uris_response.ok) {
         const data = await uris_response.json();
         const uris = Object.keys(data.uris.found);
-        console.log(uris);
 
         const ddis_response = await fetch("/api/ddis", {
           method: 'POST',
