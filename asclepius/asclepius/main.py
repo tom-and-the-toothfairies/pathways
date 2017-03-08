@@ -2,11 +2,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 from flask import jsonify, request
+
 from app import app
-
 import dinto
-
-
 
 
 class InvalidUsage(Exception):

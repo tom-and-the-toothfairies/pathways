@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 import re
 import requests
 import logging
@@ -57,13 +58,11 @@ def sparql(qfunction):
     return sparqled
 
 
-@lru_cache()
 @sparql
 def drugs(labels=None):
-
     if labels is not None:
-        if not isinstance(labels, frozenset):
-            raise ValueError("for cachability, `labels` must be given as a frozenset")
+        if not isinstance(labels, Iterable):
+            raise TypeError("`labels` must be iterable")
         label_str_literals = [f'"{label}"' for label in labels]
         filter = f'FILTER (?label in ({", ".join(label_str_literals)}))'
     else:
@@ -94,9 +93,9 @@ def all_ddis():
 
 @sparql
 def ddi_from_drugs(drugs):
-    if not isinstance(drugs, frozenset):
-        raise ValueError("for cachability, `drugs` must be given as a frozenset")
-    print(drugs)
+    if not isinstance(drugs, Iterable):
+        raise TypeError("`drugs` must be iterable")
+
     if len(drugs) < 2:
         raise ValueError("Need at least 2 drugs to find interactions")
 
