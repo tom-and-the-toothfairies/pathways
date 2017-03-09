@@ -70,7 +70,7 @@ def uris():
     """
     params = request.get_json()
     if params is None or 'labels' not in params or not params['labels']:
-        raise InvalidUsage("Expecting {'labels': [...]} with at least two labels")
+        raise InvalidUsage("Expecting {'labels': [...]} - a list of labels")
 
     labels = frozenset(params['labels'])
     drugs = dinto.drugs(labels)
