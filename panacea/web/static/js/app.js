@@ -27,6 +27,7 @@ async function submitFile() {
     if (drugsResponse.ok) {
       const data = await drugsResponse.json();
       const drugs = data.drugs;
+
       if (drugs.length > 0){
         displayDrugs(drugs);
 
@@ -40,10 +41,12 @@ async function submitFile() {
         if (urisResponse.ok) {
           const data = await urisResponse.json();
           const uris = Object.keys(data.uris.found);
-          const unidentifiedDrugs = Object.values(data.uris.not_found);
+          const unidentifiedDrugs = data.uris.not_found;
+
           if (unidentifiedDrugs.length > 0){
             displayUnidentifiedDrugs(unidentifiedDrugs);
           }
+
           if (uris.length >= 2){
             const ddisResponse = await fetch("/api/ddis", {
               method: 'POST',
@@ -61,15 +64,13 @@ async function submitFile() {
             }
           }
           else {
-            // TODO: ddis require more than one drug by definition
-            console.log("less than two identified drugs, no ddis")
+            console.log("by definition ddis require more than one drug")
           }
         } else {
           displayError(await urisResponse.json());
         }
-      }
-      else {
-        displayError({"message": "No drugs found"});
+      } else {
+        displayError({message: "No drugs found"});
       }
     } else {
       displayError(await drugsResponse.json());
