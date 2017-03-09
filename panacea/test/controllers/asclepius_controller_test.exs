@@ -19,15 +19,22 @@ defmodule Panacea.AsclepiusControllerTest do
       resp = post conn, asclepius_path(conn, :uris_for_labels), %{labels: labels}
 
       assert resp.status == 200
-      assert response_body(resp) |> Map.get("uris") == %{
-        "found" => %{
-          "http://purl.obolibrary.org/obo/CHEBI_27958" => "cocaine",
-          "http://purl.obolibrary.org/obo/CHEBI_46195" => "paracetamol",
-        },
-        "not_found" => [
-          "flat seven up"
-        ]
-      }
+      assert response_body(resp) |> Map.get("uris") ==
+        %{
+          "found" => [
+            %{
+              "label" => "cocaine",
+              "uri" => "http://purl.obolibrary.org/obo/CHEBI_27958"
+            },
+            %{
+              "label" => "paracetamol",
+              "uri" => "http://purl.obolibrary.org/obo/CHEBI_46195"
+            }
+          ],
+          "not_found" => [
+            "flat seven up"
+          ]
+        }
     end
   end
 
@@ -53,8 +60,8 @@ defmodule Panacea.AsclepiusControllerTest do
 
     test "returns the ddis for the given drugs", %{conn: conn} do
       drugs = [
-         "http://purl.obolibrary.org/obo/DINTO_DB00214",
-         "http://purl.obolibrary.org/obo/DINTO_DB00519",
+        "http://purl.obolibrary.org/obo/DINTO_DB00214",
+        "http://purl.obolibrary.org/obo/DINTO_DB00519",
       ]
       resp = post conn, asclepius_path(conn, :ddis), %{drugs: drugs}
 

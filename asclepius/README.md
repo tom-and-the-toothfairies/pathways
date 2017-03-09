@@ -125,11 +125,16 @@ Endpoints
 
 ```json
 {
-  "found": {
-    "http://purl.obolibrary.org/obo/CHEBI_27958": "cocaine",
-    "http://purl.obolibrary.org/obo/CHEBI_46195": "paracetamol",
-
-  },
+  "found": [
+    {
+      "label": "cocaine",
+      "uri": "http://purl.obolibrary.org/obo/CHEBI_27958"
+    },
+    {
+      "label": "paracetamol",
+      "uri": "http://purl.obolibrary.org/obo/CHEBI_46195"
+    }
+  ],
   "not_found": [
     "flat seven up"
   ]

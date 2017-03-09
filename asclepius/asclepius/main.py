@@ -73,17 +73,12 @@ def uris():
         raise InvalidUsage("Expecting {'labels': [...]} - a list of labels")
 
     labels = frozenset(params['labels'])
-    drugs = dinto.drugs(labels)
-
-    to_label = {}
-    for entry in drugs:
-        to_label[entry['uri']] = entry['label']
-
-    missing = labels - set(to_label.values())
+    found = dinto.drugs(labels)
+    not_found = labels - set([item['label'] for item in found])
 
     result = {
-        'not_found': list(missing),
-        'found': to_label,
+        'found': found,
+        'not_found': list(not_found),
     }
     return jsonify(result)
 

@@ -40,7 +40,7 @@ async function submitFile() {
 
         if (urisResponse.ok) {
           const data = await urisResponse.json();
-          const uris = Object.keys(data.uris.found);
+          const uris = data.uris.found.map(x => x.uri);
           const unidentifiedDrugs = data.uris.not_found;
 
           if (unidentifiedDrugs.length > 0){
