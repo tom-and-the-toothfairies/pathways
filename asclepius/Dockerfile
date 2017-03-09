@@ -7,7 +7,7 @@ EXPOSE 5000
 ENV PYTHONPATH=asclepius
 ENV FLASK_CONFIGURATION=production
 
-RUN apk --no-cache add git gcc musl-dev
+RUN apk --no-cache add gcc musl-dev
 
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
