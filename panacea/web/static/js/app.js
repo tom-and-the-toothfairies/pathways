@@ -2,6 +2,11 @@ import "babel-polyfill";
 import "phoenix_html";
 
 const apiAccessToken = document.getElementById('api-access-token').content;
+const defaultHeaders = new Headers({
+  "Authorization": apiAccessToken,
+  "Content-Type": "application/json",
+  "Accept": "application/json, text/plain, */*"
+});
 
 document.getElementById('file-form').addEventListener('submit', e => {
   e.preventDefault();
@@ -12,17 +17,62 @@ async function submitFile() {
   hideFileForm();
   hideResults();
   try {
-    const response = await fetch(this.action, {
+    const drugsResponse = await fetch(this.action, {
       method: 'POST',
       body: new FormData(this),
       credentials: 'same-origin',
       headers: new Headers({authorization: apiAccessToken})
     });
 
-    if (response.ok) {
-      renderSuccess(await response.json());
+    if (drugsResponse.ok) {
+      const data = await drugsResponse.json();
+      const drugs = data.drugs;
+
+      if (drugs.length > 0){
+        displayDrugs(drugs);
+
+        const urisResponse = await fetch("/api/uris", {
+          method: 'POST',
+          body: JSON.stringify({labels: drugs}),
+          credentials: 'same-origin',
+          headers: defaultHeaders
+        });
+
+        if (urisResponse.ok) {
+          const data = await urisResponse.json();
+          const uris = data.uris.found.map(x => x.uri);
+          const unidentifiedDrugs = data.uris.not_found;
+
+          if (unidentifiedDrugs.length > 0){
+            displayUnidentifiedDrugs(unidentifiedDrugs);
+          }
+
+          if (uris.length >= 2){
+            const ddisResponse = await fetch("/api/ddis", {
+              method: 'POST',
+              body: JSON.stringify({drugs: uris}),
+              credentials: 'same-origin',
+              headers: defaultHeaders
+            });
+
+            if (ddisResponse.ok) {
+              const data = await ddisResponse.json();
+              const ddis = data.ddis;
+              displayDdis(ddis);
+            } else {
+              displayError(await ddisResponse.json());
+            }
+          } else {
+            console.log("by definition ddis require more than one drug")
+          }
+        } else {
+          displayError(await urisResponse.json());
+        }
+      } else {
+        displayError({message: "No drugs found"});
+      }
     } else {
-      renderError(await response.json());
+      displayError(await drugsResponse.json());
     }
     this.reset();
   } catch (err) {
@@ -31,32 +81,45 @@ async function submitFile() {
   restoreFileForm();
 }
 
-const successElement = document.getElementById('success');
-const errorElement = document.getElementById('error');
+const drugsPanel = document.getElementById('drugs-panel');
+const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel');
+const ddisPanel = document.getElementById('ddis-panel');
+const errorPanel = document.getElementById('error-panel');
 
 const hideResults = () => {
-  errorElement.classList.add('hidden');
-  successElement.classList.add('hidden');
+  drugsPanel.classList.add('hidden');
+  unidentifiedDrugsPanel.classList.add('hidden');
+  ddisPanel.classList.add('hidden');
+  errorPanel.classList.add('hidden');
 }
 
-const renderSuccess = data => {
-  const drugsResultMessage = document.getElementById('success-result-message');
-  const ddisResultMessage = document.getElementById('success-ddis-message');
+const displayDrugs = drugs => {
+  const drugsTextElement = document.getElementById('drugs-text');
+  drugsTextElement.innerHTML = JSON.stringify(drugs);
 
-  drugsResultMessage.innerHTML = JSON.stringify(data.drugs);
-  ddisResultMessage.innerHTML = JSON.stringify(data.ddis);
+  drugsPanel.classList.remove('hidden');
+}
 
-  errorElement.classList.add('hidden');
-  successElement.classList.remove('hidden');
-};
+const displayUnidentifiedDrugs = drugs => {
+  const unidentifiedDrugsTextElement = document.getElementById('unidentified-drugs-text');
+  unidentifiedDrugsTextElement.innerHTML = JSON.stringify(drugs);
 
-const renderError = data => {
-  const errorResultMessage = document.getElementById('error-result-message');
-  errorResultMessage.innerHTML = data.message;
+  unidentifiedDrugsPanel.classList.remove('hidden');
+}
 
-  errorElement.classList.remove('hidden');
-  successElement.classList.add('hidden');
-};
+const displayDdis = ddis => {
+  const ddisTextElement = document.getElementById('ddis-text');
+  ddisTextElement.innerHTML = JSON.stringify(ddis);
+
+  ddisPanel.classList.remove('hidden');
+}
+
+const displayError = error => {
+  const errorTextElement = document.getElementById('error-text');
+  errorTextElement.innerHTML = JSON.stringify(error);
+
+  errorPanel.classList.remove('hidden');
+}
 
 const formElement = document.getElementById('file-form');
 const loadingElement = document.getElementById('loading-container');

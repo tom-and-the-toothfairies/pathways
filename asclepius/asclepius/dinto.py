@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 import re
 import requests
 import logging
@@ -58,13 +59,22 @@ def sparql(qfunction):
 
 
 @sparql
-def all_drugs():
+def drugs(labels=None):
+    if labels is not None:
+        if not isinstance(labels, Iterable):
+            raise TypeError("`labels` must be iterable")
+        label_str_literals = [f'"{label}"' for label in labels]
+        filter = f'FILTER (?label in ({", ".join(label_str_literals)}))'
+    else:
+        filter = ''
+
     return f'''
     {PREFIXES}
     SELECT ?uri ?label
     WHERE {{
-        ?uri rdfs:subClassOf {PHARMACOLOGICAL_ENTITY}.
+        ?uri rdfs:subClassOf {PHARMACOLOGICAL_ENTITY} .
         ?uri rdfs:label ?label
+        {filter}
     }}
     '''
 
@@ -81,22 +91,16 @@ def all_ddis():
     '''
 
 
-def _valid_drug(drug_identifier):
-    return DRUG_PATTERN.match(drug_identifier) is not None
-
-
 @sparql
 def ddi_from_drugs(drugs):
-    if not isinstance(drugs, frozenset):
-        raise ValueError("for cachability, `drugs` must be given as a frozenset")
+    if not isinstance(drugs, Iterable):
+        raise TypeError("`drugs` must be iterable")
 
     if len(drugs) < 2:
         raise ValueError("Need at least 2 drugs to find interactions")
 
-    if not all(_valid_drug(drug) for drug in drugs):
-        raise ValueError("Drugs must be specified as chebi:123 or dinto:DB123")
-
-    drug_search_space = ', '.join(drugs)
+    quoted = (f'<{uri}>' for uri in drugs)
+    drug_search_space = ', '.join(quoted)
 
     return f'''
     {PREFIXES}

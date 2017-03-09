@@ -23,6 +23,11 @@ defmodule Panacea.AuthorizedConnCase do
 
       import Panacea.Router.Helpers
 
+
+      def response_body(conn) do
+        Poison.decode!(conn.resp_body)
+      end
+
       # The default endpoint for testing
       @endpoint Panacea.Endpoint
     end

@@ -3,10 +3,9 @@ defmodule Panacea.PmlController do
 
   def upload(conn, %{"upload" => %{"file" => %Plug.Upload{path: path}}}) do
     path
-    |> File.read
-    |> validate
-    |> parse
-    |> get_ddis
+    |> File.read()
+    |> validate()
+    |> parse()
     |> respond(conn)
   end
 
@@ -25,18 +24,10 @@ defmodule Panacea.PmlController do
     {:error, message}
   end
 
-  defp get_ddis({:ok, drugs}) do
-    {:ok, ddis} = Panacea.Asclepius.ddis(drugs)
-    {:ok, %{drugs: drugs, ddis: ddis}}
-  end
-  defp get_ddis({:error, message}) do
-    {:error, message}
-  end
-
-  defp respond({:ok, response}, conn) do
+  defp respond({:ok, drugs}, conn) do
     conn
     |> put_status(:ok)
-    |> json(response)
+    |> json(%{drugs: drugs})
   end
   defp respond({:error, message}, conn) do
     conn

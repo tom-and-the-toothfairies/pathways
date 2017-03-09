@@ -1,24 +1,23 @@
 import pytest
 
 from asclepius.dinto import (
-        _valid_drug,
-        ddi_from_drugs,
-    )
+    ddi_from_drugs,
+    drugs
+)
 
 
-def test_valid_drug():
-    assert _valid_drug('chebi:123')
-    assert _valid_drug('dinto:DB123')
-    assert not _valid_drug('dinto:123')
-    assert not _valid_drug('chebi:DB123')
-
-
-def test_ddi_from_drugs_raises_with_incorrect_drug_identifiers():
-    with pytest.raises(ValueError):
-        ddi_from_drugs(frozenset([]))
-
-    with pytest.raises(ValueError):
-        ddi_from_drugs(frozenset(['garbage', 'rubbish']))
-
+def test_ddi_from_drugs_raises_with_uncachable_things():
     with pytest.raises(TypeError):
-        ddi_from_drugs(['dinto:db123', 'chebi:123'])
+        ddi_from_drugs([''])
+
+def test_ddi_from_drugs_raises_with_too_few_drugs():
+    with pytest.raises(ValueError):
+        ddi_from_drugs(frozenset(['http://perl.oboelibrary.org/din-toe/chubby:1245']))
+
+def test_ddi_from_drugs_raises_with_non_iterable():
+    with pytest.raises(TypeError):
+        ddi_from_drugs(object())
+
+def test_drugs_raises_with_non_iterable():
+    with pytest.raises(TypeError):
+        drugs(object())

@@ -5,7 +5,7 @@ process foo {
       script { "eat the pills" }
       agent { "patient" }
       requires {
-        drug { "torasemide" }
+        drug { "marmalade" }
       }
       provides { "a cured patient" }
     }
@@ -14,7 +14,7 @@ process foo {
       script { "eat the pills" }
       agent { "patient" }
       requires {
-        drug { "trandolapril" }
+        drug { "dimethylheptylpyran" }
       }
       provides { "a cured patient" }
     }

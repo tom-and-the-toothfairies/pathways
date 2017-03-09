@@ -11,6 +11,16 @@ All notable changes to this project will be documented in this file.
   separate documents.
 - Updated user interface with loading icon to provide visual representation of
   the request's duration.
+- The representation of drugs in PML. Our initial representation meant that
+  users had to look up the CHEBI/DINTO identifier for a drug. Now users can
+  specify drugs with a new `drug { "name" }` construct.
+- Added UI section to display drugs that were specified in the PML but that are
+  not included in DINTO
+- Updated user interface to enable live updates in which the results of the
+  PML parsing and DINTO lookup are displayed as soon as they are found before
+  the DDIs have been calculated
+- Fixed bug where results of the previous DDI analysis would not be cleared
+  in the event there was an error with the current analysis
 
 ## Added
 - install-docker.sh for easy docker installation on Ubuntu 16.0.4. Part of

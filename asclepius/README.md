@@ -82,11 +82,14 @@ Endpoints
 | Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved                                         |
 
 #### Example
-
 ##### Request Body
-
 ```json
-{"drugs": ["chebi:421707", "chebi:465284", "dinto:DB00503", "chebi:9342"]}
+{
+  "drugs": [
+    "http://purl.obolibrary.org/obo/DINTO_DB00214",
+    "http://purl.obolibrary.org/obo/DINTO_DB00519"
+  ]
+}
 ```
 
 ##### Response Body
@@ -94,16 +97,47 @@ Endpoints
 ```json
 [
   {
-    "drug_a": "chebi:421707",
-    "drug_b": "chebi:465284",
-    "label": "abacavir/ganciclovir DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_05759"
-  },
-  {
-    "drug_a": "chebi:421707",
-    "drug_b": "dinto:DB00503",
-    "label": "abacavir/ritonavir DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_11043"
+    "drug_a": "http://purl.obolibrary.org/obo/DINTO_DB00214",
+    "drug_b": "http://purl.obolibrary.org/obo/DINTO_DB00519",
+    "label": "torasemide/trandolapril DDI",
+    "uri": "http://purl.obolibrary.org/obo/DINTO_11031"
   }
 ]
+```
+### `/uris`
+
+|              |                                                                                                                  |
+|--------------|------------------------------------------------------------------------------------------------------------------|
+| Description  | For a given list of drug labels, find their `chebi:123/dinto:db123` identifier (to be used when calling `/ddis`) |
+| Methods      | `POST`                                                                                                           |
+| Request Body | An object containing a list of drug labels, named `labels`                                                       |
+| Returns      | See below                                     |
+
+#### Example
+
+##### Request Body
+
+```json
+{"labels": [ "paracetamol", "flat seven up", "cocaine"]}
+```
+
+##### Response Body
+
+```json
+{
+  "found": [
+    {
+      "label": "cocaine",
+      "uri": "http://purl.obolibrary.org/obo/CHEBI_27958"
+    },
+    {
+      "label": "paracetamol",
+      "uri": "http://purl.obolibrary.org/obo/CHEBI_46195"
+    }
+  ],
+  "not_found": [
+    "flat seven up"
+  ]
+}
+
 ```

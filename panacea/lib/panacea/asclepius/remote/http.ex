@@ -13,6 +13,13 @@ defmodule Panacea.Asclepius.Remote.HTTP do
     |> decode_response()
   end
 
+  def uris_for_labels(labels) do
+    {:ok, body} = %{labels: labels} |> Poison.encode
+    asclepius_uri("/uris")
+    |> HTTPoison.post(body, @default_headers, @default_options)
+    |> decode_response()
+  end
+
   defp asclepius_uri(path) do
     URI.merge(@asclepius_uri, path) |> to_string()
   end

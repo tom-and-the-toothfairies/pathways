@@ -2,11 +2,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 from flask import jsonify, request
+
 from app import app
-
 import dinto
-
-
 
 
 class InvalidUsage(Exception):
@@ -63,15 +61,26 @@ def ddis():
     except ValueError as e:
         raise InvalidUsage(str(e))
 
-    for ddi in dinto_res:
-        for drug in ('drug_a', 'drug_b'):
-            if ddi[drug].startswith(dinto.DINTO_PREFIX):
-                ddi[drug] = ddi[drug].replace(dinto.DINTO_PREFIX, 'dinto:')
-            elif ddi[drug].startswith(dinto.CHEBI_PREFIX):
-                ddi[drug] = ddi[drug].replace(dinto.CHEBI_PREFIX, 'chebi:')
-
     return jsonify(dinto_res)
 
+
+@app.route('/uris', methods=["POST"])
+def uris():
+    """
+    """
+    params = request.get_json()
+    if params is None or 'labels' not in params or not params['labels']:
+        raise InvalidUsage("Expecting {'labels': [...]} - a list of labels")
+
+    labels = frozenset(params['labels'])
+    found = dinto.drugs(labels)
+    not_found = labels - set([item['label'] for item in found])
+
+    result = {
+        'found': found,
+        'not_found': list(not_found),
+    }
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run()
