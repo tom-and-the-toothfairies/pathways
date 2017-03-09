@@ -33,6 +33,8 @@ The project can be run with `docker compose`
 $ sudo docker-compose up -d
 ```
 
+The system is then accessible at [localhost:4000](http://localhost:4000).
+
 To stop the project, run the following command
 
 ```bash
