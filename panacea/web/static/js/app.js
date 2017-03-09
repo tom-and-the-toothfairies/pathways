@@ -62,8 +62,7 @@ async function submitFile() {
             } else {
               displayError(await ddisResponse.json());
             }
-          }
-          else {
+          } else {
             console.log("by definition ddis require more than one drug")
           }
         } else {
