@@ -12,9 +12,7 @@ dependencies:
 
 compile:
   override:
-    - docker build --rm=false -t tomtoothfairies/panacea panacea
-    - docker build --rm=false -t tomtoothfairies/asclepius asclepius
-    - docker build --rm=false -t tomtoothfairies/athloi athloi
+    - echo "panacea asclepius athloi" | parallel --trim r -d " " "docker build --rm=false -t tomtoothfairies/{} {}"
 
 test:
   pre:
