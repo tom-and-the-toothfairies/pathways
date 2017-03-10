@@ -7,13 +7,12 @@ machine:
 
 dependencies:
   override:
-    - sudo apt-get install -y parallel
     - docker pull selenium/standalone-firefox
     - docker pull tomtoothfairies/chiron:0.3
 
 compile:
   override:
-    - echo "panacea asclepius athloi" | parallel --trim r --no-notice -d " " "docker build --rm=false -t tomtoothfairies/{} {}"
+    - echo "panacea asclepius athloi" | parallel --trim r -d " " "docker build --rm=false -t tomtoothfairies/{} {}"
 
 test:
   pre:
