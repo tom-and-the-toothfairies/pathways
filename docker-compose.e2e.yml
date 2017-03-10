@@ -22,6 +22,3 @@ services:
       - selenium
       - panacea
     image: tomtoothfairies/athloi:latest
-    tty: true
-    volumes:
-      - "${CIRCLE_TEST_REPORTS}/cucumber:/test-reports"

@@ -23,7 +23,7 @@ test:
     - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
 
   override:
-    - docker-compose -f docker-compose.e2e.yml up -d
+    - docker-compose -f docker-compose.e2e.yml -f docker-compose.e2e.ci.yml up -d
     - docker run -t -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports tomtoothfairies/panacea mix test
     - docker run -t -v $CIRCLE_TEST_REPORTS/pytest:/test-reports tomtoothfairies/asclepius pytest --junitxml=/test-reports/test-junit-report.xml
     - ./end-2-end.sh
