@@ -74,7 +74,14 @@ defmodule Panacea.Pml.ParserTest do
         }
       """
 
-      assert Parser.parse(pml) == {:ok, ["paracetamol", "cocaine"]}
+      assert Parser.parse(pml) ==
+      {
+        :ok,
+        [
+          %{label: "paracetamol", line: 8},
+          %{label: "cocaine", line: 17}
+        ]
+      }
     end
   end
 end

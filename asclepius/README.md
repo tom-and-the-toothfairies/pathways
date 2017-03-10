@@ -74,12 +74,12 @@ Endpoints
 
 ### `/ddis`
 
-|              |                                                                                                                                  |
-|--------------|----------------------------------------------------------------------------------------------------------------------------------|
-| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the *given* drugs                                 |
-| Methods      | `POST`                                                                                                                           |
-| Request Body | An object containing a list of *drug references*, named `drugs`, where a *drug reference* is either `dinto:DB123` or `chebi:123` |
-| Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved                                         |
+|              |                                                                                                  |
+|--------------|--------------------------------------------------------------------------------------------------|
+| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the *given* drugs |
+| Methods      | `POST`                                                                                           |
+| Request Body | An object containing a list of *DINTO URIs*                                                      |
+| Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved         |
 
 #### Example
 ##### Request Body
@@ -106,12 +106,12 @@ Endpoints
 ```
 ### `/uris`
 
-|              |                                                                                                                  |
-|--------------|------------------------------------------------------------------------------------------------------------------|
-| Description  | For a given list of drug labels, find their `chebi:123/dinto:db123` identifier (to be used when calling `/ddis`) |
-| Methods      | `POST`                                                                                                           |
-| Request Body | An object containing a list of drug labels, named `labels`                                                       |
-| Returns      | See below                                     |
+|              |                                                                                            |
+|--------------|--------------------------------------------------------------------------------------------|
+| Description  | For a given list of drug labels, find their *DINTO URIs* (to be used when calling `/ddis`) |
+| Methods      | `POST`                                                                                     |
+| Request Body | An object containing a list of drug labels, named `labels`                                 |
+| Returns      | See below                                                                                  |
 
 #### Example
 

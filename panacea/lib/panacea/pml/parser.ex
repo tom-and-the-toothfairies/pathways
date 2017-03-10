@@ -30,8 +30,10 @@ defmodule Panacea.Pml.Parser do
     {:error, {:syntax_error, formatted}}
   end
   defp to_result({:ok, drugs}) do
-    Logger.info("PML Parsing success: #{Enum.join(drugs, " ")}")
+    result = for {label, line} <- drugs, do: %{label: label, line: line}
 
-    {:ok, drugs}
+    Logger.info(["PML Parsing success: ", inspect(result)])
+
+    {:ok, result}
   end
 end
