@@ -17,7 +17,7 @@ Then(/^I should see the following drugs in the found drugs panel:$/) do |drugs|
 end
 
 Then(/^I should see the unidentified drugs panel$/) do
-  panel = find('#unidentified-drugs-panel')
+  panel = find('#unidentified-drugs-panel', wait: 5)
 
   expect(panel).to be_visible
 end
