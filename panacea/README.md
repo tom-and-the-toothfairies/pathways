@@ -23,7 +23,7 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
 
 #### Example
 
-#### Response Body
+##### Response Body
 
 ```json
 {
@@ -120,9 +120,11 @@ All error responses take have the following format:
 
 ```json
 {
-  "status_code": "http status code",
-  "title": "string summarising the error",
-  "detail": "string explaining the specific error",
-  "meta": "object containing error specific metadata"
+  "error": {
+    "status_code": "http status code",
+    "title": "string summarising the error",
+    "detail": "string explaining the specific error",
+    "meta": "object containing error specific metadata"
+  }
 }
 ```
