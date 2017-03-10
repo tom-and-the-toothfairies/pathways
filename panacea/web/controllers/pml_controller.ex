@@ -6,32 +6,21 @@ defmodule Panacea.PmlController do
     |> File.read()
     |> validate()
     |> parse()
-    |> respond(conn)
+    |> to_result()
+    |> Panacea.BaseController.respond(conn)
   end
 
   defp validate({:ok, str}) do
     if String.valid?(str) do
       {:ok, str}
     else
-      {:error, "Invalid filetype"}
+      {:error, {:encoding_error, "File is not UTF-8 encoded."}}
     end
   end
 
-  defp parse({:ok, contents}) do
-    Panacea.Pml.Parser.parse(contents)
-  end
-  defp parse({:error, message}) do
-    {:error, message}
-  end
+  defp parse({:ok, contents}),  do: Panacea.Pml.Parser.parse(contents)
+  defp parse({:error, reason}), do: {:error, reason}
 
-  defp respond({:ok, drugs}, conn) do
-    conn
-    |> put_status(:ok)
-    |> json(%{drugs: drugs})
-  end
-  defp respond({:error, message}, conn) do
-    conn
-    |> put_status(:unprocessable_entity)
-    |> json(%{message: message})
-  end
+  defp to_result({:ok, drugs}),     do: {:ok, %{drugs: drugs}}
+  defp to_result({:error, reason}), do: {:error, reason}
 end

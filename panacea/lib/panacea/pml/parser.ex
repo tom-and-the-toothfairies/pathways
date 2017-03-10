@@ -27,7 +27,7 @@ defmodule Panacea.Pml.Parser do
     formatted = Error.format(reason)
     Logger.error("PML Parsing error: #{formatted}")
 
-    {:error, formatted}
+    {:error, {:syntax_error, formatted}}
   end
   defp to_result({:ok, drugs}) do
     Logger.info("PML Parsing success: #{Enum.join(drugs, " ")}")

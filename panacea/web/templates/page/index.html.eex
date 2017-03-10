@@ -30,7 +30,7 @@
   <div class="panel-body" id="ddis-text"></div>
 </div>
 <div class="panel panel-danger hidden fades-in" id="error-panel">
-  <div class="panel-heading">PML Error</div>
+  <div class="panel-heading" id="error-title"></div>
   <div class="panel-body" id="error-text"></div>
 </div>
 

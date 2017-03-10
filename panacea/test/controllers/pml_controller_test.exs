@@ -31,7 +31,9 @@ defmodule Panacea.PmlControllerTest do
       conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
 
       assert conn.status == 422
-      assert response_body(conn) |> Map.get("message") =~ "syntax error"
+
+      error = response_body(conn) |> Map.get("error")
+      assert error["title"] =~ "Syntax error"
     end
 
     @tag :err_highlights
@@ -44,7 +46,9 @@ defmodule Panacea.PmlControllerTest do
       conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
 
       assert conn.status == 422
-      assert response_body(conn) |> Map.get("message") =~ "Invalid filetype"
+
+      error = response_body(conn) |> Map.get("error")
+      assert error["title"]=~ "Encoding error"
     end
 
     @tag :identify_drugs

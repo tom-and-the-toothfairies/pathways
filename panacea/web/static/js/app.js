@@ -114,9 +114,12 @@ const displayDdis = ddis => {
   ddisPanel.classList.remove('hidden');
 }
 
-const displayError = error => {
+const displayError = data => {
+  const errorTitleElement = document.getElementById('error-title');
   const errorTextElement = document.getElementById('error-text');
-  errorTextElement.innerHTML = JSON.stringify(error);
+
+  errorTitleElement.innerHTML = data.error.title;
+  errorTextElement.innerHTML = data.error.detail;
 
   errorPanel.classList.remove('hidden');
 }

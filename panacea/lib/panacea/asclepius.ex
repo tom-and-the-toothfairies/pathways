@@ -6,7 +6,7 @@ defmodule Panacea.Asclepius do
   end
   def ddis(drugs) do
     message = "expected a list 2 or more drugs - got #{inspect drugs}"
-    {:error, {:bad_data, message}}
+    {:error, {:invalid_data, message}}
   end
 
   def uris_for_labels(labels) when is_list(labels) do
@@ -14,6 +14,6 @@ defmodule Panacea.Asclepius do
   end
   def uris_for_labels(labels) do
     message = "expected a list of drug labels - got #{inspect labels}"
-    {:error, {:bad_data, message}}
+    {:error, {:invalid_data, message}}
   end
 end
