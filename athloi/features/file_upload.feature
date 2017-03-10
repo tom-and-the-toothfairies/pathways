@@ -25,7 +25,7 @@ Feature: File upload
   Scenario: uploading a PML file with no drugs
     When I select "no_drugs.pml"
     And I submit the upload form
-    Then I shouldn't see any panels
+    Then I should not see any panels
 
   Scenario: uploading a PML file with syntax errors
     When I select "bad.pml"
@@ -42,12 +42,12 @@ Feature: File upload
   Scenario: uploading a PML file with identifiable drugs that have an interaction
     When I select "ddis.pml"
     And I submit the upload form
-    Then I should see the found ddis panel
-    And I should see the following ddis in the found ddis panel:
+    Then I should see the found DDIs panel
+    And I should see the following DDIs in the found DDIs panel:
       | torasemide/trandolapril DDI |
 
   Scenario: uploading a PML file with identifiable drugs that don't have an interaction
     When I select "no_ddis.pml"
     And I submit the upload form
-    Then I should see the found ddis panel
-    But I should not see any ddis in the found ddis panel
+    Then I should see the found DDIs panel
+    But I should not see any DDIs in the found DDIs panel

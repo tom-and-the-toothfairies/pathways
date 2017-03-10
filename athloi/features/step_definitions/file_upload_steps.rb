@@ -37,18 +37,18 @@ Then(/^I should see the error panel$/) do
 end
 
 Then(/^the error panel title should be "([^"]*)"$/) do |title|
-  title_text = find('#error-title').text
+  title_element = find('#error-title')
 
-  expect(title_text).to eq(title)
+  expect(title_element.text).to eq(title)
 end
 
-Then(/^I should see the found ddis panel$/) do
+Then(/^I should see the found DDIs panel$/) do
   panel = find('#ddis-panel', wait: 15)
 
   expect(panel).to be_visible
 end
 
-Then(/^I should see the following ddis in the found ddis panel:$/) do |ddis|
+Then(/^I should see the following DDIs in the found DDIs panel:$/) do |ddis|
   panel = find('#ddis-panel')
 
   ddis.raw.flatten.each do |ddi|
@@ -57,13 +57,13 @@ Then(/^I should see the following ddis in the found ddis panel:$/) do |ddis|
 end
 
 # Very likely to change with improved UI
-Then(/^I should not see any ddis in the found ddis panel$/) do
-  ddis_text = find('#ddis-text').text
+Then(/^I should not see any DDIs in the found DDIs panel$/) do
+  ddis_element = find('#ddis-text')
 
-  expect(ddis_text).to eq("[]")
+  expect(ddis_element.text).to eq('[]')
 end
 
-Then(/^I shouldn't see any panels$/) do
+Then(/^I should not see any panels$/) do
   expect(page).not_to have_css('#ddis-panel')
   expect(page).not_to have_css('#drugs-panel')
   expect(page).not_to have_css('#error-panel')
