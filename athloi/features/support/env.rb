@@ -1,5 +1,6 @@
 require 'capybara/cucumber'
 require 'pathname'
+require 'pry-byebug'
 
 Capybara.register_driver :selenium_remote_firefox do |app|
   driver = Capybara::Selenium::Driver.new(app,

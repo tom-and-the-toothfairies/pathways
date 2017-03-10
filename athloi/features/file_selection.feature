@@ -1,9 +1,9 @@
-Feature: Uploading Files
+Feature: File selection
   In order to perform PML analysis
   As a clinician
-  I should be able to upload PML files
+  I should be able to select PML files
 
-  Scenario: File Name Display
+  Scenario: selecting a file
     Given I am on the home page
-    When I upload "ddis.pml"
+    When I select "ddis.pml"
     Then I should see "ddis.pml" in the file input
