@@ -5,3 +5,4 @@ services:
     tty: true
     volumes:
       - "${CIRCLE_TEST_REPORTS}/cucumber:/test-reports"
+      - "${CIRCLE_ARTIFACTS}/screenshots:/screenshots"
