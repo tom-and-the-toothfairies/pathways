@@ -101,8 +101,9 @@ operator ->
 
 Erlang code.
 
-extract_drug({_,_,DrugStr}) ->
-    [strip_quotes(DrugStr)].
+extract_drug({_,Line,DrugStr}) ->
+    Drug = strip_quotes(DrugStr),
+    [{Drug, Line}].
 
 strip_quotes(Drug) ->
     CharList = string:strip(Drug,both,$"),

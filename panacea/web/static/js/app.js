@@ -26,7 +26,7 @@ async function submitFile() {
 
     if (drugsResponse.ok) {
       const data = await drugsResponse.json();
-      const drugs = data.drugs;
+      const drugs = data.drugs.map(x => x.label);
 
       if (drugs.length > 0){
         displayDrugs(drugs);
