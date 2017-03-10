@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
   separate documents.
 - Updated user interface with loading icon to provide visual representation of
   the request's duration.
+- Changed the homepage to update when a file is selected not when it is analysed, based on client feedback.
+- Fixed a bug where analysis requests would time out.
 - The representation of drugs in PML. Our initial representation meant that
   users had to look up the CHEBI/DINTO identifier for a drug. Now users can
   specify drugs with a new `drug { "name" }` construct.
