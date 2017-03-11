@@ -25,62 +25,77 @@ async function submitFile() {
       headers: new Headers({authorization: apiAccessToken})
     });
 
-    if (drugsResponse.ok) {
-      const {drugs} = await drugsResponse.json();
-      const labels = drugs.map(x => x.label);
+    handleDrugsResponse(drugsResponse);
 
-      if (labels.length > 0) {
-        displayDrugs(labels);
-
-        const urisResponse = await fetch('/api/uris', {
-          method: 'POST',
-          body: JSON.stringify({labels: labels}),
-          credentials: 'same-origin',
-          headers: defaultHeaders
-        });
-
-        if (urisResponse.ok) {
-          const {uris: {found, not_found: unidentifiedDrugs}} = await urisResponse.json();
-          const uris = found.map(x => x.uri);
-
-          if (unidentifiedDrugs.length > 0) {
-            displayUnidentifiedDrugs(unidentifiedDrugs);
-          }
-
-          if (uris.length >= 2) {
-            const ddisResponse = await fetch('/api/ddis', {
-              method: 'POST',
-              body: JSON.stringify({drugs: uris}),
-              credentials: 'same-origin',
-              headers: defaultHeaders
-            });
-
-            if (ddisResponse.ok) {
-              const {ddis} = await ddisResponse.json();
-              displayDdis(ddis);
-            } else {
-              const {error} = await ddisResponse.json();
-              displayError(error);
-            }
-          } else {
-            console.log("by definition ddis require more than one drug")
-          }
-        } else {
-          const {error} = await urisResponse.json();
-          displayError(error);
-        }
-      } else {
-        displayError({title: "Pathway error", detail: "No drugs found"});
-      }
-    } else {
-      const {error} = await drugsResponse.json();
-      displayError(error);
-    }
     this.reset();
   } catch (err) {
     console.log(err);
   }
   restoreFileForm();
+}
+
+async function handleDrugsResponse(drugsResponse) {
+  if (drugsResponse.ok) {
+    const {drugs} = await drugsResponse.json();
+    const labels = drugs.map(x => x.label);
+
+    if (labels.length > 0) {
+      displayDrugs(labels);
+
+      const urisResponse = await fetch('/api/uris', {
+        method: 'POST',
+        body: JSON.stringify({labels: labels}),
+        credentials: 'same-origin',
+        headers: defaultHeaders
+      });
+
+      handleUrisResponse(urisResponse);
+
+    } else {
+      displayError({title: "Pathway error", detail: "No drugs found"});
+    }
+  } else {
+    const {error} = await drugsResponse.json();
+    displayError(error);
+  }
+}
+
+async function handleUrisResponse(urisResponse) {
+  if (urisResponse.ok) {
+    const {uris: {found, not_found: unidentifiedDrugs}} = await urisResponse.json();
+    const uris = found.map(x => x.uri);
+
+    if (unidentifiedDrugs.length > 0) {
+      displayUnidentifiedDrugs(unidentifiedDrugs);
+    }
+
+    if (uris.length >= 2) {
+      const ddisResponse = await fetch('/api/ddis', {
+        method: 'POST',
+        body: JSON.stringify({drugs: uris}),
+        credentials: 'same-origin',
+        headers: defaultHeaders
+      });
+
+      handleDdisResponse(ddisResponse);
+
+    } else {
+      console.log("by definition ddis require more than one drug")
+    }
+  } else {
+    const {error} = await urisResponse.json();
+    displayError(error);
+  }
+}
+
+async function handleDdisResponse(ddisResponse) {
+  if (ddisResponse.ok) {
+    const {ddis} = await ddisResponse.json();
+    displayDdis(ddis);
+  } else {
+    const {error} = await ddisResponse.json();
+    displayError(error);
+  }
 }
 
 const drugsPanel = document.getElementById('drugs-panel');
