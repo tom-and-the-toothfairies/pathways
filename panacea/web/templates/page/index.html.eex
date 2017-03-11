@@ -1,11 +1,11 @@
-<%= form_for @conn, pml_path(@conn, :upload), [as: :upload, multipart: true, id: "file-form", class: "center fades-in"], fn f -> %>
+<form accept-charset="UTF-8" class="center fades-in" enctype="multipart/form-data" id="file-form">
   <div class="form-group col-sm-8">
     <div class="input-group">
       <label class="input-group-btn">
         <span class="btn btn-success">
           <span class="glyphicon glyphicon-folder-open" aria-hidden="true">&ensp;</span>
           Choose PML File
-          <%= file_input f, :file, class: "form-control hidden", id: "file-input", required: true %>
+          <input class="form-control hidden" id="file-input" name="upload[file]" required type="file">
         </span>
       </label>
       <input type="text" class="form-control" id="filename-display" readonly>
@@ -13,9 +13,9 @@
   </div>
 
   <div class="form-group">
-    <%= submit "Submit", class: "btn btn-success btn-lg" %>
+    <button class="btn btn-success btn-lg" type="submit">Submit</button>
   </div>
-<% end %>
+</form>
 
 <div class="panel panel-success hidden fades-in" id="drugs-panel">
   <div class="panel-heading">Drugs Found</div>
