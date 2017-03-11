@@ -44,9 +44,8 @@ async function handleResponse(response, handle) {
   }
 }
 
-async function handleDrugsResponse(drugsResponse) {
-  handleResponse(drugsResponse, async function (payload) {
-    const {drugs} = payload;
+const handleDrugsResponse = drugsResponse => {
+  handleResponse(drugsResponse, async function ({drugs}) {
     const labels = drugs.map(x => x.label);
 
     if (labels.length > 0) {
@@ -65,11 +64,10 @@ async function handleDrugsResponse(drugsResponse) {
       displayError({title: "Pathway error", detail: "No drugs found"});
     }
   });
-}
+};
 
-async function handleUrisResponse(urisResponse) {
-  handleResponse(urisResponse, async function (payload) {
-    const {uris: {found, not_found: unidentifiedDrugs}} = payload;
+const handleUrisResponse = urisResponse => {
+  handleResponse(urisResponse, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
     const uris = found.map(x => x.uri);
 
     if (unidentifiedDrugs.length > 0) {
@@ -87,17 +85,16 @@ async function handleUrisResponse(urisResponse) {
       handleDdisResponse(ddisResponse);
 
     } else {
-      console.log("by definition ddis require more than one drug")
+      console.log("by definition ddis require more than one drug");
     }
   });
-}
+};
 
-async function handleDdisResponse(ddisResponse) {
-  handleResponse(ddisResponse, async function (payload) {
-    const {ddis} = payload;
+const handleDdisResponse = ddisResponse => {
+  handleResponse(ddisResponse, ({ddis}) => {
     displayDdis(ddis);
   });
-}
+};
 
 const drugsPanel = document.getElementById('drugs-panel');
 const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel');
