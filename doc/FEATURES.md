@@ -101,9 +101,24 @@ error was.
 
 See [On-Screen PML Reporting](#on-screen-pml-reporting---complete)
 
-## Select specific OWL Ontology
+## Select specific OWL Ontology - Complete
 
-## Load Selected Ontology
+### Description
+Administrative users must have the ability to update the OWL file used as the
+source of DDI information.
+
+As described in the [README], our system builds a queryable database out of the
+OWL file. This database is built into a docker image that is then deployed to
+the production environment. To change the OWL file, users must be able to
+specify which file should be used in the `docker build` process.
+
+Instructions on how to specify an OWL file and releasing the new docker image
+can be found [here](./UPDATING_DINTO.md)
+
+
+## Load Selected Ontology - Complete
+
+See [Select specific OWL Ontology](#select-specific-owl-ontology---complete)
 
 ## Identify drugs in PML - Complete
 
@@ -175,6 +190,6 @@ result in DDIs being reported to the user.
 
 ## DINTO Error and Warning highlights
 
-[README]: ./README.md
+[README]: ../README.md
 [homepage]: http://localhost:4000
-[fixtures directory]: ./panacea/test/fixtures
+[fixtures directory]: ../panacea/test/fixtures

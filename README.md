@@ -43,11 +43,11 @@ $ sudo docker-compose down
 
 ## Features
 
-The feature list for the project can be found [here](./FEATURES.md)
+The feature list for the project can be found [here](./doc/FEATURES.md)
 
 ## Change Log
 
-The change log for the project can be found [here](./CHANGELOG.md)
+The change log for the project can be found [here](./doc/CHANGELOG.md)
 
 
 ## Architecture Overview
@@ -83,7 +83,7 @@ More information about Asclepius can be found [here](./asclepius/README.md).
 Docker compose will pull down the required versions of each service from [Docker
 Hub] when you run the project. If for some reason you wish to build these
 services manually, instructions for doing so can be
-found [here](./BUILDING_MANUALLY.md).
+found [here](./doc/BUILDING_MANUALLY.md).
 
 
 
