@@ -2,20 +2,23 @@ version: '2'
 
 services:
   asclepius:
+    image: tomtoothfairies/asclepius:latest
     depends_on:
       - chiron
-    image: tomtoothfairies/asclepius:latest
-    ports:
-      - '5000:5000'
 
   panacea:
     depends_on:
       - asclepius
     image: tomtoothfairies/panacea:latest
-    ports:
-      - '4000:4000'
 
   chiron:
     image: tomtoothfairies/chiron:0.3
-    ports:
-      - '3030:3030'
+
+  selenium:
+    image: selenium/standalone-firefox:latest
+
+  athloi:
+    depends_on:
+      - selenium
+      - panacea
+    image: tomtoothfairies/athloi:latest
