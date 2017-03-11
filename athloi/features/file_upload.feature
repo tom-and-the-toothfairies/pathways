@@ -25,7 +25,8 @@ Feature: File upload
   Scenario: uploading a PML file with no drugs
     When I select "no_drugs.pml"
     And I submit the upload form
-    Then I should not see any panels
+    Then I should see the error panel
+    And the error panel title should be "Pathway error"
 
   Scenario: uploading a PML file with syntax errors
     When I select "bad.pml"

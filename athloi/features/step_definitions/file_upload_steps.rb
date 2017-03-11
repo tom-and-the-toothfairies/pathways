@@ -62,9 +62,3 @@ Then(/^I should not see any DDIs in the found DDIs panel$/) do
 
   expect(ddis_element.text).to eq('[]')
 end
-
-Then(/^I should not see any panels$/) do
-  expect(page).not_to have_css('#ddis-panel')
-  expect(page).not_to have_css('#drugs-panel')
-  expect(page).not_to have_css('#error-panel')
-end
