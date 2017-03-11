@@ -14,14 +14,14 @@ async function post(endpoint, body, headers) {
   });
 }
 
-export const drugs = formContents => {
-  return post('/api/pml', new FormData(formContents), formHeaders);
+export const drugs = formData => {
+  return post('/api/pml', formData, formHeaders);
 };
 
 export const uris = labels => {
-  return post('/api/uris', JSON.stringify({labels: labels}), defaultHeaders);
+  return post('/api/uris', JSON.stringify({labels}), defaultHeaders);
 };
 
-export const ddis = uris => {
-  return post('/api/ddis', JSON.stringify({drugs: uris}), defaultHeaders);
+export const ddis = drugs => {
+  return post('/api/ddis', JSON.stringify({drugs}), defaultHeaders);
 };

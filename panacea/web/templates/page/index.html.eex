@@ -1,11 +1,11 @@
-<form accept-charset="UTF-8" action="/api/noop" class="center fades-in" enctype="multipart/form-data" id="file-form" method="post">
+<form accept-charset="UTF-8" class="center fades-in" enctype="multipart/form-data" id="file-form">
   <div class="form-group col-sm-8">
     <div class="input-group">
       <label class="input-group-btn">
         <span class="btn btn-success">
           <span class="glyphicon glyphicon-folder-open" aria-hidden="true">&ensp;</span>
           Choose PML File
-          <input class="form-control hidden" id="file-input" name="upload[file]" required="required" type="file">
+          <input class="form-control hidden" id="file-input" name="upload[file]" required type="file">
         </span>
       </label>
       <input type="text" class="form-control" id="filename-display" readonly>

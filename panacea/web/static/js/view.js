@@ -49,6 +49,12 @@ export const displayError = error => {
   showElement(errorPanel);
 };
 
+export const displayNetworkError = error => {
+  const title = "Network Error";
+  const detail = `<h5>Something went wrong</h5><code>${error}<code>`;
+  displayError({title, detail})
+};
+
 const formElement = document.getElementById('file-form');
 const loadingElement = document.getElementById('loading-container');
 

@@ -14,12 +14,11 @@ async function submitFile() {
   View.hideFileForm();
   View.hideResults();
   try {
-    const drugsResponse = await Request.drugs(this);
-    handleDrugsResponse(drugsResponse);
-
-    this.reset();
-  } catch (err) {
+    handleDrugsResponse(await Request.drugs(new FormData(this)));
+  } catch (e) {
+    View.displayNetworkError(e);
   }
+  this.reset();
   View.restoreFileForm();
 }
 
@@ -39,8 +38,11 @@ const handleDrugsResponse = drugsResponse => {
 
     if (labels.length > 0) {
       View.displayDrugs(labels);
-      const urisResponse = await Request.uris(labels);
-      handleUrisResponse(urisResponse);
+      try {
+        handleUrisResponse(await Request.uris(labels));
+      } catch (e) {
+        View.displayNetworkError(e);
+      }
     } else {
      View.displayError({title: "Pathway error", detail: "No drugs found"});
     }
@@ -56,9 +58,11 @@ const handleUrisResponse = urisResponse => {
     }
 
     if (uris.length >= 2) {
-      const ddisResponse = await Request.ddis(uris);
-      handleDdisResponse(ddisResponse);
-
+      try {
+        handleDdisResponse(await Request.ddis(uris));
+      } catch (e) {
+        View.displayNetworkError(e);
+      }
     } else {
       console.log("by definition ddis require more than one drug");
     }
