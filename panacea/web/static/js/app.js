@@ -34,9 +34,19 @@ async function submitFile() {
   restoreFileForm();
 }
 
+async function handleResponse(response, handle) {
+  if (response.ok) {
+    const payload = await response.json();
+    handle(payload);
+  } else {
+    const {error} = await response.json();
+    displayError(error);
+  }
+}
+
 async function handleDrugsResponse(drugsResponse) {
-  if (drugsResponse.ok) {
-    const {drugs} = await drugsResponse.json();
+  handleResponse(drugsResponse, async function (payload) {
+    const {drugs} = payload;
     const labels = drugs.map(x => x.label);
 
     if (labels.length > 0) {
@@ -54,15 +64,12 @@ async function handleDrugsResponse(drugsResponse) {
     } else {
       displayError({title: "Pathway error", detail: "No drugs found"});
     }
-  } else {
-    const {error} = await drugsResponse.json();
-    displayError(error);
-  }
+  });
 }
 
 async function handleUrisResponse(urisResponse) {
-  if (urisResponse.ok) {
-    const {uris: {found, not_found: unidentifiedDrugs}} = await urisResponse.json();
+  handleResponse(urisResponse, async function (payload) {
+    const {uris: {found, not_found: unidentifiedDrugs}} = payload;
     const uris = found.map(x => x.uri);
 
     if (unidentifiedDrugs.length > 0) {
@@ -82,20 +89,14 @@ async function handleUrisResponse(urisResponse) {
     } else {
       console.log("by definition ddis require more than one drug")
     }
-  } else {
-    const {error} = await urisResponse.json();
-    displayError(error);
-  }
+  });
 }
 
 async function handleDdisResponse(ddisResponse) {
-  if (ddisResponse.ok) {
-    const {ddis} = await ddisResponse.json();
+  handleResponse(ddisResponse, async function (payload) {
+    const {ddis} = payload;
     displayDdis(ddis);
-  } else {
-    const {error} = await ddisResponse.json();
-    displayError(error);
-  }
+  });
 }
 
 const drugsPanel = document.getElementById('drugs-panel');
