@@ -1,5 +1,6 @@
 import "babel-polyfill";
 import "phoenix_html";
+import "whatwg-fetch";
 
 const apiAccessToken = document.getElementById('api-access-token').content;
 const defaultHeaders = new Headers({
@@ -25,30 +26,29 @@ async function submitFile() {
     });
 
     if (drugsResponse.ok) {
-      const data = await drugsResponse.json();
-      const drugs = data.drugs.map(x => x.label);
+      const {drugs} = await drugsResponse.json();
+      const labels = drugs.map(x => x.label);
 
-      if (drugs.length > 0){
-        displayDrugs(drugs);
+      if (labels.length > 0) {
+        displayDrugs(labels);
 
-        const urisResponse = await fetch("/api/uris", {
+        const urisResponse = await fetch('/api/uris', {
           method: 'POST',
-          body: JSON.stringify({labels: drugs}),
+          body: JSON.stringify({labels: labels}),
           credentials: 'same-origin',
           headers: defaultHeaders
         });
 
         if (urisResponse.ok) {
-          const data = await urisResponse.json();
-          const uris = data.uris.found.map(x => x.uri);
-          const unidentifiedDrugs = data.uris.not_found;
+          const {uris: {found, not_found: unidentifiedDrugs}} = await urisResponse.json();
+          const uris = found.map(x => x.uri);
 
-          if (unidentifiedDrugs.length > 0){
+          if (unidentifiedDrugs.length > 0) {
             displayUnidentifiedDrugs(unidentifiedDrugs);
           }
 
-          if (uris.length >= 2){
-            const ddisResponse = await fetch("/api/ddis", {
+          if (uris.length >= 2) {
+            const ddisResponse = await fetch('/api/ddis', {
               method: 'POST',
               body: JSON.stringify({drugs: uris}),
               credentials: 'same-origin',
@@ -56,8 +56,7 @@ async function submitFile() {
             });
 
             if (ddisResponse.ok) {
-              const data = await ddisResponse.json();
-              const ddis = data.ddis;
+              const {ddis} = await ddisResponse.json();
               displayDdis(ddis);
             } else {
               displayError(await ddisResponse.json());
@@ -91,28 +90,28 @@ const hideResults = () => {
   unidentifiedDrugsPanel.classList.add('hidden');
   ddisPanel.classList.add('hidden');
   errorPanel.classList.add('hidden');
-}
+};
 
 const displayDrugs = drugs => {
   const drugsTextElement = document.getElementById('drugs-text');
   drugsTextElement.innerHTML = JSON.stringify(drugs);
 
   drugsPanel.classList.remove('hidden');
-}
+};
 
 const displayUnidentifiedDrugs = drugs => {
   const unidentifiedDrugsTextElement = document.getElementById('unidentified-drugs-text');
   unidentifiedDrugsTextElement.innerHTML = JSON.stringify(drugs);
 
   unidentifiedDrugsPanel.classList.remove('hidden');
-}
+};
 
 const displayDdis = ddis => {
   const ddisTextElement = document.getElementById('ddis-text');
   ddisTextElement.innerHTML = JSON.stringify(ddis);
 
   ddisPanel.classList.remove('hidden');
-}
+};
 
 const displayError = data => {
   const errorTitleElement = document.getElementById('error-title');
@@ -122,7 +121,7 @@ const displayError = data => {
   errorTextElement.innerHTML = data.error.detail;
 
   errorPanel.classList.remove('hidden');
-}
+};
 
 const formElement = document.getElementById('file-form');
 const loadingElement = document.getElementById('loading-container');
@@ -130,12 +129,12 @@ const loadingElement = document.getElementById('loading-container');
 const hideFileForm = () => {
   formElement.classList.add('hidden');
   loadingElement.classList.remove('hidden');
-}
+};
 
 const restoreFileForm = () => {
   formElement.classList.remove('hidden');
   loadingElement.classList.add('hidden');
-}
+};
 
 // to make the file input pretty take the filename from the form
 // and place it in a disabled input box right beside it :art:
