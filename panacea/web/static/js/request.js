@@ -10,7 +10,6 @@ async function post(endpoint, body, headers) {
   return fetch(endpoint, {
     method: 'POST',
     body: body,
-    credentials: 'same-origin',
     headers: headers
   });
 }
