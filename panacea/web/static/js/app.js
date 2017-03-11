@@ -59,19 +59,22 @@ async function submitFile() {
               const {ddis} = await ddisResponse.json();
               displayDdis(ddis);
             } else {
-              displayError(await ddisResponse.json());
+              const {error} = await ddisResponse.json();
+              displayError(error);
             }
           } else {
             console.log("by definition ddis require more than one drug")
           }
         } else {
-          displayError(await urisResponse.json());
+          const {error} = await urisResponse.json();
+          displayError(error);
         }
       } else {
-        displayError({message: "No drugs found"});
+        displayError({title: "Pathway error", detail: "No drugs found"});
       }
     } else {
-      displayError(await drugsResponse.json());
+      const {error} = await drugsResponse.json();
+      displayError(error);
     }
     this.reset();
   } catch (err) {
@@ -85,55 +88,63 @@ const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel
 const ddisPanel = document.getElementById('ddis-panel');
 const errorPanel = document.getElementById('error-panel');
 
+const hideElement = element => {
+  element.classList.add('hidden');
+};
+
+const showElement = element => {
+  element.classList.remove('hidden');
+};
+
 const hideResults = () => {
-  drugsPanel.classList.add('hidden');
-  unidentifiedDrugsPanel.classList.add('hidden');
-  ddisPanel.classList.add('hidden');
-  errorPanel.classList.add('hidden');
+  hideElement(drugsPanel);
+  hideElement(unidentifiedDrugsPanel);
+  hideElement(ddisPanel);
+  hideElement(errorPanel);
 };
 
 const displayDrugs = drugs => {
   const drugsTextElement = document.getElementById('drugs-text');
   drugsTextElement.innerHTML = JSON.stringify(drugs);
 
-  drugsPanel.classList.remove('hidden');
+  showElement(drugsPanel);
 };
 
 const displayUnidentifiedDrugs = drugs => {
   const unidentifiedDrugsTextElement = document.getElementById('unidentified-drugs-text');
   unidentifiedDrugsTextElement.innerHTML = JSON.stringify(drugs);
 
-  unidentifiedDrugsPanel.classList.remove('hidden');
+  showElement(unidentifiedDrugsPanel);
 };
 
 const displayDdis = ddis => {
   const ddisTextElement = document.getElementById('ddis-text');
   ddisTextElement.innerHTML = JSON.stringify(ddis);
 
-  ddisPanel.classList.remove('hidden');
+  showElement(ddisPanel);
 };
 
-const displayError = data => {
+const displayError = error => {
   const errorTitleElement = document.getElementById('error-title');
   const errorTextElement = document.getElementById('error-text');
 
-  errorTitleElement.innerHTML = data.error.title;
-  errorTextElement.innerHTML = data.error.detail;
+  errorTitleElement.innerHTML = error.title;
+  errorTextElement.innerHTML = error.detail;
 
-  errorPanel.classList.remove('hidden');
+  showElement(errorPanel);
 };
 
 const formElement = document.getElementById('file-form');
 const loadingElement = document.getElementById('loading-container');
 
 const hideFileForm = () => {
-  formElement.classList.add('hidden');
-  loadingElement.classList.remove('hidden');
+  hideElement(formElement);
+  showElement(loadingElement);
 };
 
 const restoreFileForm = () => {
-  formElement.classList.remove('hidden');
-  loadingElement.classList.add('hidden');
+  showElement(formElement);
+  hideElement(loadingElement);
 };
 
 // to make the file input pretty take the filename from the form
