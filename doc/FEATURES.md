@@ -184,12 +184,33 @@ result in no DDIs being reported to the user.
 `ddis.pml` contains drugs that do interact. Analysing this file should
 result in DDIs being reported to the user.
 
-## On-Screen DINTO Reporting
+## On Screen DINTO Reporting - Complete
 
-## DINTO Logfile Generation
+### Description
+The system must show errors and warnings on screen when loading a new ontology.
 
-## DINTO Error and Warning highlights
+The instructions for loading a new ontology can be found in the [updating dinto]
+document. As mentioned in the [updating dinto] document, loading a new ontology
+requires deploying new versions of system services to production.
 
+If there is any problem with the ontology file then the `docker build` step will fail
+and print an appropriate error message. Possible causes of errors are:
+
+- the OWL file is malformed
+- the OWL file cannot be found
+
+`docker build` is run each time a new release is released. Images that fail to
+build cannot be deployed. This prevents an invalid ontology from being deployed
+to production.
+
+## DINTO Logfile Generation - Complete
+
+See [On Screen DINTO Reporting](#on-screen-dinto-reporting---complete)
+
+## DINTO Error and Warning highlights - Complete
+
+See [On Screen DINTO Reporting](#on-screen-dinto-reporting---complete)
 [README]: ../README.md
 [homepage]: http://localhost:4000
 [fixtures directory]: ../panacea/test/fixtures
+[updating dinto]: ./UPDATING_DINTO.md
