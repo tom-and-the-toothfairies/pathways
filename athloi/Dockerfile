@@ -12,7 +12,7 @@ WORKDIR /opt/app
 
 # Cache Ruby deps
 COPY Gemfile Gemfile.lock ./
-RUN bundle install -j4
+RUN bundle install
 
 COPY . .
 
