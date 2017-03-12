@@ -1,10 +1,12 @@
 # Tom and the Toothfairies
 [![spacemacs badge]][spacemacs github] [![build status badge]][circle ci]
 
+*Note: While Markdown is a very readable form of plain text, we recommend viewing these docs on Github for convenience.*
+
 This file contains instructions on how to install and run the project, as well
 as an overview of the project's design. The target platform is Ubuntu 16.04.
 
-At the time of writing the current release is `0.3`
+At the time of writing the current release is `1.0`
 
 ## Installing Dependencies
 
@@ -52,7 +54,7 @@ The change log for the project can be found [here](./doc/CHANGELOG.md)
 
 ## Architecture Overview
 
-The system is split into three distinct services, Pancea, Asclepius and Chiron.
+The system is split into three distinct services; Panacea, Asclepius and Chiron.
 They each run inside a docker container. The containers can be easily managed
 using `docker-compose` as mentioned earlier.
 
@@ -65,7 +67,7 @@ More information about Panacea can be found [here](./panacea/README.md).
 
 ### Chiron
 
-Chiron houses the DINTO data. The data is compiled into a triple store, Chiron
+Chiron houses the DINTO data. The data is compiled into a triple store. Chiron
 exposes a HTTP API for querying the triple store.
 
 More information about Chiron can be found [here](./chiron/README.md).

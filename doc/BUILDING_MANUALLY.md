@@ -28,7 +28,7 @@ $ sudo service docker restart
  $ cd pathways
  $ sudo docker build -t tomtoothfairies/asclepius asclepius
  $ sudo docker build -t tomtoothfairies/panacea panacea
- $ sudo docker built -t tomtoothfairies/chiron chiron
+ $ sudo docker build -t tomtoothfairies/chiron chiron
  ```
 
 3. Run the tests
