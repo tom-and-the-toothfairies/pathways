@@ -55,6 +55,7 @@ The change log for the project can be found [here](./doc/CHANGELOG.md)
 ## Architecture Overview
 
 The system is split into three distinct services; Panacea, Asclepius and Chiron.
+The auxiliary service, Athloi, is used for automated testing.
 They each run inside a docker container. The containers can be easily managed
 using `docker-compose` as mentioned earlier.
 
@@ -79,6 +80,12 @@ requests to identify DDIs from Panacea, creates the necessary SPARQL query and
 passes it on to Chiron.
 
 More information about Asclepius can be found [here](./asclepius/README.md).
+
+### Athloi
+
+Athloi is the service that runs our end to end tests.
+
+More information about Athloi can be found [here](./athloi/README.md).
 
 ## Building Manually
 

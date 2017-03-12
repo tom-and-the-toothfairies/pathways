@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## Changed
+### Changed
 - Clarified installation instructions after feedback from client. Client left
   feedback after release 0.3 indicating that our current README was unhelpful.
   We have greatly simplified it and moved more non-essential information into
@@ -24,9 +24,12 @@ All notable changes to this project will be documented in this file.
 - Fixed bug where results of the previous DDI analysis would not be cleared
   in the event there was an error with the current analysis
 
-## Added
-- install-docker.sh for easy docker installation on Ubuntu 16.0.4. Part of
+### Added
+- install-docker.sh for easy docker installation on Ubuntu 16.04. Part of
   simplifying the installation steps.
+- Created Athloi: This service runs our end to end Cucumber tests using Selenium WebDriver
+  and Firefox. This service also runs during continuous integration to ensure
+  there are no regressions to the end user interface between commits/releases.
 
 ## [0.3] 2017-03-05
 

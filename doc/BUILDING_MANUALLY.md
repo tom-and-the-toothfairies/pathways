@@ -29,6 +29,7 @@ $ sudo service docker restart
  $ sudo docker build -t tomtoothfairies/asclepius asclepius
  $ sudo docker build -t tomtoothfairies/panacea panacea
  $ sudo docker build -t tomtoothfairies/chiron chiron
+ $ sudo docker build -t tomtoothfairies/athloi athloi
  ```
 
 3. Run the tests
@@ -36,4 +37,5 @@ $ sudo service docker restart
  ```bash
  $ sudo docker run -t -e "MIX_ENV=test" tomtoothfairies/panacea mix test
  $ sudo docker run -t tomtoothfairies/asclepius pytest
+ $ sudo docker-compose -f docker-compose.e2e.yml -p integration run athloi; sudo docker-compose -f docker-compose.e2e.yml -p integration down
  ```
