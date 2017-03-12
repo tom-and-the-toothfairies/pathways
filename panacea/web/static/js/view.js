@@ -52,7 +52,15 @@ export const displayError = error => {
 export const displayNetworkError = error => {
   const title = "Network Error";
   const detail = `<h5>Something went wrong</h5><code>${error}<code>`;
-  displayError({title, detail})
+  displayError({title, detail});
+};
+
+export const displayNoDrugsError = () => {
+  const title = "Pathway Error";
+  const detail = `<h5>No drugs were found in the given file.
+You can specify drugs in PML like this:</h5>
+<code>requires { drug { "paracetamol" } }</code>`;
+  displayError({title, detail});
 };
 
 const formElement = document.getElementById('file-form');

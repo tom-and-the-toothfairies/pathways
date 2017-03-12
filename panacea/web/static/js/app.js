@@ -37,14 +37,13 @@ const handleDrugsResponse = drugsResponse => {
     const labels = drugs.map(x => x.label);
 
     if (labels.length > 0) {
-      View.displayDrugs(labels);
       try {
         handleUrisResponse(await Request.uris(labels));
       } catch (e) {
         View.displayNetworkError(e);
       }
     } else {
-     View.displayError({title: "Pathway error", detail: "No drugs found"});
+      View.displayNoDrugsError();
     }
   });
 };
@@ -52,19 +51,22 @@ const handleDrugsResponse = drugsResponse => {
 const handleUrisResponse = urisResponse => {
   handleResponse(urisResponse, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
     const uris = found.map(x => x.uri);
+    const labels = found.map(x => x.label);
+
+    View.displayDrugs(labels);
 
     if (unidentifiedDrugs.length > 0) {
       View.displayUnidentifiedDrugs(unidentifiedDrugs);
     }
 
-    if (uris.length >= 2) {
+    if (uris.length > 1) {
       try {
         handleDdisResponse(await Request.ddis(uris));
       } catch (e) {
         View.displayNetworkError(e);
       }
     } else {
-      console.log("by definition ddis require more than one drug");
+      View.displayDdis([]);
     }
   });
 };
