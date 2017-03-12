@@ -35,15 +35,19 @@ export const displayUnidentifiedDrugs = drugs => {
 export const displayDdis = (ddis, urisToLabels) => {
   const ddisTextElement = document.getElementById('ddis-text');
 
-  const preamble = 'I have identified interactions between the following drugs:';
-  const ddisHTML = ddis.map(({drug_a: uriA, drug_b: uriB}) => {
-    const drugA = urisToLabels[uriA];
-    const drugB = urisToLabels[uriB];
+  if (ddis.length > 0) {
+    const preamble = 'I have identified interactions between the following drugs:';
+    const ddisHTML = ddis.map(({drug_a: uriA, drug_b: uriB}) => {
+      const drugA = urisToLabels[uriA];
+      const drugB = urisToLabels[uriB];
 
-    return `<li><b>${drugA}</b> and <b>${drugB}</b></li>`;
-  }).join('');
+      return `<li><b>${drugA}</b> and <b>${drugB}</b></li>`;
+    }).join('');
 
-  ddisTextElement.innerHTML = `<p>${preamble}</p><ul>${ddisHTML}</ul>`;
+    ddisTextElement.innerHTML = `<p>${preamble}</p><ul>${ddisHTML}</ul>`;
+  } else {
+    ddisTextElement.innerHTML = 'I have not identified any interactions between the drugs in this file.';
+  }
   showElement(ddisPanel);
 };
 

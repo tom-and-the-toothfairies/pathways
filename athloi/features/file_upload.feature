@@ -45,7 +45,7 @@ Feature: File upload
     And I submit the upload form
     Then I should see the found DDIs panel
     And I should see the following DDIs in the found DDIs panel:
-      | torasemide/trandolapril DDI |
+      | torasemide and trandolapril |
 
   Scenario: uploading a PML file with identifiable drugs that don't have an interaction
     When I select "no_ddis.pml"
