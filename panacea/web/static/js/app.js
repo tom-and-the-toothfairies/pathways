@@ -52,6 +52,10 @@ async function handleUrisResponse(response) {
   await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
     const uris = found.map(x => x.uri);
     const labels = found.map(x => x.label);
+    const urisToLabels = found.reduce((acc, {uri, label}) => {
+      acc[uri] = label;
+      return acc;
+    }, {});
 
     View.displayDrugs(labels);
 
@@ -61,18 +65,18 @@ async function handleUrisResponse(response) {
 
     if (uris.length > 1) {
       try {
-        await handleDdisResponse(await Request.ddis(uris));
+        await handleDdisResponse(await Request.ddis(uris), urisToLabels);
       } catch (e) {
         View.displayNetworkError(e);
       }
     } else {
-      View.displayDdis([]);
+      View.displayDdis([], {});
     }
   });
 }
 
-async function handleDdisResponse(response) {
+async function handleDdisResponse(response, urisToLabels) {
   await handleResponse(response, ({ddis}) => {
-    View.displayDdis(ddis);
+    View.displayDdis(ddis, urisToLabels);
   });
 }
