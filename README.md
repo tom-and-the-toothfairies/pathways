@@ -98,7 +98,7 @@ found [here](./doc/BUILDING_MANUALLY.md).
 
 [spacemacs badge]: https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg
 [spacemacs github]: https://github.com/syl20bnr/spacemacs
-[build status badge]: https://img.shields.io/circleci/project/github/tom-and-the-toothfairies/master.svg
+[build status badge]: https://img.shields.io/circleci/project/github/tom-and-the-toothfairies/pathways/master.svg
 [circle ci]: https://circleci.com/gh/tom-and-the-toothfairies/pathways
 [install docker ce]: https://www.docker.com/community-edition#/download
 [docker hub]:  https://hub.docker.com/u/tomtoothfairies/
