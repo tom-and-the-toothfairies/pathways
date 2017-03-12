@@ -20,22 +20,38 @@ export const hideResults = () => {
 
 export const displayDrugs = drugs => {
   const drugsTextElement = document.getElementById('drugs-text');
-  drugsTextElement.innerHTML = JSON.stringify(drugs);
+  const preamble = 'I recognised the following drugs:';
+  const drugsHTML = drugs.map(x => `<li>${x}</li>`).join('');
+  drugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
   showElement(drugsPanel);
 };
 
 export const displayUnidentifiedDrugs = drugs => {
   const unidentifiedDrugsTextElement = document.getElementById('unidentified-drugs-text');
-  unidentifiedDrugsTextElement.innerHTML = JSON.stringify(drugs);
+  const preamble = 'I did not recognise the following drugs:';
+  const drugsHTML = drugs.map(x => `<li>${x}</li>`).join('');
+  unidentifiedDrugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
   showElement(unidentifiedDrugsPanel);
 };
 
-export const displayDdis = ddis => {
+export const displayDdis = (ddis, urisToLabels) => {
   const ddisTextElement = document.getElementById('ddis-text');
-  ddisTextElement.innerHTML = JSON.stringify(ddis);
 
+  if (ddis.length > 0) {
+    const preamble = 'I have identified interactions between the following drugs:';
+    const ddisHTML = ddis.map(({drug_a: uriA, drug_b: uriB}) => {
+      const drugA = urisToLabels[uriA];
+      const drugB = urisToLabels[uriB];
+
+      return `<li><b>${drugA}</b> and <b>${drugB}</b></li>`;
+    }).join('');
+
+    ddisTextElement.innerHTML = `<p>${preamble}</p><ul>${ddisHTML}</ul>`;
+  } else {
+    ddisTextElement.innerHTML = 'I have not identified any interactions between the drugs in this file.';
+  }
   showElement(ddisPanel);
 };
 

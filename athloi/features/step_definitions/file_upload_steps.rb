@@ -60,5 +60,5 @@ end
 Then(/^I should not see any DDIs in the found DDIs panel$/) do
   ddis_element = find('#ddis-text')
 
-  expect(ddis_element.text).to eq('[]')
+  expect(ddis_element.text).to eq('I have not identified any interactions between the drugs in this file.')
 end
