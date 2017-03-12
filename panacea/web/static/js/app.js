@@ -14,7 +14,7 @@ async function submitFile() {
   View.hideFileForm();
   View.hideResults();
   try {
-    handleDrugsResponse(await Request.drugs(new FormData(this)));
+    await handleDrugsResponse(await Request.drugs(new FormData(this)));
   } catch (e) {
     View.displayNetworkError(e);
   }
@@ -25,52 +25,54 @@ async function submitFile() {
 async function handleResponse(response, handle) {
   if (response.ok) {
     const payload = await response.json();
-    handle(payload);
+    await handle(payload);
   } else {
     const {error} = await response.json();
     View.displayError(error);
   }
 }
 
-const handleDrugsResponse = drugsResponse => {
-  handleResponse(drugsResponse, async function ({drugs}) {
+async function handleDrugsResponse(response) {
+  await handleResponse(response, async function ({drugs}) {
     const labels = drugs.map(x => x.label);
 
     if (labels.length > 0) {
-      View.displayDrugs(labels);
       try {
-        handleUrisResponse(await Request.uris(labels));
+        await handleUrisResponse(await Request.uris(labels));
       } catch (e) {
         View.displayNetworkError(e);
       }
     } else {
-     View.displayError({title: "Pathway error", detail: "No drugs found"});
+      View.displayNoDrugsError();
     }
   });
-};
+}
 
-const handleUrisResponse = urisResponse => {
-  handleResponse(urisResponse, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
+async function handleUrisResponse(response) {
+  await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
     const uris = found.map(x => x.uri);
+    const labels = found.map(x => x.label);
+
+    View.displayDrugs(labels);
 
     if (unidentifiedDrugs.length > 0) {
       View.displayUnidentifiedDrugs(unidentifiedDrugs);
     }
 
-    if (uris.length >= 2) {
+    if (uris.length > 1) {
       try {
-        handleDdisResponse(await Request.ddis(uris));
+        await handleDdisResponse(await Request.ddis(uris));
       } catch (e) {
         View.displayNetworkError(e);
       }
     } else {
-      console.log("by definition ddis require more than one drug");
+      View.displayDdis([]);
     }
   });
-};
+}
 
-const handleDdisResponse = ddisResponse => {
-  handleResponse(ddisResponse, ({ddis}) => {
+async function handleDdisResponse(response) {
+  await handleResponse(response, ({ddis}) => {
     View.displayDdis(ddis);
   });
-};
+}
