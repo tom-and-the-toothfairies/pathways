@@ -1,7 +1,10 @@
 # Tom and the Toothfairies
 [![spacemacs badge]][spacemacs github] [![build status badge]][circle ci]
 
-*Note: While Markdown is a very readable form of plain text, we recommend viewing these docs on Github for convenience.*
+*Note: this document is written Markdown. While it can be easily read in a text
+editor, we recommend viewing our documentation on
+Github [here](https://github.com/tom-and-the-toothfairies/pathways#readme) for
+maximum conveniece - the ability to click links for example.*
 
 This file contains instructions on how to install and run the project, as well
 as an overview of the project's design. The target platform is Ubuntu 16.04.

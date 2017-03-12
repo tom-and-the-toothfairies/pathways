@@ -22,7 +22,7 @@ the specified *URL*.
 
 # Rebuilding and Releasing new image
 
-Once the [Dockerfile] has been updated, the changes can be commited and merged
+Once the [Dockerfile] has been updated, the changes can be committed and merged
 into the master branch after passing CI and code review.
 
 The docker images are automatically built on [Docker Hub] when a new git tag is

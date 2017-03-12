@@ -10,7 +10,7 @@ tracked [here](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
 ## End to End Automated Testing
 
 We have developed a suite of end to end tests that verify the whole system's
-functionally by automating interactions with a web browser. These can be run
+functionality by automating interactions with a web browser. These can be run
 with the following command
 
 ```bash
@@ -34,11 +34,10 @@ The system allows users to upload PML files for analysis. Users must be able to
 select these files from their local file system.
 
 ### Testing
-Currently, this feature can only be tested manually. Visit the [homepage]. Click
-the `Choose File` button and select a file (`panacea/test/fixtures/ddis.pml` for
-example). The chosen file should appear as selected. If you have selected the
-file suggested above, you should see `ddis.pml` beside the file selection
-button.
+Visit the [homepage]. Click the `Choose File` button and select a file
+(`panacea/test/fixtures/ddis.pml` for example). The name of the chosen file
+should be displayed beside the file selection button. If you have selected the
+file suggested above, you should see `ddis.pml`.
 
 ## PML File Loading - Complete
 
@@ -46,17 +45,10 @@ button.
 Once a file has been selected, users must be able to load it into the system for analysis.
 
 ### Testing
-This feature has automated tests which can be run with the following command
-
-```bash
-$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only pml_loading
-```
-
-This feature can also be tested manually. Visit the [homepage] and select a
-file. Press the `Submit` button. The file should be sent to the system, and
-analysis results should now be displayed. For example, if you submit
-`panacea/test/fixtures/no_ddis.pml`, the analysis results should list
-`paracetamol` and `cocaine` as drugs found in the file.
+Visit the [homepage] and select a file. Press the `Submit` button. The file
+should be sent to the system, and analysis results should now be displayed. For
+example, if you submit `panacea/test/fixtures/no_ddis.pml`, the analysis results
+should list `paracetamol` and `cocaine` as drugs found in the file.
 
 
 ## Running PML Analysis - Complete
@@ -67,19 +59,13 @@ that it is a valid PML file. Invalid files must be rejected, and information
 about the encountered error must be readily available.
 
 ### Testing
-This feature has automated tests which can be run with the following command
-
-```bash
-$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only pml_analysis
-```
-
-This feature can also be tested manually. Visit the [homepage] and select a
-file. Press the `Submit` button. The file should be sent to the system, and
-analysis results should now be displayed. Invalid files should result in an
-error dialogue, which displays a meaningful error message. For example,
-`panacea/test/fixtures/bad.pml` should result in a `Syntax error` being
-displayed when submitted. Valid files should result in a success dialogue.
-See [PML File Loading](#pml-file-loading---complete) for an example.
+Visit the [homepage] and select a file. Press the `Submit` button. The file
+should be sent to the system, and analysis results should now be displayed.
+Invalid files should result in an error dialogue, which displays a meaningful
+error message. For example, `panacea/test/fixtures/bad.pml` should result in a
+`Syntax error` being displayed when submitted. Valid files should result in a
+success dialogue. See [PML File Loading](#pml-file-loading---complete) for an
+example.
 
 ## On-Screen PML Reporting - Complete
 
@@ -88,19 +74,12 @@ The results of analysing a file must be made available to the user. Any errors
 must be easily identified, and the error messages must be useful.
 
 ### Testing
-This feature has automated tests which can be run with the following command
-
-```bash
-$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only err_highlights
-```
-
-This feature can also be tested manually. Visit the [homepage] and select a
-file. Some useful files can be found in the [fixtures directory]. Press the
-`Submit` button. Analysis results should be displayed.
-`panacea/test/fixtures/example.png` is not UTF-8 encoded and should result in an
-`Encoding error`. `panacea/test/fixtures/bad.pml` contains invalid PML and
-should result in a `Syntax error`. `panacea/test/fixtures/ddis.pml` contains
-valid PML and should result in a successful analysis.
+Visit the [homepage] and select a file. Some useful files can be found in the
+[fixtures directory]. Press the `Submit` button. Analysis results should be
+displayed. `panacea/test/fixtures/example.png` is not UTF-8 encoded and should
+result in an `Encoding error`. `panacea/test/fixtures/bad.pml` contains invalid
+PML and should result in a `Syntax error`. `panacea/test/fixtures/ddis.pml`
+contains valid PML and should result in a successful analysis.
 
 ## PML Log File Generation - Complete
 
@@ -109,8 +88,6 @@ The successful or unsuccessful loading of PML files into the system is output
 to the console logs of the panacea service.
 
 ### Testing
-This feature is tested manually.
-
 First, open up the tail of the Panacea logs (the system must be running to do this):
 ```bash
 $ sudo docker-compose logs -f panacea
@@ -168,18 +145,13 @@ When a PML file is successfully analysed, any drugs found in `requires` blocks
 must be reported back to the user as `identified drugs`.
 
 ### Testing
-This feature has automated tests which can be run with the following command
-
-```bash
-$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_drugs
-```
-
-This feature can also be manually tested by uploading files. Some useful files
-can be found in the [fixtures directory]. Visit the [homepage], select a file,
-then press `Submit`.
+This feature can be tested by uploading files. Some useful files can be found in
+the [fixtures directory]. Visit the [homepage], select a file, then press
+`Submit`.
 
 `no_ddis.pml` is a well-structured PML document containing some drug identifiers
-and analysing it should result in `paracetamol` and `cocaine` being identified and presented in the UI.
+and analysing it should result in `paracetamol` and `cocaine` being identified
+and presented in the UI.
 
 `no_drugs.pml` is a well-structured PML document that does not contain drug
 identifiers. Analysing it should result in no drugs being identified.
@@ -206,21 +178,15 @@ The system must identify any drug-drug interactions between drugs in the
 uploaded PML files. The drug-drug interactions are contained in DINTO.
 
 ### Testing
-This feature has automated tests which can be run with the following command
-
-```bash
-$ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_ddis
-```
-
 This feature can also be manually tested by uploading files. Some useful files
 can be found in the [fixtures directory]. Visit the [homepage], select a file,
 then press `Submit`.
 
-`no_ddis.pml` contains drugs that do not interact. Analysing this file should
-result in no DDIs being reported to the user.
+`panacea/test/fixtures/no_ddis.pml` contains drugs that do not interact.
+Analysing this file should result in no DDIs being reported to the user.
 
-`ddis.pml` contains drugs that do interact. Analysing this file should
-result in DDIs being reported to the user.
+`panacea/test/fixtures/ddis.pml` contains drugs that do interact. Analysing this
+file should result in DDIs being reported to the user.
 
 ## On-Screen DINTO Reporting - Complete
 
@@ -244,10 +210,11 @@ to production.
 ## DINTO Log File Generation - Complete
 
 ### Description
-A record of queries made to DINTO (via Chiron/Asclepius) can be found in the console logs of the Chiron service.
+A record of queries made to DINTO (via Chiron/Asclepius) can be found in the
+console logs of the Chiron service.
 
 ### Testing
-This feature is tested manually.
+This feature is tested manually by looking at the logs of the running sytem.
 
 First, open up the tail of the Chiron logs (the system must be running to do this):
 ```bash
