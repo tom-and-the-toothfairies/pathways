@@ -3,7 +3,7 @@ When(/^I submit the upload form$/) do
 end
 
 Then(/^I should see the found drugs panel$/) do
-  panel = find('#drugs-panel')
+  panel = find('#drugs-panel', wait: 15)
 
   expect(panel).to be_visible
 end
