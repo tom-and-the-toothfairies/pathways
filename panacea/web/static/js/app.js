@@ -1,5 +1,9 @@
 import "babel-polyfill";
 import "phoenix_html";
+import "whatwg-fetch";
+import * as Request from "./request";
+import * as View from "./view";
+
 
 document.getElementById('file-form').addEventListener('submit', e => {
   e.preventDefault();
@@ -7,43 +11,74 @@ document.getElementById('file-form').addEventListener('submit', e => {
 });
 
 async function submitFile() {
+  View.hideFileForm();
+  View.hideResults();
   try {
-    const response = await fetch(this.action, {
-      method: 'POST',
-      body: new FormData(this),
-      credentials: 'same-origin'
-    });
+    await handleDrugsResponse(await Request.drugs(new FormData(this)));
+  } catch (e) {
+    View.displayNetworkError(e);
+  }
+  this.reset();
+  View.restoreFileForm();
+}
 
-    if (response.ok) {
-      renderFileResponse(await response.json());
-    } else {
-      renderFileError(await response.json());
-    }
-    this.reset();
-  } catch (err) {
-    console.log(err);
+async function handleResponse(response, handle) {
+  if (response.ok) {
+    const payload = await response.json();
+    await handle(payload);
+  } else {
+    const {error} = await response.json();
+    View.displayError(error);
   }
 }
 
-const successPanel = document.getElementById('success');
-const errorPanel = document.getElementById('error-panel');
+async function handleDrugsResponse(response) {
+  await handleResponse(response, async function ({drugs}) {
+    const labels = drugs.map(x => x.label);
 
-const renderFileResponse = data => {
-  // Parsed drugs
-  const drugsResultMessage = document.getElementById('success-result-message');
-  drugsResultMessage.innerHTML = JSON.stringify(data.drugs);
+    if (labels.length > 0) {
+      try {
+        await handleUrisResponse(await Request.uris(labels));
+      } catch (e) {
+        View.displayNetworkError(e);
+      }
+    } else {
+      View.displayNoDrugsError();
+    }
+  });
+}
 
-  // DDIS
-  const ddisResultMessage = document.getElementById('success-ddis-message');
-  ddisResultMessage.innerHTML = JSON.stringify(data.ddis);
+async function handleUrisResponse(response) {
+  await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
+    const uris = found.map(x => x.uri);
+    const labels = found.map(x => x.label);
+    const urisToLabels = found.reduce((acc, {uri, label}) => {
+      acc[uri] = label;
+      return acc;
+    }, {});
 
-  errorPanel.style.display = 'none';
-  successPanel.style.display = 'block';
-};
+    if (labels.length > 0) {
+      View.displayDrugs(labels);
+    }
 
-const renderFileError = data => {
-  const errorResultMessage = document.getElementById('error-result-message');
-  errorResultMessage.innerHTML = data.message;
-  errorPanel.style.display = 'block';
-  successPanel.style.display = 'none';
-};
+    if (unidentifiedDrugs.length > 0) {
+      View.displayUnidentifiedDrugs(unidentifiedDrugs);
+    }
+
+    if (uris.length > 1) {
+      try {
+        await handleDdisResponse(await Request.ddis(uris), urisToLabels);
+      } catch (e) {
+        View.displayNetworkError(e);
+      }
+    } else {
+      View.displayDdis([], {});
+    }
+  });
+}
+
+async function handleDdisResponse(response, urisToLabels) {
+  await handleResponse(response, ({ddis}) => {
+    View.displayDdis(ddis, urisToLabels);
+  });
+}

@@ -1,24 +1,39 @@
-<%= form_for @conn, pml_path(@conn, :upload), [as: :upload, multipart: true, id: "file-form"], fn f -> %>
+<form accept-charset="UTF-8" class="center fades-in" enctype="multipart/form-data" id="file-form">
+  <div class="form-group col-sm-8">
+    <div class="input-group">
+      <label class="input-group-btn">
+        <span class="btn btn-success">
+          <span class="glyphicon glyphicon-folder-open" aria-hidden="true">&ensp;</span>
+          Choose PML File
+          <input class="form-control hidden" id="file-input" name="upload[file]" required type="file">
+        </span>
+      </label>
+      <input type="text" class="form-control" id="filename-display" readonly>
+    </div>
+  </div>
+
   <div class="form-group">
-    <label>
-      PML file input <%= file_input f, :file, class: "form-control" %>
-    </label>
+    <button class="btn btn-success btn-lg" type="submit">Submit</button>
   </div>
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-success btn-lg" %>
-  </div>
-<% end %>
-<div id="success">
-  <div class="panel panel-success" id="success-panel-drugs">
-    <div class="panel-heading">Drugs Found</div>
-    <div class="panel-body" id="success-result-message"></div>
-  </div>
-  <div class="panel panel-success" id="success-panel-ddis">
-    <div class="panel-heading">DDIs Found</div>
-    <div class="panel-body" id="success-ddis-message"></div>
-  </div>
+</form>
+
+<div class="panel panel-success hidden fades-in" id="drugs-panel">
+  <div class="panel-heading">Drugs Found</div>
+  <div class="panel-body" id="drugs-text"></div>
 </div>
-<div class="panel panel-danger panel-hidden" id="error-panel">
-  <div class="panel-heading">PML Error</div>
-  <div class="panel-body" id="error-result-message"></div>
+<div class="panel panel-warning hidden fades-in" id="unidentified-drugs-panel">
+  <div class="panel-heading">Unidentified Drugs Found</div>
+  <div class="panel-body" id="unidentified-drugs-text"></div>
+</div>
+<div class="panel panel-success hidden fades-in" id="ddis-panel">
+  <div class="panel-heading">Drug-Drug Interactions</div>
+  <div class="panel-body" id="ddis-text"></div>
+</div>
+<div class="panel panel-danger hidden fades-in" id="error-panel">
+  <div class="panel-heading" id="error-title"></div>
+  <div class="panel-body" id="error-text"></div>
+</div>
+
+<div id="loading-container" class="center hidden fades-in">
+  <%= img_tag(static_path(@conn, "/images/heart.svg"), class: "loading-icon") %>
 </div>

@@ -2,11 +2,15 @@ version: '2'
 
 services:
   asclepius:
+    depends_on:
+      - chiron
     image: tomtoothfairies/asclepius:latest
     ports:
       - '5000:5000'
 
   panacea:
+    depends_on:
+      - asclepius
     image: tomtoothfairies/panacea:latest
     ports:
       - '4000:4000'

@@ -2,7 +2,7 @@ FROM anapsix/alpine-java:jre8
 MAINTAINER Conor Brennan <brennc27@tcd.ie>
 
 EXPOSE 3030
-RUN apk add --no-cache git curl
+RUN apk add --no-cache curl
 
 # Download tdbloader2 binary
 ENV JENA_ARCHIVE https://archive.apache.org/dist/
@@ -22,19 +22,15 @@ RUN mkdir $FUSEKI_DIR && \
     curl $JENA_ARCHIVE/jena/binaries/apache-jena-fuseki-$FUSEKI_VERSION.tar.gz | tar zxf - -C $FUSEKI_DIR
 ENV PATH $FUSEKI_DIR/apache-jena-fuseki-$FUSEKI_VERSION:$PATH
 
-# Checkout our chosen version of DINTO
-ENV DINTO_DIR /opt/DINTO
-ENV DINTO_SHA 68a29b5
+ENV OWL_DIR /opt/owl
 
-WORKDIR $DINTO_DIR
-RUN git clone https://github.com/labda/DINTO.git && \
-    cd DINTO && \
-    git checkout $DINTO_SHA && \
-    mv DINTO\ 1/DINTO_1.owl $DINTO_DIR
+# This variable specifies which OWL ontology should be used in the system
+ENV OWL_FILE https://raw.githubusercontent.com/labda/DINTO/68a29b568d6690fd04284feb06d152ca6e1e2e46/DINTO%201/DINTO_1.owl
 
 # Create indexed database from DINTO OWL
-RUN SORT_ARGS="-m" tdbloader2 --loc $DINTO_DIR/tdb DINTO_1.owl && rm -rf DINTO DINTO_1.owl
+WORKDIR $OWL_DIR
+RUN curl $OWL_FILE -o ddis.owl
+RUN SORT_ARGS="-m" tdbloader2 --loc $OWL_DIR/tdb ddis.owl && \
+    rm -rf ddis.owl
 
-
-
-CMD ["fuseki-server", "--loc=/opt/DINTO/tdb", "/dinto"]
+CMD ["fuseki-server", "--loc=/opt/owl/tdb", "/dinto"]

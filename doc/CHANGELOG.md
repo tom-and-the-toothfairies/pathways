@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0] 2017-03-12
+
+### Changed
+- Clarified installation instructions after feedback from client. Client left
+  feedback after release 0.3 indicating that our current README was unhelpful.
+  We have greatly simplified it and moved more non-essential information into
+  separate documents.
+- Updated user interface with loading icon to provide visual representation of
+  the request's duration.
+- Changed the homepage to update when a file is selected not when it is
+  analysed, based on client feedback.
+- Updated the representation of drugs in PML after client feedback. Our initial
+  representation meant that users had to look up the CHEBI/DINTO identifier for
+  a drug. Now users can specify drugs with a new `drug { "name" }` construct.
+- Added UI section to display drugs that were specified in the PML but that are
+  not included in DINTO
+- Updated user interface to enable live updates in which the results of the
+  PML parsing and DINTO lookup are displayed as soon as they are found before
+  the DDIs have been calculated
+- Updated how analysis results are displayed to make them more readable.
+  Previously we would display the JSON responses from the API to the user. Now
+  we take the JSON responses and create a readable message which is then
+  displayed to the user.
+- Updated the testing instructions. The client indicated that he would like
+  clear instructions for manual acceptance tests. We have updated the testing
+  instructions in `FEATURES.md` accordingly. We also removed references to
+  Panacea's automated unit tests. A section was added about running our new
+  end-to-end tests instead, as these are a much more thorough test of the
+  system.
+
+### Added
+- install-docker.sh for easy docker installation on Ubuntu 16.04. Part of
+  simplifying the installation steps.
+- Created Athloi: This service runs our end to end Cucumber tests using Selenium WebDriver
+  and Firefox. This service also runs during continuous integration to ensure
+  there are no regressions to the end user interface between commits/releases.
+
+### Fixed
+- Fixed a bug where analysis requests would time out.
+- Fixed bug where results of the previous DDI analysis would not be cleared
+  in the event there was an error with the current analysis
+
 ## [0.3] 2017-03-05
 
 ### Added
@@ -20,7 +62,7 @@ All notable changes to this project will be documented in this file.
   take several minutes to load DINTO into memory so Panacea would have to poll
   it to see if it was ready. Chiron can load DINTO from its triple store
   instantly, so the waiting is no longer required.
-  
+
 ## [0.2] 2017-02-26
 
 ### Added
@@ -50,7 +92,7 @@ All notable changes to this project will be documented in this file.
   build process. Now Asclepius clones DINTO and checks out a specific revision
   instead.
 
-  
+
 ## [0.1] 2017-02-12
 
 ### Fixed
@@ -72,7 +114,8 @@ All notable changes to this project will be documented in this file.
   docker service: pathways.
 - Installation instructions in README
 
-[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.3...release-1
+[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.0...iteration1-2
+[1.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.3...1.0
 [0.3]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.2...0.3
 [0.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.1...0.2
 [0.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.0...0.1

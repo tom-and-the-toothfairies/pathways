@@ -1,6 +1,5 @@
 Definitions.
 
-DRUG  = "(chebi:|dinto:DB)[0-9]+"
 IDENT = [a-zA-Z0-9_]+
 WS    = [\s\t\n\r]+
 STRING = "[^"]*"
@@ -11,6 +10,7 @@ Rules.
 
 \{            : {token, {'{', TokenLine}}.
 \}            : {token, {'}', TokenLine}}.
+drug          : {token, {drug, TokenLine}}.
 process       : {token, {process, TokenLine}}.
 task          : {token, {task, TokenLine}}.
 action        : {token, {action, TokenLine}}.
@@ -25,17 +25,12 @@ script        : {token, {script, TokenLine}}.
 tool          : {token, {tool, TokenLine}}.
 input         : {token, {input, TokenLine}}.
 output        : {token, {output, TokenLine}}.
-{DRUG}        : {token, {drug, TokenLine, strip_quotes(TokenChars)}}.
 {ACTION_TYPE} : {token, {action_type, TokenLine}}.
 {COMMENT}     : skip_token.
-{STRING}      : {token, {string, TokenLine}}.
+{STRING}      : {token, {string, TokenLine, TokenChars}}.
 \.            : {token, {dot, TokenLine}}.
 ==            : {token, {equals, TokenLine}}.
-{IDENT}       : {token, {ident, TokenLine, TokenChars}}.
+{IDENT}       : {token, {ident, TokenLine}}.
 {WS}          : skip_token.
 
 Erlang code.
-
-strip_quotes(Drug) ->
-    CharList = string:strip(Drug,both,$"),
-    list_to_binary(CharList).

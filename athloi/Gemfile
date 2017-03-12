@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+ruby '2.4.0'
+
+group :test do
+  gem 'capybara'
+  gem 'capybara-screenshot'
+  gem 'cucumber-rails'
+  gem 'pry-byebug'
+  gem 'rspec-expectations'
+  gem 'selenium-webdriver'
+end

@@ -1,18 +1,28 @@
 machine:
   pre:
     - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+    - pip install docker-compose
   services:
     - docker
 
+dependencies:
+  override:
+    - docker pull selenium/standalone-firefox
+    - docker pull tomtoothfairies/chiron
+
 compile:
   override:
-    - docker build --rm=false -t panacea panacea
-    - docker build --rm=false -t asclepius asclepius
+    - echo "panacea asclepius athloi" | parallel --trim r -d " " "docker build --rm=false -t tomtoothfairies/{} {}"
 
 test:
   pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/exunit
     - mkdir -p $CIRCLE_TEST_REPORTS/pytest
+    - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
+    - mkdir -p $CIRCLE_ARTIFACTS/screenshots
+
   override:
-    - docker run -t -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports panacea mix test
-    - docker run -t -v $CIRCLE_TEST_REPORTS/pytest:/test-reports asclepius pytest --junitxml=/test-reports/test-junit-report.xml
+    - docker-compose -f docker-compose.e2e.yml -f docker-compose.e2e.ci.yml up -d
+    - docker run -t -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports tomtoothfairies/panacea mix test
+    - docker run -t -v $CIRCLE_TEST_REPORTS/pytest:/test-reports tomtoothfairies/asclepius pytest --junitxml=/test-reports/test-junit-report.xml
+    - ./end-2-end.sh

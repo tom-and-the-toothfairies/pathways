@@ -5,6 +5,32 @@
   margin-top: -10px;
 }
 
-.panel-hidden, #success {
+.hidden {
   display: none;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fades-in {
+  animation: fade-in 500ms ease-in-out both;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-icon {
+  width: 128px;
+  height: 128px;
+  margin: 40px;
 }

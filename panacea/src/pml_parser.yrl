@@ -2,7 +2,7 @@ Nonterminals
 
 pml primitive_block primitive_list primitive
 action_block action_attributes action_attribute
-expression variable operator.
+expression variable operator requires_expr.
 
 Terminals
 
@@ -57,7 +57,7 @@ action_attributes ->
     action_attribute action_attributes : '$1' ++ '$2'.
 
 action_attribute ->
-    'requires' '{' expression '}' : '$3'.
+    'requires' '{' requires_expr '}' : '$3'.
 action_attribute ->
     'provides' '{' expression '}' : [].
 action_attribute ->
@@ -71,8 +71,12 @@ action_attribute ->
 action_attribute ->
     'output' '{' expression '}'  : [].
 
-expression ->
-    'drug' : extract_drug('$1').
+requires_expr ->
+    'drug' '{' 'string' '}' : extract_drug('$3').
+
+requires_expr ->
+    expression : [].
+
 expression ->
     'string' : [].
 
@@ -97,5 +101,10 @@ operator ->
 
 Erlang code.
 
-extract_drug({_,_,Drug}) ->
-    [Drug].
+extract_drug({_,Line,DrugStr}) ->
+    Drug = strip_quotes(DrugStr),
+    [{Drug, Line}].
+
+strip_quotes(Drug) ->
+    CharList = string:strip(Drug,both,$"),
+    list_to_binary(CharList).

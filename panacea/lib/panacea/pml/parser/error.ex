@@ -1,7 +1,6 @@
 defmodule Panacea.Pml.Parser.Error do
   @type error_info :: {pos_integer, atom, iodata}
 
-
   @spec format(error_info) :: String.t
   def format({number,_,message}) do
     [
