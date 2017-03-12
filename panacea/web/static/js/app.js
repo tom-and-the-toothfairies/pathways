@@ -57,7 +57,9 @@ async function handleUrisResponse(response) {
       return acc;
     }, {});
 
-    View.displayDrugs(labels);
+    if (labels.length > 0) {
+      View.displayDrugs(labels);
+    }
 
     if (unidentifiedDrugs.length > 0) {
       View.displayUnidentifiedDrugs(unidentifiedDrugs);

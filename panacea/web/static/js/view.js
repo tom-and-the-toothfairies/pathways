@@ -20,14 +20,18 @@ export const hideResults = () => {
 
 export const displayDrugs = drugs => {
   const drugsTextElement = document.getElementById('drugs-text');
-  drugsTextElement.innerHTML = JSON.stringify(drugs);
+  const preamble = 'I recognised the following drugs:';
+  const drugsHTML = drugs.map(x => `<li>${x}</li>`).join('');
+  drugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
   showElement(drugsPanel);
 };
 
 export const displayUnidentifiedDrugs = drugs => {
   const unidentifiedDrugsTextElement = document.getElementById('unidentified-drugs-text');
-  unidentifiedDrugsTextElement.innerHTML = JSON.stringify(drugs);
+  const preamble = 'I did not recognise the following drugs:';
+  const drugsHTML = drugs.map(x => `<li>${x}</li>`).join('');
+  unidentifiedDrugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
   showElement(unidentifiedDrugsPanel);
 };
