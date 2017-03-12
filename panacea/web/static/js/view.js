@@ -50,13 +50,13 @@ export const displayError = error => {
 };
 
 export const displayNetworkError = error => {
-  const title = "Network Error";
+  const title = "Network error";
   const detail = `<h5>Something went wrong</h5><code>${error}<code>`;
   displayError({title, detail});
 };
 
 export const displayNoDrugsError = () => {
-  const title = "Pathway Error";
+  const title = "Pathway error";
   const detail = `<h5>No drugs were found in the given file.
 You can specify drugs in PML like this:</h5>
 <code>requires { drug { "paracetamol" } }</code>`;
