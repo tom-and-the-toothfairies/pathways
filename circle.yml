@@ -8,7 +8,7 @@ machine:
 dependencies:
   override:
     - docker pull selenium/standalone-firefox
-    - docker pull tomtoothfairies/chiron:0.3
+    - docker pull tomtoothfairies/chiron
 
 compile:
   override:

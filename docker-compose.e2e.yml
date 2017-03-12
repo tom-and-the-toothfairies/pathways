@@ -12,7 +12,7 @@ services:
     image: tomtoothfairies/panacea:latest
 
   chiron:
-    image: tomtoothfairies/chiron:0.3
+    image: tomtoothfairies/chiron:latest
 
   selenium:
     image: selenium/standalone-firefox:latest

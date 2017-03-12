@@ -16,6 +16,6 @@ services:
       - '4000:4000'
 
   chiron:
-    image: tomtoothfairies/chiron:0.3
+    image: tomtoothfairies/chiron:latest
     ports:
       - '3030:3030'

@@ -4,14 +4,14 @@ services:
   asclepius:
     depends_on:
       - chiron
-    image: tomtoothfairies/asclepius:0.3
+    image: tomtoothfairies/asclepius:1.0
 
   panacea:
     depends_on:
       - asclepius
-    image: tomtoothfairies/panacea:0.3
+    image: tomtoothfairies/panacea:1.0
     ports:
       - '4000:4000'
 
   chiron:
-    image: tomtoothfairies/chiron:0.3
+    image: tomtoothfairies/chiron:1.0

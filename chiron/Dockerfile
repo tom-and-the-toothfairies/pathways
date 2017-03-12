@@ -2,7 +2,7 @@ FROM anapsix/alpine-java:jre8
 MAINTAINER Conor Brennan <brennc27@tcd.ie>
 
 EXPOSE 3030
-RUN apk add --no-cache git curl
+RUN apk add --no-cache curl
 
 # Download tdbloader2 binary
 ENV JENA_ARCHIVE https://archive.apache.org/dist/
@@ -33,6 +33,4 @@ RUN curl $OWL_FILE -o ddis.owl
 RUN SORT_ARGS="-m" tdbloader2 --loc $OWL_DIR/tdb ddis.owl && \
     rm -rf ddis.owl
 
-
-
-CMD ["fuseki-server", "--loc=/opt/DINTO/tdb", "/dinto"]
+CMD ["fuseki-server", "--loc=/opt/owl/tdb", "/dinto"]
