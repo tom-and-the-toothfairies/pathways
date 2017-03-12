@@ -18,8 +18,8 @@ select these files from their local file system.
 
 ### Testing
 Currently, this feature can only be tested manually. Visit the [homepage]. Click
-the `Choose File` button and select a file. The chosen file should appear
-as selected.
+the `Choose File` button and select a file (`panacea/test/fixtures/ddis.pml` for example). The chosen file should appear
+as selected. If you have selected the file suggested above, you should see `ddis.pml` beside the file selection button.
 
 ## PML File Loading - Complete
 
@@ -35,7 +35,7 @@ $ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only pml_
 
 This feature can also be tested manually. Visit the [homepage] and
 select a file. Press the `Submit` button. The file should be sent to the system,
-and analysis results should now be displayed.
+and analysis results should now be displayed. For example, if you submit `panacea/test/fixtures/no_ddis.pml`, the analysis results should list `paracetamol` and `cocaine` as drugs found in the file.
 
 
 ## Running PML Analysis - Complete
@@ -55,8 +55,8 @@ $ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only pml_
 This feature can also be tested manually. Visit the [homepage] and select a
 file. Press the `Submit` button. The file should be sent to the system, and
 analysis results should now be displayed. Invalid files should result in an
-error dialogue, which displays a meaningful error message. Valid files should
-result in a success dialogue.
+error dialogue, which displays a meaningful error message. For example, `panacea/test/fixtures/bad.pml` should result in a `syntax error` being displayed when submitted. Valid files should
+result in a success dialogue. See [PML File Loading](#pml-file-loading---complete) for an example.
 
 ## On-Screen PML Reporting - Complete
 
@@ -73,9 +73,9 @@ $ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only err_
 
 This feature can also be tested manually. Visit the [homepage] and select a
 file. Some useful files can be found in the [fixtures directory]. Press the
-`Submit` button. Analysis results should be displayed. `example.png` is not
-UTF-8 encoded and should result in an `invalid filetype` error. `bad.pml`
-contains invalid PML and should result in a `syntax error`. `ddis.pml` contains
+`Submit` button. Analysis results should be displayed. `panacea/test/fixtures/example.png` is not
+UTF-8 encoded and should result in an `invalid filetype` error. `panacea/test/fixtures/bad.pml`
+contains invalid PML and should result in a `syntax error`. `panacea/test/fixtures/ddis.pml` contains
 valid PML and should result in a successful analysis.
 
 ## PML Log-file Generation - Complete
@@ -87,7 +87,7 @@ to the console logs of the panacea service.
 ### Testing
 This feature is tested manually.
 
-First, open up the tail of the panacea logs:
+First, open up the tail of the Panacea logs (the system must be running to do this):
 ```bash
 $ sudo docker-compose logs -f panacea
 ```
@@ -155,12 +155,14 @@ can be found in the [fixtures directory]. Visit the homepage, select a file,
 then press `Submit`.
 
 `no_ddis.pml` is a well-structured PML document containing some drug identifiers
-and analysing it should result in drugs being identified and presented in the UI.
+and analysing it should result in `paracetamol` and `cocaine` being identified and presented in the UI.
 
 `no_drugs.pml` is a well-structured PML document that does not contain drug
 identifiers. Analysing it should result in no drugs being identified.
 
 ## Identify drugs in DINTO
+
+TODO
 
 ## Identify DDIs - Complete
 
@@ -175,7 +177,7 @@ This feature has automated tests which can be run with the following command
 $ sudo docker run -e "MIX_ENV=test" tomtoothfairies/panacea mix test --only identify_ddis
 ```
 
-This feature can also be manually tested by uploading files. Some usefull files
+This feature can also be manually tested by uploading files. Some useful files
 can be found in the [fixtures directory]. Visit the homepage, select a file, then press `Submit`.
 
 `no_ddis.pml` contains drugs that do not interact. Analysing this file should
@@ -205,7 +207,17 @@ to production.
 
 ## DINTO Logfile Generation - Complete
 
-See [On Screen DINTO Reporting](#on-screen-dinto-reporting---complete)
+### Description
+A record of queries made to DINTO (via Chiron/Asclepius) can be found in the console logs of the Chiron service.
+
+### Testing
+This feature is tested manually.
+
+First, open up the tail of the Chiron logs (the system must be running to do this):
+```bash
+$ sudo docker-compose logs -f chiron
+```
+Visit the [homepage] and select a PML file that contains drugs; for example `panacea/text/fixtures/ddis.pml`. Press the `Submit` button. You should see log entries indicating that queries were made (there will be requests such as `POST http://chiron:3030/dinto/query`) and the contents of those queries.
 
 ## DINTO Error and Warning highlights - Complete
 
