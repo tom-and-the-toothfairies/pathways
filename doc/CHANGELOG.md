@@ -11,18 +11,20 @@ All notable changes to this project will be documented in this file.
   separate documents.
 - Updated user interface with loading icon to provide visual representation of
   the request's duration.
-- Changed the homepage to update when a file is selected not when it is analysed, based on client feedback.
-- Fixed a bug where analysis requests would time out.
-- The representation of drugs in PML. Our initial representation meant that
-  users had to look up the CHEBI/DINTO identifier for a drug. Now users can
-  specify drugs with a new `drug { "name" }` construct.
+- Changed the homepage to update when a file is selected not when it is
+  analysed, based on client feedback.
+- Updated the representation of drugs in PML after client feedback. Our initial
+  representation meant that users had to look up the CHEBI/DINTO identifier for
+  a drug. Now users can specify drugs with a new `drug { "name" }` construct.
 - Added UI section to display drugs that were specified in the PML but that are
   not included in DINTO
 - Updated user interface to enable live updates in which the results of the
   PML parsing and DINTO lookup are displayed as soon as they are found before
   the DDIs have been calculated
-- Fixed bug where results of the previous DDI analysis would not be cleared
-  in the event there was an error with the current analysis
+- Updated how analysis results are displayed to make them more readable.
+  Previously we would display the JSON responses from the API to the user. Now
+  we take the JSON responses and create a readable message which is then
+  displayed to the user.
 
 ### Added
 - install-docker.sh for easy docker installation on Ubuntu 16.04. Part of
@@ -30,6 +32,11 @@ All notable changes to this project will be documented in this file.
 - Created Athloi: This service runs our end to end Cucumber tests using Selenium WebDriver
   and Firefox. This service also runs during continuous integration to ensure
   there are no regressions to the end user interface between commits/releases.
+
+### Fixed
+- Fixed a bug where analysis requests would time out.
+- Fixed bug where results of the previous DDI analysis would not be cleared
+  in the event there was an error with the current analysis
 
 ## [0.3] 2017-03-05
 
