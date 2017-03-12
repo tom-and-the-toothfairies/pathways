@@ -25,6 +25,12 @@ All notable changes to this project will be documented in this file.
   Previously we would display the JSON responses from the API to the user. Now
   we take the JSON responses and create a readable message which is then
   displayed to the user.
+- Updated the testing instructions. The client indicated that he would like
+  clear instructions for manual acceptance tests. We have updated the testing
+  instructions in `FEATURES.md` accordingly. We also removed references to
+  Panacea's automated unit tests. A section was added about running our new
+  end-to-end tests instead, as these are a much more thorough test of the
+  system.
 
 ### Added
 - install-docker.sh for easy docker installation on Ubuntu 16.04. Part of
