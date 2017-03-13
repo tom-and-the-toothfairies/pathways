@@ -45,7 +45,7 @@ export const displayDdis = (ddis, urisToLabels) => {
       const drugA = urisToLabels[uriA];
       const drugB = urisToLabels[uriB];
 
-      return `<li><b>${drugA}</b> and <b>${drugB}</b></li>`;
+      return `<li><strong>${drugA}</strong> and <strong>${drugB}</strong></li>`;
     }).join('');
 
     ddisTextElement.innerHTML = `<p>${preamble}</p><ul>${ddisHTML}</ul>`;
