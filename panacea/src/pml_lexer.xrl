@@ -2,14 +2,14 @@ Definitions.
 
 IDENT = [a-zA-Z0-9_]+
 WS    = [\s\t\n\r]+
+NUMBER = [0-9]+(\.[0-9]+)?
 STRING = "[^"]*"
-ACTION_TYPE  = (manual|executable)
 COMMENT = \/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/
 
 Rules.
 
-\{            : {token, {'{', TokenLine}}.
-\}            : {token, {'}', TokenLine}}.
+% keywords
+
 drug          : {token, {drug, TokenLine}}.
 process       : {token, {process, TokenLine}}.
 task          : {token, {task, TokenLine}}.
@@ -25,12 +25,32 @@ script        : {token, {script, TokenLine}}.
 tool          : {token, {tool, TokenLine}}.
 input         : {token, {input, TokenLine}}.
 output        : {token, {output, TokenLine}}.
-{ACTION_TYPE} : {token, {action_type, TokenLine}}.
+manual        : {token, {manual, TokenLine}}.
+executable    : {token, {executable, TokenLine}}.
+
+% symbols
+
+\{            : {token, {'{', TokenLine}}.
+\}            : {token, {'}', TokenLine}}.
+\(            : {token, {'(', TokenLine}}.
+\)            : {token, {')', TokenLine}}.
+\|\|          : {token, {'||', TokenLine}}.
+&&            : {token, {'&&', TokenLine}}.
+==            : {token, {'==', TokenLine}}.
+<             : {token, {'<', TokenLine}}.
+>             : {token, {'>', TokenLine}}.
+<=            : {token, {'<=', TokenLine}}.
+>=            : {token, {'>=', TokenLine}}.
+!=            : {token, {'!=', TokenLine}}.
+!             : {token, {'!', TokenLine}}.
+\.            : {token, {'.', TokenLine}}.
+
+% primitives
+
 {COMMENT}     : skip_token.
-{STRING}      : {token, {string, TokenLine, TokenChars}}.
-\.            : {token, {dot, TokenLine}}.
-==            : {token, {equals, TokenLine}}.
-{IDENT}       : {token, {ident, TokenLine}}.
 {WS}          : skip_token.
+{STRING}      : {token, {string, TokenLine, TokenChars}}.
+{NUMBER}      : {tokem, {number, TokenLine}}.
+{IDENT}       : {token, {ident, TokenLine}}.
 
 Erlang code.
