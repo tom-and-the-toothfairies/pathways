@@ -1,15 +1,10 @@
-/* Simple process to smoke test kernel. */
 process simple {
-    action a {
-	requires { a }
-	provides { a }
-    }
-    action b {
-	requires { a }
-	provides { a }
-    }
-    action c {
-	requires { a }
-	provides { a }
-    }
-}
+  action a {
+    requires { foo }
+    provides { foo } 
+  }
+  action b {
+    requires { foo }
+    provides { bar } 
+  }
+}  

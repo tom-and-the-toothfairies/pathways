@@ -13,7 +13,7 @@ defmodule Panacea.Pml.ParserTest do
           action baz {
             tool { "drill" }
             script { "drill a hole" }
-            agent { "driller" }
+            agent { 44.1234532E-123342 }
             requires { "wall" }
             provides { "a hole" }
           }
