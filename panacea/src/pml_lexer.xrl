@@ -2,7 +2,7 @@ Definitions.
 
 IDENT = [a-zA-Z0-9_]+
 WS    = [\s\t\n\r]+
-NUMBER = [0-9]+(\.[0-9]+)?
+NUMBER = ([0-9]+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?
 STRING = "[^"]*"
 COMMENT = \/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/
 
@@ -50,7 +50,7 @@ executable    : {token, {executable, TokenLine}}.
 {COMMENT}     : skip_token.
 {WS}          : skip_token.
 {STRING}      : {token, {string, TokenLine, TokenChars}}.
-{NUMBER}      : {tokem, {number, TokenLine}}.
+{NUMBER}      : {token, {number, TokenLine}}.
 {IDENT}       : {token, {ident, TokenLine}}.
 
 Erlang code.
