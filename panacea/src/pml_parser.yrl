@@ -5,7 +5,6 @@ primitive_block
 primitive_list
 primitive
 optional_name
-action_block
 action_attributes
 action_attribute
 optional_type
@@ -96,22 +95,14 @@ primitive ->
 % action names are required and have a different block
 % to other primitives
 primitive ->
-    'action' ident optional_type action_block :  '$4'.
+    'action' ident optional_type '{' action_attributes '}' :  '$5'.
 
-optional_name ->
-    '$empty' : [].
-optional_name ->
-    'ident' : [].
+optional_name -> '$empty'.
+optional_name -> 'ident'.
 
-optional_type ->
-    '$empty' : [].
-optional_type ->
-    'manual' : [].
-optional_type ->
-    'executable' : [].
-
-action_block ->
-    '{' action_attributes '}' : '$2'.
+optional_type -> '$empty'.
+optional_type -> 'manual'.
+optional_type -> 'executable'.
 
 action_attributes ->
     '$empty' : [].
@@ -141,76 +132,47 @@ requires_expr ->
 requires_expr ->
     expression : [].
 
-expression ->
-    expr logical_combination : [].
+expression -> expr logical_combination.
 
-logical_combination ->
-    '&&' expr logical_combination : [].
-logical_combination ->
-    '||' expr logical_combination : [].
-logical_combination ->
-    '$empty' : [].
+logical_combination -> '&&' expr logical_combination.
+logical_combination -> '||' expr logical_combination.
+logical_combination -> '$empty'.
 
-expr ->
-    value operation : [].
+expr -> value operation.
 
-operation ->
-    operator value : [].
-operation ->
-    '$empty' : [].
+operation -> operator value.
+operation -> '$empty'.
 
-value ->
-    '!' expression : [].
-value ->
-    '(' expression ')' :[].
-value ->
-    'string' : [].
-value ->
-    'number' : [].
-value ->
-    variable : [].
+value -> '!' expression.
+value -> '(' expression ')'.
+value -> 'string'.
+value -> 'number'.
+value -> variable.
 
-variable ->
-    identifier accessor : [].
-variable ->
-    prefix prefix_list accessor : [].
+variable -> identifier accessor.
+variable -> prefix prefix_list accessor.
 
-identifier ->
-    'ident' : [].
+identifier -> 'ident'.
 % some of jnoll's sample pml has these keywords
 % on the RHS of expressions!
-identifier ->
-    'manual' : [].
-identifier ->
-    'executable' : [].
+identifier -> 'manual'.
+identifier -> 'executable'.
 
-prefix ->
-    '(' ident ')' : [].
+prefix -> '(' ident ')'.
 
-prefix_list ->
-    ident : [].
-prefix_list ->
-    prefix prefix_list : [].
-prefix_list ->
-    '$empty' : [].
+prefix_list -> ident.
+prefix_list -> prefix prefix_list.
+prefix_list -> '$empty'.
 
-accessor ->
-    '$empty' : [].
-accessor ->
-    '.' 'ident' : [].
+accessor -> '$empty'.
+accessor -> '.' 'ident'.
 
-operator ->
-    '==' : [].
-operator ->
-    '!=' : [].
-operator ->
-    '<' : [].
-operator ->
-    '>' : [].
-operator ->
-    '<=' : [].
-operator ->
-    '>=' : [].
+operator -> '=='.
+operator -> '!='.
+operator -> '<'.
+operator -> '>'.
+operator -> '<='.
+operator -> '>='.
 
 Erlang code.
 
