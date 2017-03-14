@@ -12,17 +12,22 @@ dependencies:
 
 compile:
   override:
-    - echo "panacea asclepius athloi" | parallel --trim r -d " " "docker build --rm=false -t tomtoothfairies/{} {}"
+    - docker build --rm=false -t tomtoothfairies/panacea panacea
+    - docker build --rm=false -t tomtoothfairies/asclepius asclepius
+    - docker build --rm=false -t tomtoothfairies/athloi athloi
 
 test:
   pre:
-    - mkdir -p $CIRCLE_TEST_REPORTS/exunit
-    - mkdir -p $CIRCLE_TEST_REPORTS/pytest
-    - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
-    - mkdir -p $CIRCLE_ARTIFACTS/screenshots
+    - mkdir -p $CIRCLE_TEST_REPORTS/{exunit,pytest,cucumber}
+    - mkdir -p $CIRCLE_ARTIFACTS/{screenshots,logs}
 
   override:
-    - docker-compose -f docker-compose.e2e.yml -f docker-compose.e2e.ci.yml up -d
     - docker run -t -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports tomtoothfairies/panacea mix test
     - docker run -t -v $CIRCLE_TEST_REPORTS/pytest:/test-reports tomtoothfairies/asclepius pytest --junitxml=/test-reports/test-junit-report.xml
-    - ./end-2-end.sh
+    - docker-compose -f docker-compose.e2e.yml -f docker-compose.e2e.ci.yml run athloi
+
+  post:
+    - docker logs pathways_panacea_1 > $CIRCLE_ARTIFACTS/logs/panacea.log
+    - docker logs pathways_asclepius_1 > $CIRCLE_ARTIFACTS/logs/asclepius.log
+    - docker logs pathways_chiron_1 > $CIRCLE_ARTIFACTS/logs/chiron.log
+    - docker logs pathways_selenium_1 > $CIRCLE_ARTIFACTS/logs/selenium.log
