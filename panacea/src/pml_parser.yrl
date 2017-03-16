@@ -25,22 +25,22 @@ Terminals
 
 % keywords
 
-'process'
-'task'
-'action'
-'branch'
-'selection'
-'iteration'
-'sequence'
-'provides'
-'requires'
-'agent'
-'script'
-'tool'
-'input'
-'output'
-'manual'
-'executable'
+process
+task
+action
+branch
+selection
+iteration
+sequence
+provides
+requires
+agent
+script
+tool
+input
+output
+manual
+executable
 
 % symbols
 '{'
@@ -59,10 +59,10 @@ Terminals
 '!'
 
 % primitives
-'string'
-'ident'
-'drug'
-'number'.
+string
+ident
+drug
+number.
 
 Rootsymbol pml.
 
@@ -72,7 +72,7 @@ Rootsymbol pml.
 Nonassoc 200 '==' '!=' '||' '&&' '<' '>' '<=' '>=' '!' '.' ')'.
 
 pml ->
-    'process' 'ident' primitive_block : '$3'.
+    process ident primitive_block : {process, [{ident, extract_ident('$2')}, line_number('$1')], '$3'}.
 
 primitive_block ->
     '{' primitive_list '}' : '$2'.
@@ -80,54 +80,54 @@ primitive_block ->
 primitive_list ->
     '$empty' : [].
 primitive_list ->
-    primitive primitive_list : '$1' ++ '$2'.
+    primitive primitive_list : ['$1'|'$2'].
 
 primitive ->
-    'branch' optional_name primitive_block    : '$3'.
+    branch optional_name primitive_block    : primitive('$1', '$2', '$3').
 primitive ->
-    'selection' optional_name primitive_block :  '$3'.
+    selection optional_name primitive_block : primitive('$1', '$2', '$3').
 primitive ->
-    'iteration' optional_name primitive_block :  '$3'.
+    iteration optional_name primitive_block : primitive('$1', '$2', '$3').
 primitive ->
-    'sequence' optional_name primitive_block  :  '$3'.
+    sequence optional_name primitive_block  : primitive('$1', '$2', '$3').
 primitive ->
-    'task' optional_name primitive_block      :  '$3'.
+    task optional_name primitive_block      : primitive('$1', '$2', '$3').
 % action names are required and have a different block
 % to other primitives
 primitive ->
-    'action' ident optional_type '{' action_attributes '}' :  '$5'.
+    action ident optional_type '{' action_attributes '}' : action(extract_ident('$2'), line_number('$1'), '$3', '$5').
 
-optional_name -> '$empty'.
-optional_name -> 'ident'.
+optional_name -> '$empty' : nil.
+optional_name -> ident : extract_ident('$1').
 
-optional_type -> '$empty'.
-optional_type -> 'manual'.
-optional_type -> 'executable'.
+optional_type -> '$empty' : nil.
+optional_type -> manual : manual.
+optional_type -> executable : executable.
 
 action_attributes ->
     '$empty' : [].
 action_attributes ->
-    action_attribute action_attributes : '$1' ++ '$2'.
+    action_attribute action_attributes : ['$1'|'$2'].
 
 action_attribute ->
-    'provides' '{' expression '}' : [].
+    provides '{' expression '}' : action_attribute('$1', '$3').
 % `requires` uses a different expression production as
 % drugs are only allowed in `requires `blocks
 action_attribute ->
-    'requires' '{' requires_expr '}' : '$3'.
+    requires '{' requires_expr '}' : action_attribute('$1', '$3').
 action_attribute ->
-    'agent' '{' expression '}'  : [].
+    agent '{' expression '}' : action_attribute('$1', '$3').
 action_attribute ->
-    'script' '{' 'string' '}'  : [].
+    script '{' string '}' : action_attribute('$1', '$3').
 action_attribute ->
-    'tool' '{' 'string' '}'  : [].
+    tool '{' string '}' : action_attribute('$1', '$3').
 action_attribute ->
-    'input' '{' 'string' '}'  : [].
+    input '{' string '}' : action_attribute('$1', '$3').
 action_attribute ->
-    'output' '{' 'string' '}'  : [].
+    output '{' string '}' : action_attribute('$1', '$3').
 
 requires_expr ->
-    'drug' '{' 'string' '}' : extract_drug('$3').
+    drug '{' string '}' : extract_string('$3').
 
 requires_expr ->
     expression : [].
@@ -143,20 +143,20 @@ expr -> value operation.
 operation -> operator value.
 operation -> '$empty'.
 
-value -> '!' expression.
-value -> '(' expression ')'.
-value -> 'string'.
-value -> 'number'.
-value -> variable.
+value -> '!' expression : {negate, '$2'}.
+value -> '(' expression ')': '$2'.
+value -> string : extract_string('$1').
+value -> number : list_to_float('$1').
+value -> variable : '$1'.
 
 variable -> identifier accessor.
 variable -> prefix prefix_list accessor.
 
-identifier -> 'ident'.
+identifier -> ident.
 % some of jnoll's sample pml has these keywords
 % on the RHS of expressions!
-identifier -> 'manual'.
-identifier -> 'executable'.
+identifier -> manual.
+identifier -> executable.
 
 prefix -> '(' ident ')'.
 
@@ -165,21 +165,39 @@ prefix_list -> prefix prefix_list.
 prefix_list -> '$empty'.
 
 accessor -> '$empty'.
-accessor -> '.' 'ident'.
+accessor -> '.' ident : {accessor, extract_ident('$2')}.
 
-operator -> '=='.
-operator -> '!='.
-operator -> '<'.
-operator -> '>'.
-operator -> '<='.
-operator -> '>='.
+operator -> '==' : equal.
+operator -> '!=' : not_equal.
+operator -> '<' : less_than.
+operator -> '>' : greater_than.
+operator -> '<=' : less_than_equal.
+operator -> '>=' : greater_than_equal.
 
 Erlang code.
 
-extract_drug({_,Line,DrugStr}) ->
-    Drug = strip_quotes(DrugStr),
-    [{Drug, Line}].
+extract_string({_, Line, Str}) ->
+    Stripped = strip_quotes(Str),
+    [{Stripped, Line}].
 
-strip_quotes(Drug) ->
-    CharList = string:strip(Drug,both,$"),
+strip_quotes(Str) ->
+    CharList = string:strip(Str, both, $"),
     list_to_binary(CharList).
+
+extract_ident({ident, _, Ident}) -> Ident.
+
+line_number({_, Line}) -> {line, Line};
+line_number({_, Line, _}) -> {line, Line}.
+
+primitive({PrimType, Line}, nil, Rest) ->
+    {PrimType, [{line, Line}], Rest};
+primitive({PrimType, Line}, Ident, Rest) ->
+    {PrimType, [{ident, Ident}, {line, Line}], Rest}.
+
+action(Ident, Line, nil, Rest) ->
+    {action, [{ident, Ident}, Line], Rest};
+action(Ident, Line, Type, Rest) ->
+    {action, [{ident, Ident}, Line, {type, Type}], Rest}.
+
+action_attribute({AttrType, Line}, Rest) ->
+    {AttrType, [{line, Line}], Rest}.

@@ -51,6 +51,6 @@ executable    : {token, {executable, TokenLine}}.
 {WS}          : skip_token.
 {STRING}      : {token, {string, TokenLine, TokenChars}}.
 {NUMBER}      : {token, {number, TokenLine}}.
-{IDENT}       : {token, {ident, TokenLine}}.
+{IDENT}       : {token, {ident, TokenLine, TokenChars}}.
 
 Erlang code.
