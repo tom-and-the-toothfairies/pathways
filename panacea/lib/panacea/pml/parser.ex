@@ -36,4 +36,13 @@ defmodule Panacea.Pml.Parser do
 
     {:ok, result}
   end
+
+  def test do
+    {:ok, f} = File.read("test/fixtures/ddis.pml")
+    f
+    |> to_charlist()
+    |> :pml_lexer.string()
+    |> elem(1)
+    |> :pml_parser.parse()
+  end
 end

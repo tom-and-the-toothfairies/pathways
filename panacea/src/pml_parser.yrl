@@ -72,7 +72,7 @@ Rootsymbol pml.
 Nonassoc 200 '==' '!=' '||' '&&' '<' '>' '<=' '>=' '!' '.' ')'.
 
 pml ->
-    process ident primitive_block : {process, [{ident, extract_ident('$2')}, line_number('$1')], '$3'}.
+    process ident primitive_block : construct('$1', [{name, ident('$2')}], '$3').
 
 primitive_block ->
     '{' primitive_list '}' : '$2'.
@@ -83,22 +83,22 @@ primitive_list ->
     primitive primitive_list : ['$1'|'$2'].
 
 primitive ->
-    branch optional_name primitive_block    : primitive('$1', '$2', '$3').
+    branch optional_name primitive_block    : construct('$1', [{name, '$2'}], '$3').
 primitive ->
-    selection optional_name primitive_block : primitive('$1', '$2', '$3').
+    selection optional_name primitive_block : construct('$1', [{name, '$2'}], '$3').
 primitive ->
-    iteration optional_name primitive_block : primitive('$1', '$2', '$3').
+    iteration optional_name primitive_block : construct('$1', [{name, '$2'}], '$3').
 primitive ->
-    sequence optional_name primitive_block  : primitive('$1', '$2', '$3').
+    sequence optional_name primitive_block  : construct('$1', [{name, '$2'}], '$3').
 primitive ->
-    task optional_name primitive_block      : primitive('$1', '$2', '$3').
+    task optional_name primitive_block      : construct('$1', [{name, '$2'}], '$3').
 % action names are required and have a different block
 % to other primitives
 primitive ->
-    action ident optional_type '{' action_attributes '}' : action(extract_ident('$2'), line_number('$1'), '$3', '$5').
+    action ident optional_type '{' action_attributes '}' : construct('$1', [{name, ident('$2')}, {type, '$3'}], '$5').
 
 optional_name -> '$empty' : nil.
-optional_name -> ident : extract_ident('$1').
+optional_name -> ident : ident('$1').
 
 optional_type -> '$empty' : nil.
 optional_type -> manual : manual.
@@ -110,27 +110,27 @@ action_attributes ->
     action_attribute action_attributes : ['$1'|'$2'].
 
 action_attribute ->
-    provides '{' expression '}' : action_attribute('$1', '$3').
+    provides '{' expression '}' : construct('$1', [], '$3').
 % `requires` uses a different expression production as
 % drugs are only allowed in `requires `blocks
 action_attribute ->
-    requires '{' requires_expr '}' : action_attribute('$1', '$3').
+    requires '{' requires_expr '}' : construct('$1', [], '$3').
 action_attribute ->
-    agent '{' expression '}' : action_attribute('$1', '$3').
+    agent '{' expression '}'       : construct('$1', [], '$3').
 action_attribute ->
-    script '{' string '}' : action_attribute('$1', '$3').
+    script '{' string '}'          : construct('$1', [], extract_string('$3')).
 action_attribute ->
-    tool '{' string '}' : action_attribute('$1', '$3').
+    tool '{' string '}'            : construct('$1', [], extract_string('$3')).
 action_attribute ->
-    input '{' string '}' : action_attribute('$1', '$3').
+    input '{' string '}'           : construct('$1', [], extract_string('$3')).
 action_attribute ->
-    output '{' string '}' : action_attribute('$1', '$3').
+    output '{' string '}'          : construct('$1', [], extract_string('$3')).
 
 requires_expr ->
-    drug '{' string '}' : extract_string('$3').
+    drug '{' string '}'            : construct('$1', [], extract_string('$3')).
 
 requires_expr ->
-    expression : [].
+    expression : '$1'.
 
 expression -> expr logical_combination.
 
@@ -165,7 +165,7 @@ prefix_list -> prefix prefix_list.
 prefix_list -> '$empty'.
 
 accessor -> '$empty'.
-accessor -> '.' ident : {accessor, extract_ident('$2')}.
+accessor -> '.' ident : {accessor, ident('$2')}.
 
 operator -> '==' : equal.
 operator -> '!=' : not_equal.
@@ -176,28 +176,16 @@ operator -> '>=' : greater_than_equal.
 
 Erlang code.
 
-extract_string({_, Line, Str}) ->
-    Stripped = strip_quotes(Str),
-    [{Stripped, Line}].
+extract_string({_, _, Str}) ->
+    strip_quotes(Str).
 
 strip_quotes(Str) ->
     CharList = string:strip(Str, both, $"),
     list_to_binary(CharList).
 
-extract_ident({ident, _, Ident}) -> Ident.
+construct({Type, Line}, Attributes, Value) ->
+    Attrs = lists:filter(fun({_,X}) -> X /= nil end, Attributes),
+    {Type, [{line, Line}|Attrs], Value}.
 
-line_number({_, Line}) -> {line, Line};
-line_number({_, Line, _}) -> {line, Line}.
-
-primitive({PrimType, Line}, nil, Rest) ->
-    {PrimType, [{line, Line}], Rest};
-primitive({PrimType, Line}, Ident, Rest) ->
-    {PrimType, [{ident, Ident}, {line, Line}], Rest}.
-
-action(Ident, Line, nil, Rest) ->
-    {action, [{ident, Ident}, Line], Rest};
-action(Ident, Line, Type, Rest) ->
-    {action, [{ident, Ident}, Line, {type, Type}], Rest}.
-
-action_attribute({AttrType, Line}, Rest) ->
-    {AttrType, [{line, Line}], Rest}.
+ident({ident, _, Ident}) ->
+    Ident.
