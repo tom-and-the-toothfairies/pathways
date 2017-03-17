@@ -1,10 +1,17 @@
 defmodule Panacea.Pml.Analysis do
   alias __MODULE__
 
-  defstruct drugs: []
+  defstruct [:drugs, :ast]
+
+  def new(ast) do
+    %Analysis{
+      drugs: [],
+      ast: ast
+    }
+  end
 
   def run(ast) do
-    {:ok, analyse(%Analysis{}, ast)}
+    {:ok, analyse(Analysis.new(ast), ast)}
   end
 
   defp analyse(result, {:drug, [line: line], label}) do

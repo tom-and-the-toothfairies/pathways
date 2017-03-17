@@ -36,7 +36,8 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "label": "cocaine",
       "line": 2
     }
-  ]
+  ],
+  "ast": "AST representation of the provided PML file - base64 encoded"
 }
 ```
 
