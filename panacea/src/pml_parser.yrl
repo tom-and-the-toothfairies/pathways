@@ -151,9 +151,9 @@ value -> variable           : '$1'.
 variable -> ident accessor              : function_application('$1', '$2').
 variable -> prefix prefix_list accessor : function_application(['$1'|'$2'], '$3').
 
-prefix -> '(' ident ')' : {prefix, extract_string('$2')}.
+prefix -> '(' ident ')' : {prefix, [], extract_string('$2')}.
 
-prefix_list -> ident              : [{ident, extract_string('$1')}].
+prefix_list -> ident              : [{ident, [], extract_string('$1')}].
 prefix_list -> prefix prefix_list : ['$1'|'$2'].
 prefix_list -> '$empty'           : [].
 

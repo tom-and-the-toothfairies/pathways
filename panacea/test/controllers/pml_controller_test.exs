@@ -51,8 +51,8 @@ defmodule Panacea.PmlControllerTest do
 
       assert conn.status == 200
       assert response_body(conn) |> Map.get("drugs") == [
-        %{"label" => "paracetamol", "line" => 8},
-        %{"label" => "cocaine", "line" => 17}
+        %{"label" => "cocaine", "line" => 17},
+        %{"label" => "paracetamol", "line" => 8}
       ]
     end
   end
