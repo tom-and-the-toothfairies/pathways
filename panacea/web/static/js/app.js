@@ -33,12 +33,12 @@ async function handleResponse(response, handle) {
 }
 
 async function handleDrugsResponse(response) {
-  await handleResponse(response, async function ({drugs}) {
+  await handleResponse(response, async function ({drugs, ast}) {
     const labels = drugs.map(x => x.label);
 
     if (labels.length > 0) {
       try {
-        await handleUrisResponse(await Request.uris(labels));
+        await handleUrisResponse(await Request.uris(labels), ast);
       } catch (e) {
         View.displayNetworkError(e);
       }
@@ -48,7 +48,30 @@ async function handleDrugsResponse(response) {
   });
 }
 
-async function handleUrisResponse(response) {
+const triggerDownload = (fileName, fileContents) => {
+  const element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents));
+  element.setAttribute('download', fileName);
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+};
+
+const prepareDownloadButton = ast => {
+  const pmlDownloadButton = document.getElementById('pml-download-button');
+  pmlDownloadButton.onclick = async function(){
+    try {
+      const response = await Request.pml(ast);
+      const pml = await response.text();
+      triggerDownload('pml-tx.pml', pml);
+    } catch (e) {
+      View.displayNetworkError(e);
+    }
+  }
+};
+
+async function handleUrisResponse(response, ast) {
   await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
     const uris = found.map(x => x.uri);
     const labels = found.map(x => x.label);
@@ -56,6 +79,9 @@ async function handleUrisResponse(response) {
       acc[uri] = label;
       return acc;
     }, {});
+
+    prepareDownloadButton(ast);
+    View.displayDownloadButton();
 
     if (labels.length > 0) {
       View.displayDrugs(labels);

@@ -50,7 +50,6 @@ defmodule Panacea.AstControllerTest do
       conn = post conn, ast_path(conn, :to_pml), %{ast: encoded_ast}
 
       assert conn.status == 200
-      assert conn |> get_resp_header("content-disposition") == [~s(attachment; filename="pml-tx.pml")]
       assert conn.resp_body == pml
     end
   end

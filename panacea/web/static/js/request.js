@@ -18,6 +18,10 @@ export const drugs = formData => {
   return post('/api/pml', formData, formHeaders);
 };
 
+export const pml = ast => {
+  return post('/api/ast', JSON.stringify({ast}), defaultHeaders);
+};
+
 export const uris = labels => {
   return post('/api/uris', JSON.stringify({labels}), defaultHeaders);
 };
