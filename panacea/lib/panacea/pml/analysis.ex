@@ -8,7 +8,7 @@ defmodule Panacea.Pml.Analysis do
   end
 
   defp analyse(result, {:drug, [line: line], label}) do
-    %{result| drugs: [ %{label: label, line: line}| result.drugs ]}
+    %{result| drugs: [ %{label: to_string(label), line: line}| result.drugs ]}
   end
   defp analyse(result, {_, _,children}) when is_list(children) do
     Enum.reduce(children, result, fn(child, acc) ->

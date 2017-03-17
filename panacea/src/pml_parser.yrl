@@ -71,7 +71,7 @@ Rootsymbol pml.
 Nonassoc 200 '==' '!=' '||' '&&' '<' '>' '<=' '>=' '!' '.' ')'.
 
 pml ->
-    process ident primitive_block : construct('$1', [{name, ident('$2')}], '$3').
+    process ident primitive_block : construct('$1', [{name, value_of('$2')}], '$3').
 
 primitive_block ->
     '{' primitive_list '}' : '$2'.
@@ -94,10 +94,10 @@ primitive ->
 % action names are required and have a different block
 % to other primitives
 primitive ->
-    action ident optional_type '{' action_attributes '}' : construct('$1', [{name, ident('$2')}, {type, '$3'}], '$5').
+    action ident optional_type '{' action_attributes '}' : construct('$1', [{name, value_of('$2')}, {type, '$3'}], '$5').
 
 optional_name -> '$empty' : nil.
-optional_name -> ident    : ident('$1').
+optional_name -> ident    : value_of('$1').
 
 optional_type -> '$empty'   : nil.
 optional_type -> manual     : manual.
@@ -131,73 +131,57 @@ requires_expr ->
 requires_expr ->
     expression : '$1'.
 
-expression -> expr logical_combination : function_application('$1', '$2').
+expression -> expr logical_combination : construct(expression, [], join_with_spaces(['$1', '$2'])).
 
-logical_combination -> '&&' expr logical_combination : construct('$1', [], function_application('$2', '$3')).
-logical_combination -> '||' expr logical_combination : construct('$1', [], function_application('$2', '$3')).
-logical_combination -> '$empty'                      : nil.
+logical_combination -> '&&' expr logical_combination : join_with_spaces(["&&", '$2', '$3']).
+logical_combination -> '||' expr logical_combination : join_with_spaces(["||", '$2', '$3']).
+logical_combination -> '$empty'                      : "".
 
-expr -> value operation : function_application('$1', '$2').
+expr -> value operation : join_with_spaces(['$1','$2']).
 
-operation -> operator value : construct('$1', [], '$2').
-operation -> '$empty'       : nil.
+operation -> operator value : join_with_spaces(['$1', '$2']).
+operation -> '$empty'       : "".
 
-value -> '!' expression     : {negate, [], '$2'}.
-value -> '(' expression ')' : {parenthesised, [], '$2'}.
-value -> string             : string_expression('$1').
-value -> number             : number_expression('$1').
+value -> '!' expression     : "!" ++ value_of('$2').
+value -> '(' expression ')' : "(" ++ value_of('$2') ++ ")".
+value -> string             : extract_string('$1').
+value -> number             : value_of('$1').
 value -> variable           : '$1'.
 
-variable -> ident accessor              : function_application('$1', '$2').
-variable -> prefix prefix_list accessor : function_application(['$1'|'$2'], '$3').
+variable -> ident accessor              : value_of('$1') ++ '$2'.
+variable -> prefix prefix_list accessor : join_with_spaces(['$1','$2']) ++ '$3'.
 
-prefix -> '(' ident ')' : {prefix, [], extract_string('$2')}.
+prefix -> '(' ident ')' : "(" ++ value_of('$2') ++ ")".
 
-prefix_list -> ident              : [construct('$1', [], extract_string('$1'))].
-prefix_list -> prefix prefix_list : ['$1'|'$2'].
-prefix_list -> '$empty'           : [].
+prefix_list -> ident              : value_of('$1').
+prefix_list -> prefix prefix_list : join_with_spaces(['$1', '$2']).
+prefix_list -> '$empty'           : "".
 
-accessor -> '$empty'  : nil.
-accessor -> '.' ident : construct('$1', [], extract_string('$2')).
+accessor -> '$empty'  : "".
+accessor -> '.' ident : "." ++ value_of('$2').
 
-operator -> '==' : '$1'.
-operator -> '!=' : '$1'.
-operator -> '<'  : '$1'.
-operator -> '>'  : '$1'.
-operator -> '<=' : '$1'.
-operator -> '>=' : '$1'.
+operator -> '==' : "==".
+operator -> '!=' : "!=".
+operator -> '<'  : "<".
+operator -> '>'  : ">".
+operator -> '<=' : "<=".
+operator -> '>=' : ">=".
 
 Erlang code.
 
+value_of({_, _, Value}) ->
+    Value.
+
 extract_string({_, _, Str}) ->
-    strip_quotes(Str).
+    string:strip(Str, both, $").
 
-strip_quotes(Str) ->
-    CharList = string:strip(Str, both, $"),
-    list_to_binary(CharList).
-
-number_expression({_, Line, Num}) ->
-    ParsedNum = list_to_number(Num),
-    construct({number, Line}, [], ParsedNum).
-
-list_to_number(L) ->
-    try list_to_float(L)
-    catch
-        error:badarg -> list_to_integer(L)
-    end.
-
-string_expression({_, Line, Str}) ->
-    Stripped = strip_quotes(Str),
-    construct({string, Line}, [], Stripped).
-
-construct(T, Attributes, Value) ->
+construct({Type, Line}, Attributes, Value) ->
     Attrs = lists:filter(fun({_,X}) -> X /= nil end, Attributes),
-    {element(1, T), [{line, element(2, T)}|Attrs], Value}.
+    {Type, [{line, Line}|Attrs], Value};
+construct(Type, Attributes, Value) ->
+    Attrs = lists:filter(fun({_,X}) -> X /= nil end, Attributes),
+    {Type, Attrs, Value}.
 
-ident({ident, _, Ident}) ->
-    list_to_binary(Ident).
-
-function_application(Arg1, nil) ->
-    Arg1;
-function_application(Arg1, {Func, Attrs, Arg2}) ->
-    {Func, Attrs, [Arg1, Arg2]}.
+join_with_spaces(Strings) ->
+    NonEmpty = lists:filter(fun(X) -> X /= [] end, Strings),
+    string:join(NonEmpty, " ").
