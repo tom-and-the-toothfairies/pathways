@@ -26,5 +26,6 @@ defmodule Panacea.Router do
     post "/pml", PmlController, :upload
     post "/uris", AsclepiusController, :uris_for_labels
     post "/ddis", AsclepiusController, :ddis
+    post "/ast", AstController, :to_pml
   end
 end

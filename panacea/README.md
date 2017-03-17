@@ -129,3 +129,12 @@ All error responses take have the following format:
   }
 }
 ```
+
+### `/api/ast`
+
+|             |                                                                          |
+|-------------|------------------------------------------------------------------------- |
+| Description | Convert an PML AST into a PML Document                                   |
+| Methods     | `POST`                                                                   |
+| Parameters  | An object containing the *pml ast* to be converted                       |
+| Returns     | The PML document as an attachment named `pml-tx.pml`, or an error object |
