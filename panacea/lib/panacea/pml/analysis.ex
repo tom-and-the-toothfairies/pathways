@@ -25,9 +25,4 @@ defmodule Panacea.Pml.Analysis do
     |> :string.strip(:both, ?")
     |> to_string()
   end
-
-  def test do
-    {:ok, ast} = Panacea.Pml.Parser.test
-    run(ast)
-  end
 end
