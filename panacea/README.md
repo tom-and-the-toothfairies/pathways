@@ -108,7 +108,9 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "drug_a": "http://purl.obolibrary.org/obo/DINTO_DB00214",
       "drug_b": "http://purl.obolibrary.org/obo/DINTO_DB00519",
       "label": "torasemide/trandolapril DDI",
-      "uri": "http://purl.obolibrary.org/obo/DINTO_11031"
+      "uri": "http://purl.obolibrary.org/obo/DINTO_11031",
+      "harmful": false,
+      "spacing": 3
     }
   ]
 }
