@@ -17,7 +17,6 @@ operation
 value
 variable
 accessor
-identifier
 prefix_list
 prefix.
 
@@ -110,7 +109,7 @@ action_attributes ->
     action_attribute action_attributes : ['$1'|'$2'].
 
 action_attribute ->
-    provides '{' expression '}' : construct('$1', [], '$3').
+    provides '{' expression '}'    : construct('$1', [], '$3').
 % `requires` uses a different expression production as
 % drugs are only allowed in `requires `blocks
 action_attribute ->
@@ -132,51 +131,45 @@ requires_expr ->
 requires_expr ->
     expression : '$1'.
 
-expression -> expr logical_combination.
+expression -> expr logical_combination : function_application('$1', '$2').
 
-logical_combination -> '&&' expr logical_combination.
-logical_combination -> '||' expr logical_combination.
-logical_combination -> '$empty'.
+logical_combination -> '&&' expr logical_combination : construct('$1', [], function_application('$2', '$3')).
+logical_combination -> '||' expr logical_combination : construct('$1', [], function_application('$2', '$3')).
+logical_combination -> '$empty'                      : nil.
 
-expr -> value operation.
+expr -> value operation : function_application('$1', '$2').
 
-operation -> operator value.
-operation -> '$empty'.
+operation -> operator value : construct('$1', [], '$2').
+operation -> '$empty'       : nil.
 
-value -> '!' expression : {negate, '$2'}.
-value -> '(' expression ')': '$2'.
-value -> string : extract_string('$1').
-value -> number : list_to_float('$1').
-value -> variable : '$1'.
+value -> '!' expression     : {negate, [], '$2'}.
+value -> '(' expression ')' : {parenthesised, [], '$2'}.
+value -> string             : extract_string('$1').
+value -> number             : extract_string('$1').
+value -> variable           : '$1'.
 
-variable -> identifier accessor.
-variable -> prefix prefix_list accessor.
+variable -> ident accessor              : function_application('$1', '$2').
+variable -> prefix prefix_list accessor : function_application(['$1'|'$2'], '$3').
 
-identifier -> ident.
-% some of jnoll's sample pml has these keywords
-% on the RHS of expressions!
-identifier -> manual.
-identifier -> executable.
+prefix -> '(' ident ')' : {prefix, extract_string('$2')}.
 
-prefix -> '(' ident ')'.
+prefix_list -> ident              : [{ident, extract_string('$1')}].
+prefix_list -> prefix prefix_list : ['$1'|'$2'].
+prefix_list -> '$empty'           : [].
 
-prefix_list -> ident.
-prefix_list -> prefix prefix_list.
-prefix_list -> '$empty'.
+accessor -> '$empty'  : nil.
+accessor -> '.' ident : construct('$1', [], extract_string('$2')).
 
-accessor -> '$empty'.
-accessor -> '.' ident : {accessor, ident('$2')}.
-
-operator -> '==' : equal.
-operator -> '!=' : not_equal.
-operator -> '<' : less_than.
-operator -> '>' : greater_than.
-operator -> '<=' : less_than_equal.
-operator -> '>=' : greater_than_equal.
+operator -> '==' : '$1'.
+operator -> '!=' : '$1'.
+operator -> '<'  : '$1'.
+operator -> '>'  : '$1'.
+operator -> '<=' : '$1'.
+operator -> '>=' : '$1'.
 
 Erlang code.
 
-extract_string({_, _, Str}) ->
+extract_string({_,_,Str}) ->
     strip_quotes(Str).
 
 strip_quotes(Str) ->
@@ -189,3 +182,8 @@ construct({Type, Line}, Attributes, Value) ->
 
 ident({ident, _, Ident}) ->
     Ident.
+
+function_application(Arg1, nil) ->
+    Arg1;
+function_application(Arg1, {Func, Attrs, Arg2}) ->
+    {Func, Attrs, [Arg1, Arg2]}.

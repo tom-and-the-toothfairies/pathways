@@ -6,7 +6,7 @@ process develop {
 		}
 		action compile manual {
 			requires { code.status == modified }
-			provides { progA.type == executable }
+			provides { progA.type == "executable "}
 		}
 		action test manual {
 			requires { progA }
