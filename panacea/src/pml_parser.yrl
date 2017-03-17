@@ -117,16 +117,16 @@ action_attribute ->
 action_attribute ->
     agent '{' expression '}'       : construct('$1', [], '$3').
 action_attribute ->
-    script '{' string '}'          : construct('$1', [], extract_string('$3')).
+    script '{' string '}'          : construct('$1', [], value_of('$3')).
 action_attribute ->
-    tool '{' string '}'            : construct('$1', [], extract_string('$3')).
+    tool '{' string '}'            : construct('$1', [], value_of('$3')).
 action_attribute ->
-    input '{' string '}'           : construct('$1', [], extract_string('$3')).
+    input '{' string '}'           : construct('$1', [], value_of('$3')).
 action_attribute ->
-    output '{' string '}'          : construct('$1', [], extract_string('$3')).
+    output '{' string '}'          : construct('$1', [], value_of('$3')).
 
 requires_expr ->
-    drug '{' string '}'            : construct('$1', [], extract_string('$3')).
+    drug '{' string '}'            : construct('$1', [], value_of('$3')).
 
 requires_expr ->
     expression : '$1'.
@@ -144,7 +144,7 @@ operation -> '$empty'       : "".
 
 value -> '!' expression     : "!" ++ value_of('$2').
 value -> '(' expression ')' : "(" ++ value_of('$2') ++ ")".
-value -> string             : extract_string('$1').
+value -> string             : value_of('$1').
 value -> number             : value_of('$1').
 value -> variable           : '$1'.
 
@@ -171,9 +171,6 @@ Erlang code.
 
 value_of({_, _, Value}) ->
     Value.
-
-extract_string({_, _, Str}) ->
-    string:strip(Str, both, $").
 
 construct({Type, Line}, Attributes, Value) ->
     Attrs = lists:filter(fun({_,X}) -> X /= nil end, Attributes),

@@ -8,7 +8,7 @@ defmodule Panacea.Pml.Analysis do
   end
 
   defp analyse(result, {:drug, [line: line], label}) do
-    %{result| drugs: [ %{label: to_string(label), line: line}| result.drugs ]}
+    %{result| drugs: [ %{label: strip_quotes(label), line: line}| result.drugs ]}
   end
   defp analyse(result, {_, _,children}) when is_list(children) do
     Enum.reduce(children, result, fn(child, acc) ->
@@ -19,6 +19,12 @@ defmodule Panacea.Pml.Analysis do
     analyse(result, child)
   end
   defp analyse(result, _), do: result
+
+  defp strip_quotes(char_list) do
+    char_list
+    |> :string.strip(:both, ?")
+    |> to_string()
+  end
 
   def test do
     {:ok, ast} = Panacea.Pml.Parser.test
