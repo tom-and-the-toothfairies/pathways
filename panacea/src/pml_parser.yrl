@@ -97,10 +97,10 @@ primitive ->
     action ident optional_type '{' action_attributes '}' : construct('$1', [{name, ident('$2')}, {type, '$3'}], '$5').
 
 optional_name -> '$empty' : nil.
-optional_name -> ident : ident('$1').
+optional_name -> ident    : ident('$1').
 
-optional_type -> '$empty' : nil.
-optional_type -> manual : manual.
+optional_type -> '$empty'   : nil.
+optional_type -> manual     : manual.
 optional_type -> executable : executable.
 
 action_attributes ->
@@ -144,8 +144,8 @@ operation -> '$empty'       : nil.
 
 value -> '!' expression     : {negate, [], '$2'}.
 value -> '(' expression ')' : {parenthesised, [], '$2'}.
-value -> string             : extract_string('$1').
-value -> number             : extract_string('$1').
+value -> string             : string_expression('$1').
+value -> number             : number_expression('$1').
 value -> variable           : '$1'.
 
 variable -> ident accessor              : function_application('$1', '$2').
@@ -153,7 +153,7 @@ variable -> prefix prefix_list accessor : function_application(['$1'|'$2'], '$3'
 
 prefix -> '(' ident ')' : {prefix, [], extract_string('$2')}.
 
-prefix_list -> ident              : [{ident, [], extract_string('$1')}].
+prefix_list -> ident              : [construct('$1', [], extract_string('$1'))].
 prefix_list -> prefix prefix_list : ['$1'|'$2'].
 prefix_list -> '$empty'           : [].
 
@@ -169,19 +169,33 @@ operator -> '>=' : '$1'.
 
 Erlang code.
 
-extract_string({_,_,Str}) ->
+extract_string({_, _, Str}) ->
     strip_quotes(Str).
 
 strip_quotes(Str) ->
     CharList = string:strip(Str, both, $"),
     list_to_binary(CharList).
 
-construct({Type, Line}, Attributes, Value) ->
+number_expression({_, Line, Num}) ->
+    ParsedNum = list_to_number(Num),
+    construct({number, Line}, [], ParsedNum).
+
+list_to_number(L) ->
+    try list_to_float(L)
+    catch
+        error:badarg -> list_to_integer(L)
+    end.
+
+string_expression({_, Line, Str}) ->
+    Stripped = strip_quotes(Str),
+    construct({string, Line}, [], Stripped).
+
+construct(T, Attributes, Value) ->
     Attrs = lists:filter(fun({_,X}) -> X /= nil end, Attributes),
-    {Type, [{line, Line}|Attrs], Value}.
+    {element(1, T), [{line, element(2, T)}|Attrs], Value}.
 
 ident({ident, _, Ident}) ->
-    Ident.
+    list_to_binary(Ident).
 
 function_application(Arg1, nil) ->
     Arg1;
