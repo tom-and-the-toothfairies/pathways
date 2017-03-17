@@ -17,7 +17,6 @@ operation
 value
 variable
 accessor
-identifier
 prefix_list
 prefix.
 
@@ -25,22 +24,22 @@ Terminals
 
 % keywords
 
-'process'
-'task'
-'action'
-'branch'
-'selection'
-'iteration'
-'sequence'
-'provides'
-'requires'
-'agent'
-'script'
-'tool'
-'input'
-'output'
-'manual'
-'executable'
+process
+task
+action
+branch
+selection
+iteration
+sequence
+provides
+requires
+agent
+script
+tool
+input
+output
+manual
+executable
 
 % symbols
 '{'
@@ -59,10 +58,10 @@ Terminals
 '!'
 
 % primitives
-'string'
-'ident'
-'drug'
-'number'.
+string
+ident
+drug
+number.
 
 Rootsymbol pml.
 
@@ -72,7 +71,7 @@ Rootsymbol pml.
 Nonassoc 200 '==' '!=' '||' '&&' '<' '>' '<=' '>=' '!' '.' ')'.
 
 pml ->
-    'process' 'ident' primitive_block : '$3'.
+    process ident primitive_block : construct('$1', [{name, value_of('$2')}], '$3').
 
 primitive_block ->
     '{' primitive_list '}' : '$2'.
@@ -80,106 +79,106 @@ primitive_block ->
 primitive_list ->
     '$empty' : [].
 primitive_list ->
-    primitive primitive_list : '$1' ++ '$2'.
+    primitive primitive_list : ['$1'|'$2'].
 
 primitive ->
-    'branch' optional_name primitive_block    : '$3'.
+    branch optional_name primitive_block    : construct('$1', [{name, '$2'}], '$3').
 primitive ->
-    'selection' optional_name primitive_block :  '$3'.
+    selection optional_name primitive_block : construct('$1', [{name, '$2'}], '$3').
 primitive ->
-    'iteration' optional_name primitive_block :  '$3'.
+    iteration optional_name primitive_block : construct('$1', [{name, '$2'}], '$3').
 primitive ->
-    'sequence' optional_name primitive_block  :  '$3'.
+    sequence optional_name primitive_block  : construct('$1', [{name, '$2'}], '$3').
 primitive ->
-    'task' optional_name primitive_block      :  '$3'.
+    task optional_name primitive_block      : construct('$1', [{name, '$2'}], '$3').
 % action names are required and have a different block
 % to other primitives
 primitive ->
-    'action' ident optional_type '{' action_attributes '}' :  '$5'.
+    action ident optional_type '{' action_attributes '}' : construct('$1', [{name, value_of('$2')}, {type, '$3'}], '$5').
 
-optional_name -> '$empty'.
-optional_name -> 'ident'.
+optional_name -> '$empty' : nil.
+optional_name -> ident    : value_of('$1').
 
-optional_type -> '$empty'.
-optional_type -> 'manual'.
-optional_type -> 'executable'.
+optional_type -> '$empty'   : nil.
+optional_type -> manual     : manual.
+optional_type -> executable : executable.
 
 action_attributes ->
     '$empty' : [].
 action_attributes ->
-    action_attribute action_attributes : '$1' ++ '$2'.
+    action_attribute action_attributes : ['$1'|'$2'].
 
 action_attribute ->
-    'provides' '{' expression '}' : [].
+    provides '{' expression '}'    : construct('$1', [], '$3').
 % `requires` uses a different expression production as
 % drugs are only allowed in `requires `blocks
 action_attribute ->
-    'requires' '{' requires_expr '}' : '$3'.
+    requires '{' requires_expr '}' : construct('$1', [], '$3').
 action_attribute ->
-    'agent' '{' expression '}'  : [].
+    agent '{' expression '}'       : construct('$1', [], '$3').
 action_attribute ->
-    'script' '{' 'string' '}'  : [].
+    script '{' string '}'          : construct('$1', [], value_of('$3')).
 action_attribute ->
-    'tool' '{' 'string' '}'  : [].
+    tool '{' string '}'            : construct('$1', [], value_of('$3')).
 action_attribute ->
-    'input' '{' 'string' '}'  : [].
+    input '{' string '}'           : construct('$1', [], value_of('$3')).
 action_attribute ->
-    'output' '{' 'string' '}'  : [].
+    output '{' string '}'          : construct('$1', [], value_of('$3')).
 
 requires_expr ->
-    'drug' '{' 'string' '}' : extract_drug('$3').
+    drug '{' string '}'            : construct('$1', [], value_of('$3')).
 
 requires_expr ->
-    expression : [].
+    expression : '$1'.
 
-expression -> expr logical_combination.
+expression -> expr logical_combination : construct(expression, [], join_with_spaces(['$1', '$2'])).
 
-logical_combination -> '&&' expr logical_combination.
-logical_combination -> '||' expr logical_combination.
-logical_combination -> '$empty'.
+logical_combination -> '&&' expr logical_combination : join_with_spaces(["&&", '$2', '$3']).
+logical_combination -> '||' expr logical_combination : join_with_spaces(["||", '$2', '$3']).
+logical_combination -> '$empty'                      : "".
 
-expr -> value operation.
+expr -> value operation : join_with_spaces(['$1','$2']).
 
-operation -> operator value.
-operation -> '$empty'.
+operation -> operator value : join_with_spaces(['$1', '$2']).
+operation -> '$empty'       : "".
 
-value -> '!' expression.
-value -> '(' expression ')'.
-value -> 'string'.
-value -> 'number'.
-value -> variable.
+value -> '!' expression     : "!" ++ value_of('$2').
+value -> '(' expression ')' : "(" ++ value_of('$2') ++ ")".
+value -> string             : value_of('$1').
+value -> number             : value_of('$1').
+value -> variable           : '$1'.
 
-variable -> identifier accessor.
-variable -> prefix prefix_list accessor.
+variable -> ident accessor              : value_of('$1') ++ '$2'.
+variable -> prefix prefix_list accessor : join_with_spaces(['$1','$2']) ++ '$3'.
 
-identifier -> 'ident'.
-% some of jnoll's sample pml has these keywords
-% on the RHS of expressions!
-identifier -> 'manual'.
-identifier -> 'executable'.
+prefix -> '(' ident ')' : "(" ++ value_of('$2') ++ ")".
 
-prefix -> '(' ident ')'.
+prefix_list -> ident              : value_of('$1').
+prefix_list -> prefix prefix_list : join_with_spaces(['$1', '$2']).
+prefix_list -> '$empty'           : "".
 
-prefix_list -> ident.
-prefix_list -> prefix prefix_list.
-prefix_list -> '$empty'.
+accessor -> '$empty'  : "".
+accessor -> '.' ident : "." ++ value_of('$2').
 
-accessor -> '$empty'.
-accessor -> '.' 'ident'.
-
-operator -> '=='.
-operator -> '!='.
-operator -> '<'.
-operator -> '>'.
-operator -> '<='.
-operator -> '>='.
+operator -> '==' : "==".
+operator -> '!=' : "!=".
+operator -> '<'  : "<".
+operator -> '>'  : ">".
+operator -> '<=' : "<=".
+operator -> '>=' : ">=".
 
 Erlang code.
 
-extract_drug({_,Line,DrugStr}) ->
-    Drug = strip_quotes(DrugStr),
-    [{Drug, Line}].
+value_of({_, _, Value}) ->
+    Value.
 
-strip_quotes(Drug) ->
-    CharList = string:strip(Drug,both,$"),
-    list_to_binary(CharList).
+construct({Type, Line}, Attributes, Value) ->
+    Attrs = lists:filter(fun({_,X}) -> X /= nil end, Attributes),
+    {Type, [{line, Line}|Attrs], Value};
+construct(Type, Attributes, Value) ->
+    Attrs = lists:filter(fun({_,X}) -> X /= nil end, Attributes),
+    {Type, Attrs, Value}.
+
+join_with_spaces(Strings) ->
+    NonEmpty = lists:filter(fun(X) -> X /= [] end, Strings),
+    string:join(NonEmpty, " ").

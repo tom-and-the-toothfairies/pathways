@@ -6,6 +6,7 @@ defmodule Panacea.PmlController do
     |> File.read()
     |> validate()
     |> parse()
+    |> analyse()
     |> to_result()
     |> Panacea.BaseController.respond(conn)
   end
@@ -21,6 +22,9 @@ defmodule Panacea.PmlController do
   defp parse({:ok, contents}),  do: Panacea.Pml.Parser.parse(contents)
   defp parse({:error, reason}), do: {:error, reason}
 
-  defp to_result({:ok, drugs}),     do: {:ok, %{drugs: drugs}}
+  defp analyse({:ok, ast}), do: Panacea.Pml.Analysis.run(ast)
+  defp analyse({:error, reason}), do: {:error, reason}
+
+  defp to_result({:ok, analysis}),  do: {:ok, %{drugs: analysis.drugs}}
   defp to_result({:error, reason}), do: {:error, reason}
 end

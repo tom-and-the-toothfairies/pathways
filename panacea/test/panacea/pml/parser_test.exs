@@ -21,7 +21,7 @@ defmodule Panacea.Pml.ParserTest do
       }
       """
 
-      assert Parser.parse(pml) == {:ok, []}
+      assert {:ok, _} = Parser.parse(pml)
     end
 
     test "it can parse all of jnoll's sample pml" do
@@ -40,42 +40,6 @@ defmodule Panacea.Pml.ParserTest do
       """
 
       assert Parser.parse(pml) == {:error,  {:syntax_error, "line 1 -- syntax error before: '{'"}}
-    end
-
-    test "it identifies drugs" do
-      pml = """
-        process foo {
-          task bar {
-            action baz {
-              tool { "pills" }
-              script { "eat the pills" }
-              agent { "patient" }
-              requires {
-                drug { "paracetamol" }
-              }
-              provides { "a cured patient" }
-            }
-            action baz2 {
-              tool { "pills" }
-              script { "eat the pills" }
-              agent { "patient" }
-              requires {
-                drug { "cocaine" }
-              }
-              provides { "a cured patient" }
-            }
-          }
-        }
-      """
-
-      assert Parser.parse(pml) ==
-      {
-        :ok,
-        [
-          %{label: "paracetamol", line: 8},
-          %{label: "cocaine", line: 17}
-        ]
-      }
     end
   end
 end

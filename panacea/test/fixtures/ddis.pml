@@ -12,7 +12,7 @@ process foo {
     action baz2 {
       tool { "pills" }
       script { "eat the pills" }
-      agent { "patient" }
+      agent { (intangible)(inscrutable) pml.wtf && ("foo" || 1 != 2) }
       requires {
         drug { "trandolapril" }
       }

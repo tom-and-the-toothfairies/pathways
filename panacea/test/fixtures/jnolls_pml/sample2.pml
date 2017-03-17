@@ -7,7 +7,7 @@ process example {
 			}
 			action compile {
 				requires { code.status == modified }
-				provides { progA.type == executable }
+				provides { progA.type == "executable "}
 			}
 		}
 		sequence test {
