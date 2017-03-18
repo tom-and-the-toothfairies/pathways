@@ -33,6 +33,7 @@ defmodule Panacea.AstController do
 
   defp respond({:ok, pml}, conn) do
     conn
+    |> put_resp_header("content-disposition", ~s[attachment; filename="pml-tx.pml"])
     |> send_resp(200, pml)
   end
   defp respond({:error, reason}, conn) do

@@ -4,12 +4,12 @@ defmodule Panacea.AstControllerTest do
   describe "AstController.to_pml/2" do
     test "raises an error when no ast is provided", %{conn: conn} do
       assert_raise Phoenix.ActionClauseError, fn ->
-        post conn, ast_path(conn, :to_pml)
+        get conn, ast_path(conn, :to_pml)
       end
     end
 
     test "returns an error for non base64 encoded asts", %{conn: conn} do
-      conn = post conn, ast_path(conn, :to_pml), %{ast: "foo"}
+      conn = get conn, ast_path(conn, :to_pml), %{ast: "foo"}
 
       assert conn.status == 422
 
@@ -47,10 +47,13 @@ defmodule Panacea.AstControllerTest do
         |> :erlang.term_to_binary()
         |> Base.encode64()
 
-      conn = post conn, ast_path(conn, :to_pml), %{ast: encoded_ast}
+      conn = get conn, ast_path(conn, :to_pml), %{ast: encoded_ast}
 
       assert conn.status == 200
       assert conn.resp_body == pml
+
+      [disposition] = conn |> get_resp_header("content-disposition")
+      assert disposition =~ "attachment;"
     end
   end
 end

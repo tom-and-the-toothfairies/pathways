@@ -8,7 +8,10 @@ Chiron to provide DDI analysis, these must be running for Panacea to work.
 Api Endpoints
 -------------
 
-All API endpoints require the *Authorization* header to contain a valid token.
+All API endpoints require a valid *authorization token* to be provided. The
+*token* can be sent in the *Authorization* header or as the
+*authorization_token* query parameter.
+
 Tokens can be generated using: `Panacea.AccessToken.generate()`
 
 ### `/api/pml`

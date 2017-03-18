@@ -5,20 +5,30 @@ defmodule Panacea.Plugs.RequireAccessToken do
 
   def call(conn, _opts) do
     conn
-    |> fetch_auth_header()
+    |> fetch_auth_token_from_headers()
+    |> fetch_query_params()
+    |> fetch_auth_token_from_url()
     |> verify_token()
   end
 
-  defp fetch_auth_header(conn) do
+  defp fetch_auth_token_from_headers(conn) do
     case get_req_header(conn, "authorization") do
       [] ->
         conn
-        |> send_resp(:forbidden, "access token missing")
-        |> halt()
 
       [token] ->
         conn
         |> assign(:access_token, token)
+    end
+  end
+
+  defp fetch_auth_token_from_url(conn) do
+    case conn.params do
+      %{"authorization_token" => token} ->
+        conn
+        |> assign(:access_token, token)
+      _ ->
+        conn
     end
   end
 
