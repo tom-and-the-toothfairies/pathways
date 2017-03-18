@@ -30,7 +30,7 @@ defmodule Panacea.PmlController do
       analysis.ast
       |> :erlang.term_to_binary()
       |> Base.encode64()
-    {:ok, %{drugs: analysis.drugs, ast: ast}}
+    {:ok, %{drugs: analysis.drugs, unnamed: analysis.unnamed, ast: ast}}
   end
   defp to_result({:error, reason}), do: {:error, reason}
 end

@@ -37,11 +37,21 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "line": 2
     }
   ],
+  "unnamed": [
+    {
+      "type": "task",
+      "line": 3
+    },
+    {
+      "type": "sequence",
+      "line": 6
+    }
+  ],
   "ast": "AST representation of the provided PML file - base64 encoded"
 }
 ```
 
-### `api/uris`
+### `/api/uris`
 
 |              |                                                             |
 |--------------|-------------------------------------------------------------|
@@ -109,7 +119,9 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "drug_a": "http://purl.obolibrary.org/obo/DINTO_DB00214",
       "drug_b": "http://purl.obolibrary.org/obo/DINTO_DB00519",
       "label": "torasemide/trandolapril DDI",
-      "uri": "http://purl.obolibrary.org/obo/DINTO_11031"
+      "uri": "http://purl.obolibrary.org/obo/DINTO_11031",
+      "harmful": false,
+      "spacing": 3
     }
   ]
 }
