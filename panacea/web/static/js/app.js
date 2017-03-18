@@ -48,28 +48,17 @@ async function handleDrugsResponse(response) {
   });
 }
 
-const triggerDownload = (fileName, fileContents) => {
-  const element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents));
-  element.setAttribute('download', fileName);
-  element.style.display = 'none';
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
-};
-
-const prepareDownloadButton = ast => {
-  const pmlDownloadButton = document.getElementById('pml-download-button');
-  pmlDownloadButton.onclick = async function(){
-    try {
-      const response = await Request.pml(ast);
-      const pml = await response.text();
-      triggerDownload('pml-tx.pml', pml);
-    } catch (e) {
-      View.displayNetworkError(e);
-    }
+async function prepareDownloadButton(ast) {
+  try {
+    const pmlDownloadAnchor = document.getElementById('pml-download-anchor');
+    const response = await Request.pml(ast);
+    const pml = await response.text();
+    pmlDownloadAnchor.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(ast));
+    pmlDownloadAnchor.setAttribute('download', 'pml-tx.pml');
+  } catch (e) {
+    View.displayNetworkError(e);
   }
-};
+}
 
 async function handleUrisResponse(response, ast) {
   await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
