@@ -3,6 +3,13 @@ defmodule Panacea.PmlControllerTest do
 
   @fixtures_dir "test/fixtures/"
 
+  defp post_to_upload(conn, filename) do
+    file_path = Path.join(@fixtures_dir, filename)
+    upload = %Plug.Upload{path: file_path, filename: filename}
+
+    post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
+  end
+
   describe "PmlController.upload/2" do
     test "raises an error when no file is provided", %{conn: conn} do
       assert_raise Phoenix.ActionClauseError, fn ->
@@ -17,11 +24,7 @@ defmodule Panacea.PmlControllerTest do
     end
 
     test "returns an error for malformed pml", %{conn: conn} do
-      filename = "bad.pml"
-      file_path = Path.join(@fixtures_dir, filename)
-      upload = %Plug.Upload{path: file_path, filename: filename}
-
-      conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
+      conn = post_to_upload(conn, "bad.pml")
 
       assert conn.status == 422
 
@@ -30,11 +33,7 @@ defmodule Panacea.PmlControllerTest do
     end
 
     test "returns an error for incorrect filetype", %{conn: conn} do
-      filename = "example.png"
-      file_path = Path.join(@fixtures_dir, filename)
-      upload = %Plug.Upload{path: file_path, filename: filename}
-
-      conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
+      conn = post_to_upload(conn, "example.png")
 
       assert conn.status == 422
 
@@ -43,16 +42,21 @@ defmodule Panacea.PmlControllerTest do
     end
 
     test "identifies the drugs in correct pml", %{conn: conn} do
-      filename = "no_ddis.pml"
-      file_path = Path.join(@fixtures_dir, filename)
-      upload = %Plug.Upload{path: file_path, filename: filename}
-
-      conn = post conn, pml_path(conn, :upload), %{upload: %{file: upload}}
+      conn = post_to_upload(conn, "no_ddis.pml")
 
       assert conn.status == 200
       assert response_body(conn) |> Map.get("drugs") == [
         %{"label" => "cocaine", "line" => 17},
         %{"label" => "paracetamol", "line" => 8}
+      ]
+    end
+
+    test "identifies unnamed constructs in correct pml", %{conn: conn} do
+      conn = post_to_upload(conn, "analysis_test.pml")
+
+      assert conn.status == 200
+      assert response_body(conn) |> Map.get("unnamed") == [
+        %{"type" => "task", "line" => 2}
       ]
     end
   end

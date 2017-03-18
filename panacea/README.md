@@ -36,6 +36,16 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "label": "cocaine",
       "line": 2
     }
+  ],
+  "unnamed": [
+    {
+      "type": "task",
+      "line": 3
+    },
+    {
+      "type": "sequence",
+      "line": 6
+    }
   ]
 }
 ```

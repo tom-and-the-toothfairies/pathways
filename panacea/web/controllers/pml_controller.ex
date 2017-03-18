@@ -25,6 +25,6 @@ defmodule Panacea.PmlController do
   defp analyse({:ok, ast}), do: Panacea.Pml.Analysis.run(ast)
   defp analyse({:error, reason}), do: {:error, reason}
 
-  defp to_result({:ok, analysis}),  do: {:ok, %{drugs: analysis.drugs}}
+  defp to_result({:ok, analysis}),  do: {:ok, %{drugs: analysis.drugs, unnamed: analysis.unnamed}}
   defp to_result({:error, reason}), do: {:error, reason}
 end
