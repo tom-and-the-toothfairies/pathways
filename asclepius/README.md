@@ -79,7 +79,7 @@ Endpoints
 | Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the *given* drugs |
 | Methods      | `POST`                                                                                           |
 | Request Body | An object containing a list of *DINTO URIs*                                                      |
-| Returns      | A list of DDI objects; its label, its URI, and the identifiers of the two drugs involved         |
+| Returns      | A list of DDI objects; its label, its URI, the identifiers of the two drugs involved, the spacing between dosages required to avoid the DDI (in days) as well as whether or not it is a harmful interaction |
 
 #### Example
 ##### Request Body
@@ -100,7 +100,9 @@ Endpoints
     "drug_a": "http://purl.obolibrary.org/obo/DINTO_DB00214",
     "drug_b": "http://purl.obolibrary.org/obo/DINTO_DB00519",
     "label": "torasemide/trandolapril DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_11031"
+    "uri": "http://purl.obolibrary.org/obo/DINTO_11031",
+    "harmful": false,
+    "spacing": 3
   }
 ]
 ```
