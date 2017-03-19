@@ -1,16 +1,12 @@
-defmodule Panacea.Pml.Analysis.Duplicate do
+defmodule Panacea.Pml.Analysis.Clashes do
   @composite [:task, :sequence, :branch, :selection, :iteration, :action, :process]
-
-  def testrun do
-    ast = File.read!("test/fixtures/duplicate_names.pml")
-    |> Panacea.Pml.Parser.parse
-    |> elem(1)
-    ast |> run
-  end
 
   def run(ast) do
     analyse([], ast)
     |> dedup_names
+    |> Map.to_list
+    |> Enum.filter(fn {_name, xs} -> length(xs) > 1 end)
+    |> Enum.map(fn {name, conflicts} -> %{name: name, conflicts: conflicts} end)
   end
 
   defp analyse(result, {type, attrs, children}) when type in @composite do
@@ -37,9 +33,9 @@ defmodule Panacea.Pml.Analysis.Duplicate do
   end
   defp dedup_names([%{name: name, line: line, type: type} | rest], seen_names) do
     if Map.has_key?(seen_names, name) do
-      dedup_names(rest, %{seen_names | name => [[type: type, line: line] | seen_names[name]]})
+      dedup_names(rest, %{seen_names | name => [%{type: type, line: line} | seen_names[name]]})
     else
-      dedup_names(rest, Map.put(seen_names, name, [[type: type, line: line]]))
+      dedup_names(rest, Map.put(seen_names, name, [%{type: type, line: line}]))
     end
   end
   defp dedup_names([], seen_names), do: seen_names
