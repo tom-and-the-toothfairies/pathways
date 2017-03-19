@@ -1,4 +1,4 @@
-export const apiAccessToken = document.getElementById('api-access-token').content;
+const apiAccessToken = document.getElementById('api-access-token').content;
 const formHeaders = new Headers({authorization: apiAccessToken});
 const defaultHeaders = new Headers({
   "Authorization": apiAccessToken,
