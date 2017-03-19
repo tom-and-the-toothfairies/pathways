@@ -23,5 +23,25 @@ defmodule Panacea.Pml.AnalysisTest do
     test "it identifies unnamed constructs in the AST" do
       assert analyse_test_file().unnamed == [%{type: :task, line: 2}]
     end
+
+    test "it identifies construct name clashes in the AST" do
+      assert analyse_test_file().clashes ==
+        [
+          %{
+            name: 'baz',
+            conflicts: [
+              %{line: 3, type: :action},
+              %{line: 28, type: :action}
+            ],
+          },
+          %{
+            name: 'baz2',
+            conflicts: [
+              %{line: 12, type: :action},
+              %{line: 21, type: :action}
+            ],
+          }
+        ]
+    end
   end
 end
