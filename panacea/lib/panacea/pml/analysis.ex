@@ -8,6 +8,11 @@ defmodule Panacea.Pml.Analysis do
     drugs = Drugs.run(ast)
     unnamed = Unnamed.run(ast)
 
-    {:ok, %Analysis{drugs: drugs, unnamed: unnamed, ast: ast}}
+    encoded_ast =
+      ast
+      |> :erlang.term_to_binary()
+      |> Base.encode64()
+
+    {:ok, %Analysis{drugs: drugs, unnamed: unnamed, ast: encoded_ast}}
   end
 end
