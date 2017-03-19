@@ -59,5 +59,28 @@ defmodule Panacea.PmlControllerTest do
         %{"type" => "task", "line" => 2}
       ]
     end
+
+    test "returns the AST representation of the pml", %{conn: conn} do
+      filename = "no_ddis.pml"
+      file_path = Path.join(@fixtures_dir, filename)
+
+      conn = post_to_upload(conn, filename)
+
+      assert conn.status == 200
+
+      {:ok, ast} =
+        file_path
+        |> File.read!()
+        |> Panacea.Pml.Parser.parse()
+
+      received_ast =
+        conn
+        |> response_body()
+        |> Map.get("ast")
+        |> Base.decode64!()
+        |> :erlang.binary_to_term()
+
+      assert received_ast == ast
+    end
   end
 end

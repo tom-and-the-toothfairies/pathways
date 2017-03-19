@@ -230,6 +230,18 @@ http://chiron:3030/dinto/query`) and the contents of those queries.
 
 See [On Screen DINTO Reporting](#on-screen-dinto-reporting---complete)
 
+## PML-TX Save PML to File - Complete
+
+### Description
+The system should be able to allow saving of transformed PML files.
+
+### Testing
+Visit the [homepage] and select a valid PML file; for example
+`panacea/text/fixtures/ddis.pml`. Press the `Submit` button. You should now see
+a `Download PML TX File` button. Clicking the button, depending on your
+browser, will either download the file automatically or prompt you to provide a
+filename and location and download the file.
+
 [README]: ../README.md
 [homepage]: http://localhost:4000
 [fixtures directory]: ../panacea/test/fixtures

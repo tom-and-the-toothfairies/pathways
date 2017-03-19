@@ -2,6 +2,8 @@ const drugsPanel = document.getElementById('drugs-panel');
 const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel');
 const ddisPanel = document.getElementById('ddis-panel');
 const errorPanel = document.getElementById('error-panel');
+const pmlDownloadContainer = document.getElementById('pml-download-container');
+const pmlDownloadAnchor = document.getElementById('pml-download-anchor');
 
 const hideElement = element => {
   element.classList.add('hidden');
@@ -25,6 +27,19 @@ export const displayDrugs = drugs => {
   drugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
   showElement(drugsPanel);
+};
+
+const displayDownloadButton = () => {
+  showElement(pmlDownloadContainer);
+};
+
+export const preparePMLDownloadButton = href => {
+  pmlDownloadAnchor.setAttribute('href', href);
+  displayDownloadButton();
+};
+
+const hideDownloadButton = () => {
+  hideElement(pmlDownloadContainer);
 };
 
 export const displayUnidentifiedDrugs = drugs => {
@@ -99,4 +114,5 @@ const fileInputElement = document.getElementById('file-input');
 fileInputElement.addEventListener('change', function(e) {
   filenameDisplayElement.value = this.files[0].name;
   hideResults();
+  hideDownloadButton();
 });

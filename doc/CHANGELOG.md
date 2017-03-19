@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Added support for PML TX file downloads. Valid pml files uploaded to the
+  system for transformation can now be downloaded via the UI.
+
 ## [1.0] 2017-03-12
 
 ### Changed

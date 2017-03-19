@@ -8,7 +8,10 @@ Chiron to provide DDI analysis, these must be running for Panacea to work.
 Api Endpoints
 -------------
 
-All API endpoints require the *Authorization* header to contain a valid token.
+All API endpoints require a valid *authorization token* to be provided. The
+*token* can be sent in the *Authorization* header or as the
+*authorization_token* query parameter.
+
 Tokens can be generated using: `Panacea.AccessToken.generate()`
 
 ### `/api/pml`
@@ -46,11 +49,12 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "type": "sequence",
       "line": 6
     }
-  ]
+  ],
+  "ast": "AST representation of the provided PML file - base64 encoded"
 }
 ```
 
-### `api/uris`
+### `/api/uris`
 
 |              |                                                             |
 |--------------|-------------------------------------------------------------|
@@ -140,3 +144,12 @@ All error responses take have the following format:
   }
 }
 ```
+
+### `/api/ast`
+
+|             |                                                                          |
+|-------------|------------------------------------------------------------------------- |
+| Description | Convert an PML AST into a PML Document                                   |
+| Methods     | `POST`                                                                   |
+| Parameters  | An object containing the *pml ast* to be converted                       |
+| Returns     | The PML document as an attachment named `pml-tx.pml`, or an error object |

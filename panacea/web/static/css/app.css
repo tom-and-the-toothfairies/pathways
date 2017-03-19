@@ -34,3 +34,7 @@
   height: 128px;
   margin: 40px;
 }
+
+.padded-bottom {
+  padding-bottom: 20px;
+}
