@@ -1,20 +1,20 @@
 process foo {
-  task bar {
+  task {
     action baz {
       tool { "pills" }
       script { "eat the pills" }
       agent { "patient" }
       requires {
-        drug { "torasemide" }
+        drug { "paracetamol" }
       }
       provides { "a cured patient" }
     }
     action baz2 {
       tool { "pills" }
       script { "eat the pills" }
-      agent { (intangible)(inscrutable) pml.wtf && ("foo" || 1 != 2) }
+      agent { "patient" }
       requires {
-        drug { "trandolapril" }
+        drug { "cocaine" }
       }
       provides { "a cured patient" }
     }

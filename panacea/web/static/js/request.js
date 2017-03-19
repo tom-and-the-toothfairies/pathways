@@ -25,3 +25,10 @@ export const uris = labels => {
 export const ddis = drugs => {
   return post('/api/ddis', JSON.stringify({drugs}), defaultHeaders);
 };
+
+export const generatePMLHref = ast => {
+  const endpoint = '/api/ast';
+  const astParam = `ast=${encodeURIComponent(ast)}`;
+  const tokenParam = `authorization_token=${encodeURIComponent(apiAccessToken)}`;
+  return `${endpoint}?${astParam}&${tokenParam}`;
+};

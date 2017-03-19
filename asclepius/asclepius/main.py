@@ -5,7 +5,7 @@ from flask import jsonify, request
 
 from app import app
 import dinto
-
+from enrich import enrich
 
 class InvalidUsage(Exception):
     status_code = 400
@@ -61,7 +61,7 @@ def ddis():
     except ValueError as e:
         raise InvalidUsage(str(e))
 
-    return jsonify(dinto_res)
+    return jsonify(enrich(dinto_res))
 
 
 @app.route('/uris', methods=["POST"])
