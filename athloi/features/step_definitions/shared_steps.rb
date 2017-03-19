@@ -10,3 +10,7 @@ When(/^I select "([^"]*)"$/) do |filename|
 
   execute_script("document.getElementById('file-input').classList.add('hidden')")
 end
+
+When(/^I submit the upload form$/) do
+  click_on 'Submit'
+end

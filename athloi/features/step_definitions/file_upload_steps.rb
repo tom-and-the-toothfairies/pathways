@@ -1,7 +1,3 @@
-When(/^I submit the upload form$/) do
-  click_on 'Submit'
-end
-
 Then(/^I should see the found drugs panel$/) do
   panel = find('#drugs-panel', wait: 15)
 

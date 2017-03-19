@@ -3,11 +3,9 @@ Feature: PML Download
   As a clinician
   I should be able to download the PML file resulting from PML TX transformations
 
-  Background:
+  Scenario: uploading a valid PML file
     Given I am on the home page
-
-  Scenario: uploading a PML file with identifiable drugs
     When I select "ddis.pml"
     And I submit the upload form
-    And I click the PML Download button
-    Then I should get a download with the filename "pml-tx.pml"
+    Then I should see the PML download button
+    And the PML download button should have the correct href
