@@ -48,12 +48,6 @@ async function handleDrugsResponse(response) {
   });
 }
 
-const prepareDownloadButton = ast => {
-  const pmlDownloadAnchor = document.getElementById('pml-download-anchor');
-  const href = `/api/ast?ast=${encodeURIComponent(ast)}&authorization_token=${encodeURIComponent(Request.apiAccessToken)}`;
-  pmlDownloadAnchor.setAttribute('href', href);
-};
-
 async function handleUrisResponse(response, ast) {
   await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
     const uris = found.map(x => x.uri);
@@ -63,8 +57,7 @@ async function handleUrisResponse(response, ast) {
       return acc;
     }, {});
 
-    prepareDownloadButton(ast);
-    View.displayDownloadButton();
+    View.preparePMLDownloadButton(Request.generatePMLHref(ast));
 
     if (labels.length > 0) {
       View.displayDrugs(labels);

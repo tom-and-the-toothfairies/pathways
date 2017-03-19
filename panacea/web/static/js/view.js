@@ -3,6 +3,7 @@ const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel
 const ddisPanel = document.getElementById('ddis-panel');
 const errorPanel = document.getElementById('error-panel');
 const pmlDownloadContainer = document.getElementById('pml-download-container');
+const pmlDownloadAnchor = document.getElementById('pml-download-anchor');
 
 const hideElement = element => {
   element.classList.add('hidden');
@@ -28,8 +29,13 @@ export const displayDrugs = drugs => {
   showElement(drugsPanel);
 };
 
-export const displayDownloadButton = () => {
+const displayDownloadButton = () => {
   showElement(pmlDownloadContainer);
+};
+
+export const preparePMLDownloadButton = href => {
+  pmlDownloadAnchor.setAttribute('href', href);
+  displayDownloadButton();
 };
 
 const hideDownloadButton = () => {
