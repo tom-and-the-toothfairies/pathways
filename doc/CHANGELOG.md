@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.1] 2017-03-19
 
 ### Added
 - Added support for PML TX file downloads. Valid pml files uploaded to the
@@ -120,7 +120,8 @@ All notable changes to this project will be documented in this file.
   docker service: pathways.
 - Installation instructions in README
 
-[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.0...iteration1-2
+[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.1...iteration-6
+[1.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.0...1.1
 [1.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.3...1.0
 [0.3]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.2...0.3
 [0.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.1...0.2
