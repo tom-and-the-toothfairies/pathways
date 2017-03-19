@@ -18,9 +18,5 @@ defmodule Panacea.Pml.Analysis.Unnamed do
       analyse(acc, child)
     end)
   end
-  defp analyse(result, {_, _, child}) do
-    analyse(result, child)
-  end
   defp analyse(result, _), do: result
-
 end
