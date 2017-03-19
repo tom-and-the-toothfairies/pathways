@@ -24,7 +24,7 @@
 
 <div class="center hidden padded-bottom fades-in" id="pml-download-container">
   <a id="pml-download-anchor">
-    <button type="button" class="btn btn-default btn-lg" id="pml-download-button">
+    <button type="button" class="btn btn-default btn-lg">
       <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
       Download PML TX File
     </button>

@@ -1,4 +1,4 @@
-const apiAccessToken = document.getElementById('api-access-token').content;
+export const apiAccessToken = document.getElementById('api-access-token').content;
 const formHeaders = new Headers({authorization: apiAccessToken});
 const defaultHeaders = new Headers({
   "Authorization": apiAccessToken,
@@ -16,10 +16,6 @@ async function post(endpoint, body, headers) {
 
 export const drugs = formData => {
   return post('/api/pml', formData, formHeaders);
-};
-
-export const pml = ast => {
-  return post('/api/ast', JSON.stringify({ast}), defaultHeaders);
 };
 
 export const uris = labels => {
