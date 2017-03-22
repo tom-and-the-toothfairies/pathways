@@ -58,3 +58,16 @@ Then(/^I should not see any DDIs in the found DDIs panel$/) do
 
   expect(ddis_element.text).to eq('I have not identified any interactions between the drugs in this file.')
 end
+
+Then(/^I should see the unnamed panel$/) do
+  panel = find('#unnamed-panel')
+
+  expect(panel).to be_visible
+end
+
+Then(/^I should see the following warnings in the unnamed panel:$/) do |unnameds|
+  body = find('#unnamed-text')
+  unnameds.raw.flatten.each do |unnamed|
+    expect(body).to have_content(unnamed)
+  end
+end

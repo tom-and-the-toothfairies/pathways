@@ -2,6 +2,7 @@ const drugsPanel = document.getElementById('drugs-panel');
 const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel');
 const ddisPanel = document.getElementById('ddis-panel');
 const errorPanel = document.getElementById('error-panel');
+const unnamedPanel = document.getElementById('unnamed-panel');
 const pmlDownloadContainer = document.getElementById('pml-download-container');
 const pmlDownloadAnchor = document.getElementById('pml-download-anchor');
 
@@ -17,6 +18,7 @@ export const hideResults = () => {
   hideElement(drugsPanel);
   hideElement(unidentifiedDrugsPanel);
   hideElement(ddisPanel);
+  hideElement(unnamedPanel);
   hideElement(errorPanel);
 };
 
@@ -27,6 +29,15 @@ export const displayDrugs = drugs => {
   drugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
   showElement(drugsPanel);
+};
+
+export const displayUnnamed = unnamed => {
+  const unnamedTextElement = document.getElementById('unnamed-text');
+  const preamble = 'I found the following unnamed PML constructs:';
+  const unnamedHTML = unnamed.map(x => `<li>Unnamed ${x.type} found at line ${x.line}</li>`).join('');
+  unnamedTextElement.innerHTML = `<p>${preamble}</p><ul>${unnamedHTML}</ul>`;
+
+  showElement(unnamedPanel);
 };
 
 const displayDownloadButton = () => {
