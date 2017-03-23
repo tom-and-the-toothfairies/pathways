@@ -48,7 +48,13 @@ $ sudo docker-compose down
 
 ## Features
 
-The feature list for the project can be found [here](./doc/FEATURES.md)
+### Release 2
+
+The feature list for `Release 2` can be found [here](./doc/FEATURES_RELEASE_2.md)
+
+### Release 1
+
+The feature list for `Release 1` can be found [here](./doc/FEATURES_RELEASE_1.md)
 
 ## Change Log
 
