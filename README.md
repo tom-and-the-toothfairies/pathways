@@ -50,11 +50,13 @@ $ sudo docker-compose down
 
 ### Release 2
 
-The feature list for `Release 2` can be found [here](./doc/FEATURES_RELEASE_2.md)
+The feature list for `Release 2` can be found [in the Release 2 features
+document](./doc/FEATURES_RELEASE_2.md).
 
 ### Release 1
 
-The feature list for `Release 1` can be found [here](./doc/FEATURES_RELEASE_1.md)
+The feature list for `Release 1` can be found [in the Release 1 features
+document](./doc/FEATURES_RELEASE_1.md).
 
 ## Change Log
 
