@@ -108,10 +108,12 @@ defmodule Panacea.AsclepiusControllerTest do
             "drug_b" => "http://purl.obolibrary.org/obo/DINTO_DB00519",
             "label" => "torasemide/trandolapril DDI",
             "uri"   => "http://purl.obolibrary.org/obo/DINTO_11031",
-            "enclosing_construct" => %{
-              "type" => "process",
-              "line" => 1
-            }
+            "enclosing_constructs" => [
+              %{
+                "type" => "process",
+                "line" => 1
+              }
+            ]
           }
         ]
     end

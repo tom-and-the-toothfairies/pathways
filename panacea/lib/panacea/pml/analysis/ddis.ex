@@ -32,18 +32,31 @@ defmodule Panacea.Pml.Analysis.Ddis do
      set_a = ancestry_a |> MapSet.new()
      set_b = ancestry_b |> MapSet.new()
 
-     {construct_type, line, _} =
-       MapSet.intersection(set_a, set_b)
-       |> Enum.max_by(fn {_, _, id} -> id end)
+     common_ancestors = MapSet.intersection(set_a, set_b)
+     closest_common_ancestor = Enum.max_by(common_ancestors, fn {_, _, id} -> id end)
+     {category, enclosing_constructs} = analyse_ancestors(closest_common_ancestor, common_ancestors)
 
      ddi
-     |> Map.put("category", category_for_construct(construct_type))
-     |> Map.put("enclosing_construct", %{"type" => construct_type, "line" => line})
+     |> Map.put("category", category)
+     |> Map.put("enclosing_constructs", enclosing_constructs)
   end
 
-  defp category_for_construct(:branch),    do: :parallel
-  defp category_for_construct(:selection), do: :alternative
-  defp category_for_construct(_),          do: :sequential
+  defp analyse_ancestors({:branch, line, _}, _) do
+    {:parallel, [%{"type" => :branch, "line" => line}]}
+  end
+  defp analyse_ancestors({:selection, line, inner_id}, ancestors) do
+    inner = %{"type" => :selection, "line" => line}
+
+    case Enum.find(ancestors, fn {type, _, id} -> type == :iteration && id < inner_id end) do
+      nil ->
+        {:alternative, [inner]}
+      {:iteration, line, _} ->
+        {:repeated_alternative, [inner, %{"type" => :iteration, "line" => line}]}
+    end
+  end
+  defp analyse_ancestors({type, line, _}, _) do
+    {:sequential, [%{"type" => type, "line" => line}]}
+  end
 
   defp build_ancestries(ast), do: do_build_ancestries(ast, [], %{id: 0})
 

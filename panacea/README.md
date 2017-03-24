@@ -142,10 +142,12 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "harmful": false,
       "spacing": 3,
       "category": "sequential",
-      "enclosing_construct": {
-        "type": "sequence",
-        "line": 6
-      }
+      "enclosing_constructs": [
+        {
+          "type": "sequence",
+          "line": 6
+        }
+      ]
     }
   ]
 }
