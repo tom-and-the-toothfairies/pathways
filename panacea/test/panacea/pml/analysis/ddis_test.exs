@@ -9,14 +9,14 @@ defmodule Panacea.Pml.Analysis.DdisTest do
 
   def test_ddis() do
     [
-      %{drug_a: "http://purl.com/paracetamol", drug_b: "http://purl.com/cocaine"}
+      %{"drug_a" => "http://purl.com/paracetamol", "drug_b" => "http://purl.com/cocaine"}
     ]
   end
 
   def test_drugs() do
     [
-      %{label: "paracetamol", uri: "http://purl.com/paracetamol"},
-      %{label: "cocaine", uri: "http://purl.com/cocaine"},
+      %{"label" => "paracetamol", "uri" => "http://purl.com/paracetamol"},
+      %{"label" => "cocaine", "uri" => "http://purl.com/cocaine"},
     ]
   end
 
@@ -36,12 +36,12 @@ defmodule Panacea.Pml.Analysis.DdisTest do
 
       assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
         %{
-          category: :sequential,
-          drug_a: "http://purl.com/paracetamol",
-          drug_b: "http://purl.com/cocaine",
-          enclosing_construct: %{
-            type: :process,
-            line: 1
+          "category" => :sequential,
+          "drug_a" => "http://purl.com/paracetamol",
+          "drug_b" => "http://purl.com/cocaine",
+          "enclosing_construct" => %{
+            "type" => :process,
+            "line" => 1
           }
         }
       ]
@@ -64,12 +64,12 @@ defmodule Panacea.Pml.Analysis.DdisTest do
 
       assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
         %{
-          category: :parallel,
-          drug_a: "http://purl.com/paracetamol",
-          drug_b: "http://purl.com/cocaine",
-          enclosing_construct: %{
-            type: :branch,
-            line: 2
+          "category" => :parallel,
+          "drug_a" => "http://purl.com/paracetamol",
+          "drug_b" => "http://purl.com/cocaine",
+          "enclosing_construct" => %{
+            "type" => :branch,
+            "line" => 2
           }
         }
       ]
@@ -92,12 +92,12 @@ defmodule Panacea.Pml.Analysis.DdisTest do
 
       assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
         %{
-          category: :alternative,
-          drug_a: "http://purl.com/paracetamol",
-          drug_b: "http://purl.com/cocaine",
-          enclosing_construct: %{
-            type: :selection,
-            line: 2
+          "category" => :alternative,
+          "drug_a" => "http://purl.com/paracetamol",
+          "drug_b" => "http://purl.com/cocaine",
+          "enclosing_construct" => %{
+            "type" => :selection,
+            "line" => 2
           }
         }
       ]
@@ -130,45 +130,45 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       }
       """
       ddis = [
-        %{drug_a: "http://purl.com/paracetamol", drug_b: "http://purl.com/cocaine"},
-        %{drug_a: "http://purl.com/cocaine", drug_b: "http://purl.com/flat_seven_up"},
-        %{drug_a: "http://purl.com/heroin", drug_b: "http://purl.com/skittles"}
+        %{"drug_a" => "http://purl.com/paracetamol", "drug_b" => "http://purl.com/cocaine"},
+        %{"drug_a" => "http://purl.com/cocaine", "drug_b" => "http://purl.com/flat_seven_up"},
+        %{"drug_a" => "http://purl.com/heroin", "drug_b" => "http://purl.com/skittles"}
       ]
       drugs = [
-        %{label: "paracetamol", uri: "http://purl.com/paracetamol"},
-        %{label: "cocaine", uri: "http://purl.com/cocaine"},
-        %{label: "flat seven up", uri: "http://purl.com/flat_seven_up"},
-        %{label: "heroin", uri: "http://purl.com/heroin"},
-        %{label: "skittles", uri: "http://purl.com/skittles"},
+        %{"label" => "paracetamol", "uri" => "http://purl.com/paracetamol"},
+        %{"label" => "cocaine", "uri" => "http://purl.com/cocaine"},
+        %{"label" => "flat seven up", "uri" => "http://purl.com/flat_seven_up"},
+        %{"label" => "heroin", "uri" => "http://purl.com/heroin"},
+        %{"label" => "skittles", "uri" => "http://purl.com/skittles"},
       ]
       ast = parse_pml(pml)
 
       assert Analysis.Ddis.run(ast, ddis, drugs) == [
         %{
-          category: :alternative,
-          drug_a: "http://purl.com/paracetamol",
-          drug_b: "http://purl.com/cocaine",
-          enclosing_construct: %{
-            type: :selection,
-            line: 2
+          "category" => :alternative,
+          "drug_a" => "http://purl.com/paracetamol",
+          "drug_b" => "http://purl.com/cocaine",
+          "enclosing_construct" => %{
+            "type" => :selection,
+            "line" => 2
           }
         },
         %{
-          category: :parallel,
-          drug_a: "http://purl.com/cocaine",
-          drug_b: "http://purl.com/flat_seven_up",
-          enclosing_construct: %{
-            type: :branch,
-            line: 6
+          "category" => :parallel,
+          "drug_a" => "http://purl.com/cocaine",
+          "drug_b" => "http://purl.com/flat_seven_up",
+          "enclosing_construct" => %{
+            "type" => :branch,
+            "line" => 6
           }
         },
         %{
-          category: :sequential,
-          drug_a: "http://purl.com/heroin",
-          drug_b: "http://purl.com/skittles",
-          enclosing_construct: %{
-            type: :sequence,
-            line: 14
+          "category" => :sequential,
+          "drug_a" => "http://purl.com/heroin",
+          "drug_b" => "http://purl.com/skittles",
+          "enclosing_construct" => %{
+            "type" => :sequence,
+            "line" => 14
           }
         }
       ]

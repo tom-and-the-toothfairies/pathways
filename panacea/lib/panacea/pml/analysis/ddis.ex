@@ -10,13 +10,13 @@ defmodule Panacea.Pml.Analysis.Ddis do
   end
 
   defp categorize_ddis(ancestries, ddis, drugs) do
-    uris_to_labels = Enum.into(drugs, %{}, fn %{uri: uri, label: label} ->
+    uris_to_labels = Enum.into(drugs, %{}, fn %{"uri" => uri, "label" => label} ->
       {uri, label}
     end)
 
     Enum.map(ddis, fn ddi ->
-      drug_a = uris_to_labels[ddi.drug_a]
-      drug_b = uris_to_labels[ddi.drug_b]
+      drug_a = uris_to_labels[ddi["drug_a"]]
+      drug_b = uris_to_labels[ddi["drug_b"]]
 
       ancestors_a = Map.get(ancestries, drug_a, []) |> MapSet.new()
       ancestors_b = Map.get(ancestries, drug_b, []) |> MapSet.new()
@@ -31,8 +31,8 @@ defmodule Panacea.Pml.Analysis.Ddis do
        |> Enum.max_by(fn {_, _, id} -> id end)
 
      ddi
-     |> Map.put(:category, category_for_construct(construct_type))
-     |> Map.put(:enclosing_construct, %{type: construct_type, line: line})
+     |> Map.put("category", category_for_construct(construct_type))
+     |> Map.put("enclosing_construct", %{"type" => construct_type, "line" => line})
   end
 
   defp category_for_construct(:branch),    do: :parallel
@@ -52,4 +52,5 @@ defmodule Panacea.Pml.Analysis.Ddis do
   defp do_build_ancestries({:requires, _, {:drug, _, label}}, ancestors, acc) do
     Map.put(acc, Util.strip_quotes(label), ancestors)
   end
+  defp do_build_ancestries(_, _, acc), do: acc
 end
