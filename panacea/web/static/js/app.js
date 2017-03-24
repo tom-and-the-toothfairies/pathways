@@ -58,7 +58,6 @@ async function handleDrugsResponse(response) {
 
 async function handleUrisResponse(response, ast) {
   await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
-    const uris = found.map(x => x.uri);
     const labels = found.map(x => x.label);
     const urisToLabels = found.reduce((acc, {uri, label}) => {
       acc[uri] = label;
@@ -75,9 +74,9 @@ async function handleUrisResponse(response, ast) {
       View.displayUnidentifiedDrugs(unidentifiedDrugs);
     }
 
-    if (uris.length > 1) {
+    if (found.length > 1) {
       try {
-        await handleDdisResponse(await Request.ddis(uris), urisToLabels);
+        await handleDdisResponse(await Request.ddis(found, ast), urisToLabels);
       } catch (e) {
         View.displayNetworkError(e);
       }

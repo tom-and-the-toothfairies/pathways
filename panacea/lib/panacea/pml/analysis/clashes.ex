@@ -1,5 +1,5 @@
 defmodule Panacea.Pml.Analysis.Clashes do
-  @composite [:task, :sequence, :branch, :selection, :iteration, :action, :process]
+  @composite_constructs Application.get_env(:panacea, :composite_pml_constructs)
 
   def run(ast) do
     analyse(%{}, ast)
@@ -11,7 +11,7 @@ defmodule Panacea.Pml.Analysis.Clashes do
     end)
   end
 
-  defp analyse(result, {type, attrs, children}) when type in @composite do
+  defp analyse(result, {type, attrs, children}) when type in @composite_constructs do
     result =
       case Keyword.get(attrs, :name) do
         nil ->

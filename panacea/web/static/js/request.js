@@ -22,8 +22,8 @@ export const uris = labels => {
   return post('/api/uris', JSON.stringify({labels}), defaultHeaders);
 };
 
-export const ddis = drugs => {
-  return post('/api/ddis', JSON.stringify({drugs}), defaultHeaders);
+export const ddis = (drugs, ast) => {
+  return post('/api/ddis', JSON.stringify({drugs, ast}), defaultHeaders);
 };
 
 export const generatePMLHref = ast => {
