@@ -28,27 +28,26 @@ defmodule Panacea.Pml.Analysis.Ddis do
   defp categorize_ddi(ancestors_a, ancestors_b) do
      closest_common_ancestor =
        MapSet.intersection(ancestors_a, ancestors_b)
-       |> Enum.max_by(fn {_, line} -> line end)
+       |> Enum.max_by(fn {_, _, id} -> id end)
 
      case closest_common_ancestor do
-       {:branch, _} ->
+       {:branch, _, _} ->
          :parallel
-       {:selection, _} ->
+       {:selection, _, _} ->
          :alternative
        _ ->
          :sequential
      end
   end
 
-  def build_ancestries(ast), do: do_build_ancestries(ast, [], %{})
+  defp build_ancestries(ast), do: do_build_ancestries(ast, [], %{id: 0})
 
   defp do_build_ancestries({type, attrs, children}, ancestors, acc) when type in @composite_constructs do
     line =  Keyword.get(attrs, :line)
-    # TODO: add some unique ID to each element, in case there
-    #       are constructs with children on the same line
-    new_ancestors = [{type, line}|ancestors]
+    new_ancestors = [{type, line, acc.id}|ancestors]
+
     Enum.reduce(children, acc, fn (child, a) ->
-      do_build_ancestries(child, new_ancestors, a)
+      do_build_ancestries(child, new_ancestors, %{a|id: a.id + 1})
     end)
   end
   defp do_build_ancestries({:requires, _, {:drug, _, label}}, ancestors, acc) do

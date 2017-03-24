@@ -33,19 +33,6 @@ defmodule Panacea.Pml.Analysis.DdisTest do
     ast
   end
 
-  describe "build_ancestries/1" do
-    test "each drug points to all of its ancestors" do
-      ast = test_ast()
-      assert Analysis.Ddis.build_ancestries(ast) == %{
-        "paracetamol" => [action: 3, selection: 2, process: 1],
-        "flat seven up" => [action: 7, branch: 6, selection: 2, process: 1],
-        "cocaine" => [action: 10, branch: 6, selection: 2, process: 1],
-        "heroin" => [action: 15, sequence: 14, selection: 2, process: 1],
-        "skittles" => [action: 18, sequence: 14, selection: 2, process: 1]
-      }
-    end
-  end
-
   describe "run/2" do
     test "it categorizes the DDIs correctly" do
       ddis = [
