@@ -1,10 +1,11 @@
-const drugsPanel = document.getElementById('drugs-panel');
+const drugsPanel             = document.getElementById('drugs-panel');
 const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel');
-const ddisPanel = document.getElementById('ddis-panel');
-const errorPanel = document.getElementById('error-panel');
-const unnamedPanel = document.getElementById('unnamed-panel');
-const pmlDownloadContainer = document.getElementById('pml-download-container');
-const pmlDownloadAnchor = document.getElementById('pml-download-anchor');
+const ddisPanel              = document.getElementById('ddis-panel');
+const errorPanel             = document.getElementById('error-panel');
+const unnamedPanel           = document.getElementById('unnamed-panel');
+const clashesPanel           = document.getElementById('clashes-panel');
+const pmlDownloadContainer   = document.getElementById('pml-download-container');
+const pmlDownloadAnchor      = document.getElementById('pml-download-anchor');
 
 const hideElement = element => {
   element.classList.add('hidden');
@@ -19,6 +20,7 @@ export const hideResults = () => {
   hideElement(unidentifiedDrugsPanel);
   hideElement(ddisPanel);
   hideElement(unnamedPanel);
+  hideElement(clashesPanel);
   hideElement(errorPanel);
 };
 
@@ -34,10 +36,29 @@ export const displayDrugs = drugs => {
 export const displayUnnamed = unnamed => {
   const unnamedTextElement = document.getElementById('unnamed-text');
   const preamble = 'I found the following unnamed PML constructs:';
-  const unnamedHTML = unnamed.map(x => `<li>Unnamed ${x.type} found at line ${x.line}</li>`).join('');
+  const unnamedHTML = unnamed.map(x => `<li>Unnamed ${x.type} found on line ${x.line}</li>`).join('');
   unnamedTextElement.innerHTML = `<p>${preamble}</p><ul>${unnamedHTML}</ul>`;
 
   showElement(unnamedPanel);
+};
+
+export const displayClashes = clashes => {
+  const clashesTextElement = document.getElementById('clashes-text');
+  const preamble = 'I found the following PML construct name clashes:';
+
+  const clashesHTML = clashes.map(clash => {
+    const sorted = clash.occurrences.sort((a, b) => a.line - b.line);
+
+    const occurrences = sorted.map(occurrence => {
+      return `${occurrence.type} on line ${occurrence.line}`;
+    }).join(', ');
+
+    return `<li>"${clash.name}" in ${occurrences}</li>`;
+  }).join('');
+
+  clashesTextElement.innerHTML = `<p>${preamble}</p><ul>${clashesHTML}</ul>`;
+
+  showElement(clashesPanel);
 };
 
 const displayDownloadButton = () => {
