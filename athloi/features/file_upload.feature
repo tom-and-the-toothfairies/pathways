@@ -34,6 +34,13 @@ Feature: File upload
     Then I should see the error panel
     And the error panel title should be "Syntax error"
 
+  Scenario: uploading a PML file with unnamed constructs
+    When I select "analysis_test.pml"
+    And I submit the upload form
+    Then I should see the unnamed panel
+    And I should see the following warnings in the unnamed panel:
+      | Unnamed task found at line 2 |
+
   Scenario: uploading a binary file
     When I select "example.png"
     And I submit the upload form

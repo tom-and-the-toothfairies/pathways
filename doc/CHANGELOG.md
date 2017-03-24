@@ -1,6 +1,12 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
+## [Unreleased]
+
+### Added
+- Added a features document for Release 2.
+- Parser now reports unnamed PML constructs. These are then displayed to the user in a
+  similar manner to other warnings.
 
 ## [1.1] 2017-03-19
 

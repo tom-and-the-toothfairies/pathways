@@ -33,8 +33,9 @@ async function handleResponse(response, handle) {
 }
 
 async function handleDrugsResponse(response) {
-  await handleResponse(response, async function ({drugs, ast}) {
+  await handleResponse(response, async function ({drugs, unnamed, ast}) {
     const labels = drugs.map(x => x.label);
+
 
     if (labels.length > 0) {
       try {
@@ -44,6 +45,9 @@ async function handleDrugsResponse(response) {
       }
     } else {
       View.displayNoDrugsError();
+    }
+    if (unnamed.length > 0) {
+      View.displayUnnamed(unnamed);
     }
   });
 }
