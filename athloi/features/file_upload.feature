@@ -35,7 +35,7 @@ Feature: File upload
     And the error panel title should be "Syntax error"
 
   Scenario: uploading a PML file with unnamed constructs
-    When I select "analysis_test.pml"
+    When I select "analysis/unnamed.pml"
     And I submit the upload form
     Then I should see the unnamed panel
     And I should see the following warnings in the unnamed panel:

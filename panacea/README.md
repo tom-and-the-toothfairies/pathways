@@ -50,6 +50,15 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "line": 6
     }
   ],
+  "clashes": [
+    {
+      "name": "some_action",
+      "occurrences": [
+        {"line": 9, "type": "action"},
+        {"line": 3, "type": "action"}
+      ]
+    }
+  ],
   "ast": "AST representation of the provided PML file - base64 encoded"
 }
 ```
