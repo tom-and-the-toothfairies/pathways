@@ -21,7 +21,7 @@ defmodule Panacea.Pml.Analysis.DdisTest do
   end
 
   describe "run/2" do
-    test "it categorizes sequential DDIs correctly" do
+    test "it categorizes Sequential DDIs correctly" do
       pml = """
       process sequential_ddis {
         action s1 {
@@ -49,7 +49,7 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       ]
     end
 
-    test "it categorizes parallel DDIs correctly" do
+    test "it categorizes Parallel DDIs correctly" do
       pml = """
       process parallel_ddis {
         branch {
@@ -79,9 +79,9 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       ]
     end
 
-    test "it categorizes alternative DDIs correctly" do
+    test "it categorizes Alternative non-DDIs correctly" do
       pml = """
-      process alternative_ddis {
+      process alternative_non_ddis {
         selection {
           action s1 {
             requires { drug { "paracetamol" } }
@@ -109,7 +109,7 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       ]
     end
 
-    test "it categorizes repeated_alternative DDIs correctly" do
+    test "it categorizes Repeated Alternative DDIs correctly" do
       pml = """
       process repeated_alternative_ddis {
         iteration {
