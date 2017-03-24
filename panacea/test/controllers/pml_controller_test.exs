@@ -52,11 +52,33 @@ defmodule Panacea.PmlControllerTest do
     end
 
     test "identifies unnamed constructs in correct pml", %{conn: conn} do
-      conn = post_to_upload(conn, "analysis_test.pml")
+      conn = post_to_upload(conn, "analysis/unnamed.pml")
 
       assert conn.status == 200
       assert response_body(conn) |> Map.get("unnamed") == [
         %{"type" => "task", "line" => 2}
+      ]
+    end
+
+    test "identifies name clashes between constructs in correct pml", %{conn: conn} do
+      conn = post_to_upload(conn, "analysis/clashes.pml")
+
+      assert conn.status == 200
+      assert response_body(conn) |> Map.get("clashes") == [
+        %{
+          "name" => 'baz',
+          "conflicts" => [
+            %{"line" => 9, "type" => "action"},
+            %{"line" => 3, "type" => "action"}
+          ]
+        },
+        %{
+          "name" => 'baz2',
+          "conflicts" => [
+            %{"line" => 7, "type" => "action"},
+            %{"line" => 5, "type" => "action"}
+          ]
+        }
       ]
     end
 
