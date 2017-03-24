@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 - Added a features document for Release 2.
 - Parser now reports unnamed PML constructs. These are then displayed to the
   user in a similar manner to other warnings.
+- Parser now reports PML construct name clashes. These are then displayed to the
+  user in a similar manner to other warnings.
 
 ### Fixed
 - Running automated integration tests will now correctly test the release

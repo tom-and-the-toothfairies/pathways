@@ -39,7 +39,15 @@ Feature: File upload
     And I submit the upload form
     Then I should see the unnamed panel
     And I should see the following warnings in the unnamed panel:
-      | Unnamed task found at line 2 |
+      | Unnamed task found on line 2 |
+
+  Scenario: uploading a PML file with clashing construct names
+    When I select "analysis/clashes.pml"
+    And I submit the upload form
+    Then I should see the clashes panel
+    And I should see the following warnings in the clashes panel:
+      | "baz" in action on line 3, action on line 9  |
+      | "baz2" in action on line 5, action on line 7 |
 
   Scenario: uploading a binary file
     When I select "example.png"

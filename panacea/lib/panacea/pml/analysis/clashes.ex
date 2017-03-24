@@ -7,7 +7,7 @@ defmodule Panacea.Pml.Analysis.Clashes do
       length(occurrences) > 1
     end,
     fn {name, occurrences} ->
-      %{name: name, occurrences: occurrences}
+      %{name: to_string(name), occurrences: occurrences}
     end)
   end
 
