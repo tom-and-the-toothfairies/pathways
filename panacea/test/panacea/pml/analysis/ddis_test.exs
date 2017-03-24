@@ -103,6 +103,47 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       ]
     end
 
+    test "it can handle repeated drugs" do
+      pml = """
+      process repeated_drugs {
+        selection {
+          action s1 {
+            requires { drug { "paracetamol" } }
+          }
+          action s2 {
+            requires { drug { "cocaine" } }
+          }
+          action s3 {
+            requires { drug { "paracetamol" } }
+          }
+        }
+      }
+      """
+
+      ast = parse_pml(pml)
+
+      assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
+        %{
+          "category" => :alternative,
+          "drug_a" => "http://purl.com/paracetamol",
+          "drug_b" => "http://purl.com/cocaine",
+          "enclosing_construct" => %{
+            "type" => :selection,
+            "line" => 2
+          }
+        },
+        %{
+          "category" => :alternative,
+          "drug_a" => "http://purl.com/paracetamol",
+          "drug_b" => "http://purl.com/cocaine",
+          "enclosing_construct" => %{
+            "type" => :selection,
+            "line" => 2
+          }
+        }
+      ]
+    end
+
     test "it can handle more complicated PML" do
       pml = """
       process proc {

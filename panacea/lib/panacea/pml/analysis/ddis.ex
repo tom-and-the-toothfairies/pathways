@@ -18,16 +18,22 @@ defmodule Panacea.Pml.Analysis.Ddis do
       drug_a = uris_to_labels[ddi["drug_a"]]
       drug_b = uris_to_labels[ddi["drug_b"]]
 
-      ancestors_a = Map.get(ancestries, drug_a, []) |> MapSet.new()
-      ancestors_b = Map.get(ancestries, drug_b, []) |> MapSet.new()
+      ancestries_a = Map.get(ancestries, drug_a, [])
+      ancestries_b = Map.get(ancestries, drug_b, [])
 
-      categorize_ddi(ddi, ancestors_a, ancestors_b)
+      for ancestry_a <- ancestries_a, ancestry_b <- ancestries_b do
+        categorize_ddi(ddi, ancestry_a, ancestry_b)
+      end
     end)
+    |> List.flatten()
   end
 
-  defp categorize_ddi(ddi, ancestors_a, ancestors_b) do
+  defp categorize_ddi(ddi, ancestry_a, ancestry_b) do
+     set_a = ancestry_a |> MapSet.new()
+     set_b = ancestry_b |> MapSet.new()
+
      {construct_type, line, _} =
-       MapSet.intersection(ancestors_a, ancestors_b)
+       MapSet.intersection(set_a, set_b)
        |> Enum.max_by(fn {_, _, id} -> id end)
 
      ddi
@@ -50,7 +56,10 @@ defmodule Panacea.Pml.Analysis.Ddis do
     end)
   end
   defp do_build_ancestries({:requires, _, {:drug, _, label}}, ancestors, acc) do
-    Map.put(acc, Util.strip_quotes(label), ancestors)
+    key = Util.strip_quotes(label)
+    Map.update(acc, key, [ancestors], fn ancestries ->
+      [ancestors|ancestries]
+    end)
   end
   defp do_build_ancestries(_, _, acc), do: acc
 end
