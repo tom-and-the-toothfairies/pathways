@@ -3,11 +3,11 @@ defmodule Panacea.Pml.Analysis.Clashes do
 
   def run(ast) do
     analyse(%{}, ast)
-    |> Enum.filter_map(fn {_, clashes} ->
-      length(clashes) > 1
+    |> Enum.filter_map(fn {_, occurrences} ->
+      length(occurrences) > 1
     end,
-    fn {name, conflicts} ->
-      %{name: name, conflicts: conflicts}
+    fn {name, occurrences} ->
+      %{name: name, occurrences: occurrences}
     end)
   end
 

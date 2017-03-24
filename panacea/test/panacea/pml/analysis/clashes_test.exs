@@ -14,14 +14,14 @@ defmodule Panacea.Pml.Analysis.ClashesTest do
         [
           %{
             name: 'baz',
-            conflicts: [
+            occurrences: [
               %{line: 9, type: :action},
               %{line: 3, type: :action}
             ]
           },
           %{
             name: 'baz2',
-            conflicts: [
+            occurrences: [
               %{line: 7, type: :action},
               %{line: 5, type: :action}
             ]

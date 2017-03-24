@@ -53,7 +53,7 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
   "clashes": [
     {
       "name": "some_action",
-      "conflicts": [
+      "occurrences": [
         {"line": 9, "type": "action"},
         {"line": 3, "type": "action"}
       ]
