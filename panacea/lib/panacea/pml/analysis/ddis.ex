@@ -46,8 +46,11 @@ defmodule Panacea.Pml.Analysis.Ddis do
   end
   defp analyse_ancestors({:selection, line, inner_id}, ancestors) do
     inner = %{"type" => :selection, "line" => line}
+    sorted_ancestors = Enum.sort(ancestors, fn({_,_,id_a},{_,_,id_b}) ->
+      id_a >= id_b
+    end)
 
-    case Enum.find(ancestors, fn {type, _, id} -> type == :iteration && id < inner_id end) do
+    case Enum.find(sorted_ancestors, fn {type, _, id} -> type == :iteration && id < inner_id end) do
       nil ->
         {:alternative, [inner]}
       {:iteration, line, _} ->
