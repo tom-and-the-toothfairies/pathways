@@ -18,18 +18,5 @@ process foo {
       }
       provides { "a cured patient" }
     }
-    action baz2{
-      tool { "pills" }
-      script { "eat the pills" }
-      agent { "patient" }
-      provides { "a cured patient" }
-    }
-
-    action baz{
-      tool { "pills" }
-      script { "eat the pills" }
-      agent { "patient" }
-      provides { "a cured patient" }
-    }
   }
 }
