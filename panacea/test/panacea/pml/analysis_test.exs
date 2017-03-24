@@ -28,14 +28,14 @@ defmodule Panacea.Pml.AnalysisTest do
       assert analyse_test_file("clashes.pml").clashes ==
         [
           %{
-            name: 'baz',
+            name: "baz",
             occurrences: [
               %{line: 9, type: :action},
               %{line: 3, type: :action}
             ],
           },
           %{
-            name: 'baz2',
+            name: "baz2",
             occurrences: [
               %{line: 7, type: :action},
               %{line: 5, type: :action}

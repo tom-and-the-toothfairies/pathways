@@ -4,7 +4,7 @@ defmodule Panacea.Pml.Analysis.ClashesTest do
   @fixtures_dir "test/fixtures/analysis"
 
   describe "run/1" do
-    test "identifies construct name clashses in the AST" do
+    test "identifies construct name clashes in the AST" do
       {:ok, pml} = Path.join(@fixtures_dir, "clashes.pml") |> File.read()
 
       {:ok, ast} = Panacea.Pml.Parser.parse(pml)
@@ -13,14 +13,14 @@ defmodule Panacea.Pml.Analysis.ClashesTest do
       assert clashes ==
         [
           %{
-            name: 'baz',
+            name: "baz",
             occurrences: [
               %{line: 9, type: :action},
               %{line: 3, type: :action}
             ]
           },
           %{
-            name: 'baz2',
+            name: "baz2",
             occurrences: [
               %{line: 7, type: :action},
               %{line: 5, type: :action}

@@ -67,7 +67,22 @@ end
 
 Then(/^I should see the following warnings in the unnamed panel:$/) do |unnameds|
   body = find('#unnamed-text')
+
   unnameds.raw.flatten.each do |unnamed|
     expect(body).to have_content(unnamed)
+  end
+end
+
+Then(/^I should see the clashes panel$/) do
+  panel = find('#clashes-panel')
+
+  expect(panel).to be_visible
+end
+
+Then(/^I should see the following warnings in the clashes panel:$/) do |clashes|
+  body = find('#clashes-text')
+
+  clashes.raw.flatten.each do |clash|
+    expect(body).to have_content(clash)
   end
 end

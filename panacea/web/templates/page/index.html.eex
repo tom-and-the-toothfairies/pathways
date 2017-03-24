@@ -26,14 +26,22 @@
   <div class="panel-heading">Unidentified Drugs Found</div>
   <div class="panel-body" id="unidentified-drugs-text"></div>
 </div>
-<div class="panel panel-success hidden fades-in" id="ddis-panel">
-  <div class="panel-heading">Drug-Drug Interactions</div>
-  <div class="panel-body" id="ddis-text"></div>
-</div>
+
 <div class="panel panel-warning hidden fades-in" id="unnamed-panel">
   <div class="panel-heading">Unnamed PML Constructs</div>
   <div class="panel-body" id="unnamed-text"></div>
 </div>
+
+<div class="panel panel-warning hidden fades-in" id="clashes-panel">
+  <div class="panel-heading">PML Construct Name Clashes</div>
+  <div class="panel-body" id="clashes-text"></div>
+</div>
+
+<div class="panel panel-success hidden fades-in" id="ddis-panel">
+  <div class="panel-heading">Drug-Drug Interactions</div>
+  <div class="panel-body" id="ddis-text"></div>
+</div>
+
 <div class="panel panel-danger hidden fades-in" id="error-panel">
   <div class="panel-heading" id="error-title"></div>
   <div class="panel-body" id="error-text"></div>
