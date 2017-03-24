@@ -104,21 +104,28 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
 
 ### `/api/ddis`
 
-|              |                                                                                                  |
-|--------------|--------------------------------------------------------------------------------------------------|
-| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the *given* drugs |
-| Methods      | `POST`                                                                                           |
-| Request Body | An object containing a list of *DINTO URIs*                                                      |
-| Returns      | Response detailed below, or an error object                                                      |
+|              |                                                                                                                                     |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the *given* drugs, in the context of the given *AST* |
+| Methods      | `POST`                                                                                                                              |
+| Request Body | An object containing a list of *drugs* and an *AST*                                                                                 |
+| Returns      | Response detailed below, or an error object                                                                                         |
 
 #### Example
 ##### Request Body
 ```json
 {
   "drugs": [
-    "http://purl.obolibrary.org/obo/DINTO_DB00214",
-    "http://purl.obolibrary.org/obo/DINTO_DB00519"
-  ]
+    {
+      "uri": "http://purl.obolibrary.org/obo/DINTO_DB00214",
+      "label": "torasemide"
+    },
+    {
+      "uri": "http://purl.obolibrary.org/obo/DINTO_DB00519",
+      "label": "trandolapril"
+    }
+  ],
+  "ast": "encoded AST returned from /api/pml"
 }
 ```
 
@@ -133,7 +140,12 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       "label": "torasemide/trandolapril DDI",
       "uri": "http://purl.obolibrary.org/obo/DINTO_11031",
       "harmful": false,
-      "spacing": 3
+      "spacing": 3,
+      "category": "sequential",
+      "enclosing_construct": {
+        "type": "sequence",
+        "line": 6
+      }
     }
   ]
 }
