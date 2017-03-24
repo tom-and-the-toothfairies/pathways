@@ -24,7 +24,7 @@ test:
   override:
     - docker run -t -e "MIX_ENV=test" -e "CI=true" -v $CIRCLE_TEST_REPORTS/exunit:/test-reports tomtoothfairies/panacea mix test
     - docker run -t -v $CIRCLE_TEST_REPORTS/pytest:/test-reports tomtoothfairies/asclepius pytest --junitxml=/test-reports/test-junit-report.xml
-    - docker-compose -f docker-compose.e2e.yml -f docker-compose.e2e.ci.yml run athloi
+    - docker-compose -f docker-compose.e2e.dev.yml -f docker-compose.e2e.ci.yml run athloi
 
   post:
     - docker logs pathways_panacea_1 > $CIRCLE_ARTIFACTS/logs/panacea.log
