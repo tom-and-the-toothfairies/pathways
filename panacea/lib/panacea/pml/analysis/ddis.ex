@@ -21,24 +21,23 @@ defmodule Panacea.Pml.Analysis.Ddis do
       ancestors_a = Map.get(ancestries, drug_a, []) |> MapSet.new()
       ancestors_b = Map.get(ancestries, drug_b, []) |> MapSet.new()
 
-      Map.put(ddi, :type, categorize_ddi(ancestors_a, ancestors_b))
+      categorize_ddi(ddi, ancestors_a, ancestors_b)
     end)
   end
 
-  defp categorize_ddi(ancestors_a, ancestors_b) do
-     closest_common_ancestor =
+  defp categorize_ddi(ddi, ancestors_a, ancestors_b) do
+     {construct_type, line, _} =
        MapSet.intersection(ancestors_a, ancestors_b)
        |> Enum.max_by(fn {_, _, id} -> id end)
 
-     case closest_common_ancestor do
-       {:branch, _, _} ->
-         :parallel
-       {:selection, _, _} ->
-         :alternative
-       _ ->
-         :sequential
-     end
+     ddi
+     |> Map.put(:category, category_for_construct(construct_type))
+     |> Map.put(:enclosing_construct, %{type: construct_type, line: line})
   end
+
+  defp category_for_construct(:branch),    do: :parallel
+  defp category_for_construct(:selection), do: :alternative
+  defp category_for_construct(_),          do: :sequential
 
   defp build_ancestries(ast), do: do_build_ancestries(ast, [], %{id: 0})
 
