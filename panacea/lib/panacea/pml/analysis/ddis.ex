@@ -1,5 +1,6 @@
 defmodule Panacea.Pml.Analysis.Ddis do
-  @composite [:task, :sequence, :branch, :selection, :iteration, :action, :process]
+  alias Panacea.Pml.Analysis.Util
+  @composite_constructs Application.get_env(:panacea, :composite_pml_constructs)
 
   def run(_, [], _), do: []
   def run(ast, ddis, drugs) do
@@ -41,7 +42,7 @@ defmodule Panacea.Pml.Analysis.Ddis do
 
   def build_ancestries(ast), do: do_build_ancestries(ast, [], %{})
 
-  defp do_build_ancestries({type, attrs, children}, ancestors, acc) when type in @composite do
+  defp do_build_ancestries({type, attrs, children}, ancestors, acc) when type in @composite_constructs do
     line =  Keyword.get(attrs, :line)
     # TODO: add some unique ID to each element, in case there
     #       are constructs with children on the same line
@@ -51,13 +52,6 @@ defmodule Panacea.Pml.Analysis.Ddis do
     end)
   end
   defp do_build_ancestries({:requires, _, {:drug, _, label}}, ancestors, acc) do
-    Map.put(acc, strip_quotes(label), ancestors)
-  end
-
-  # TODO: move this to a shared module - copy pasted it from Analysis.Drugs for now
-  defp strip_quotes(char_list) do
-    char_list
-    |> :string.strip(:both, ?")
-    |> to_string()
+    Map.put(acc, Util.strip_quotes(label), ancestors)
   end
 end
