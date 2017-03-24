@@ -1,6 +1,23 @@
 defmodule Panacea.AsclepiusControllerTest do
   use Panacea.AuthorizedConnCase
 
+  defp encoded_ast() do
+    pml = """
+    process death {
+      action foo {
+        requires { drug { "torasemide" } }
+      }
+      action bar {
+        requires { drug { "trandolapril" } }
+      }
+    }
+    """
+    {:ok, ast} = Panacea.Pml.Parser.parse(pml)
+    ast
+    |> :erlang.term_to_binary()
+    |> Base.encode64()
+  end
+
   describe "AsclepiusController.uris_for_labels/2" do
     test "raises an error when no labels are provided", %{conn: conn} do
       assert_raise Phoenix.ActionClauseError, fn ->
@@ -41,38 +58,60 @@ defmodule Panacea.AsclepiusControllerTest do
   describe "AsclepiusController.ddis/2" do
     test "raises an error when no drugs are provided", %{conn: conn} do
       assert_raise Phoenix.ActionClauseError, fn ->
-        post conn, asclepius_path(conn, :ddis)
+        post conn, asclepius_path(conn, :ddis, %{ast: "foo"})
       end
     end
 
-    test "returns an error when the drugs are invalid", %{conn: conn} do
-      resp = post conn, asclepius_path(conn, :ddis), %{drugs: "foo"}
+    test "raises an error when no ast is provided", %{conn: conn} do
+      assert_raise Phoenix.ActionClauseError, fn ->
+        post conn, asclepius_path(conn, :ddis, %{drugs: []})
+      end
+    end
 
-      assert resp.status == 422
+    test "raises an error when the drugs are invalid", %{conn: conn} do
+      ast = encoded_ast()
+      assert_raise Phoenix.ActionClauseError, fn ->
+        post conn, asclepius_path(conn, :ddis), %{drugs: "foo", ast: ast}
+      end
     end
 
     test "returns an error when fewer than 2 drugs are provided", %{conn: conn} do
-      drugs = ["http://purl.obolibrary.org/obo/CHEBI_27958"]
-      resp = post conn, asclepius_path(conn, :ddis), %{drugs: drugs}
+      drugs = [
+        %{"uri" => "http://purl.obolibrary.org/obo/CHEBI_27958", "label" => "cocaine"}
+      ]
+      ast = encoded_ast()
+      resp = post conn, asclepius_path(conn, :ddis), %{drugs: drugs, ast: ast}
 
       assert resp.status == 422
     end
 
     test "returns the ddis for the given drugs", %{conn: conn} do
       drugs = [
-        "http://purl.obolibrary.org/obo/DINTO_DB00214",
-        "http://purl.obolibrary.org/obo/DINTO_DB00519",
+        %{
+          "uri" => "http://purl.obolibrary.org/obo/DINTO_DB00214",
+          "label" => "torasemide"
+        },
+        %{
+          "uri" => "http://purl.obolibrary.org/obo/DINTO_DB00519",
+          "label" => "trandolapril"
+        }
       ]
-      resp = post conn, asclepius_path(conn, :ddis), %{drugs: drugs}
+      ast = encoded_ast()
+      resp = post conn, asclepius_path(conn, :ddis), %{drugs: drugs, ast: ast}
 
       assert resp.status == 200
       assert response_body(resp) |> Map.get("ddis") ==
         [
           %{
+            "category" => "sequential",
             "drug_a" => "http://purl.obolibrary.org/obo/DINTO_DB00214",
             "drug_b" => "http://purl.obolibrary.org/obo/DINTO_DB00519",
             "label" => "torasemide/trandolapril DDI",
-            "uri"   => "http://purl.obolibrary.org/obo/DINTO_11031"
+            "uri"   => "http://purl.obolibrary.org/obo/DINTO_11031",
+            "enclosing_construct" => %{
+              "type" => "process",
+              "line" => 1
+            }
           }
         ]
     end
