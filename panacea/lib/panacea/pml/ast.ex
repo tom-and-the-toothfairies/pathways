@@ -54,7 +54,7 @@ defmodule Panacea.Pml.Ast do
   defp get_with_default(attrs, key) do
     case Keyword.get(attrs, key) do
       nil -> ""
-      x   -> [" ", x]
+      x   -> [" ", to_string(x)]
     end
   end
 end

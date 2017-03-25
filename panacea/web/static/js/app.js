@@ -46,13 +46,17 @@ async function handleDrugsResponse(response) {
       View.displayNoDrugsError();
     }
 
-    if (unnamed.length > 0) {
-      View.displayUnnamed(unnamed);
-    }
+    getFileContents(pml => {
+      const pmlLines = pml.split('\n');
 
-    if (clashes.length > 0) {
-      View.displayClashes(clashes);
-    }
+      if (unnamed.length > 0) {
+        View.displayUnnamed(unnamed, pmlLines);
+      }
+
+      if (clashes.length > 0) {
+        View.displayClashes(clashes, pmlLines);
+      }
+    });
   });
 }
 
@@ -91,3 +95,18 @@ async function handleDdisResponse(response, urisToLabels) {
     View.displayDdis(ddis, urisToLabels);
   });
 }
+
+const getFileContents = callback => {
+  const file = View.fileInputElement.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = e => {
+      const contents = e.target.result;
+      callback(contents);
+    };
+  }
+  else {
+    throw 'file could not be read';
+  }
+};
