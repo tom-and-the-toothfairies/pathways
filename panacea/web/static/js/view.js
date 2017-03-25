@@ -1,11 +1,12 @@
-const drugsPanel             = document.getElementById('drugs-panel');
-const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel');
-const ddisPanel              = document.getElementById('ddis-panel');
-const errorPanel             = document.getElementById('error-panel');
-const unnamedPanel           = document.getElementById('unnamed-panel');
-const clashesPanel           = document.getElementById('clashes-panel');
-const pmlDownloadContainer   = document.getElementById('pml-download-container');
-const pmlDownloadAnchor      = document.getElementById('pml-download-anchor');
+const drugsPanel              = document.getElementById('drugs-panel');
+const unidentifiedDrugsPanel  = document.getElementById('unidentified-drugs-panel');
+const ddisPanel               = document.getElementById('ddis-panel');
+const errorPanel              = document.getElementById('error-panel');
+const unnamedPanel            = document.getElementById('unnamed-panel');
+const clashesPanel            = document.getElementById('clashes-panel');
+const pmlDownloadContainer    = document.getElementById('pml-download-container');
+const pmlDownloadAnchor       = document.getElementById('pml-download-anchor');
+export const fileInputElement = document.getElementById('file-input');
 
 const hideElement = element => {
   element.classList.add('hidden');
@@ -33,7 +34,7 @@ export const displayDrugs = drugs => {
   showElement(drugsPanel);
 };
 
-export const displayUnnamed = (unnamed, pml) => {
+export const displayUnnamed = (unnamed, pmlLines) => {
   const unnamedTextElement = document.getElementById('unnamed-text');
   unnamedTextElement.innerHTML = '';
 
@@ -45,13 +46,13 @@ export const displayUnnamed = (unnamed, pml) => {
     const details = document.createElement('STRONG');
     details.innerHTML = `Unnamed ${construct.type} found on line ${construct.line}:`;
     unnamedTextElement.appendChild(details);
-    unnamedTextElement.appendChild(generateErrorHighlight(pml, construct.line));
+    unnamedTextElement.appendChild(generateErrorHighlight(pmlLines, construct.line));
   }
 
   showElement(unnamedPanel);
 };
 
-export const displayClashes = (clashes, pml) => {
+export const displayClashes = (clashes, pmlLines) => {
   const clashesTextElement = document.getElementById('clashes-text');
   clashesTextElement.innerHTML = '';
 
@@ -62,14 +63,13 @@ export const displayClashes = (clashes, pml) => {
   for (const clash of clashes) {
     const sorted = clash.occurrences.sort((a, b) => a.line - b.line);
 
-    const wrapper = document.createElement('DIV');
-    wrapper.classList.add('clash-wrapper');
+    const wrapper = createElementWithClass('DIV', 'clash-wrapper');
 
     for (const occurrence of sorted) {
       const details = document.createElement('STRONG');
       details.innerHTML = `${occurrence.type} ${clash.name} found on line ${occurrence.line}:`;
       wrapper.appendChild(details);
-      wrapper.appendChild(generateErrorHighlight(pml, occurrence.line));
+      wrapper.appendChild(generateErrorHighlight(pmlLines, occurrence.line));
     }
 
     clashesTextElement.appendChild(wrapper);
@@ -156,8 +156,7 @@ export const restoreFileForm = () => {
   hideElement(loadingElement);
 };
 
-export const generateErrorHighlight = (code, errorLine, numContextLines = 2) => {
-  const lines = code.split('\n');
+const generateErrorHighlight = (lines, errorLine, numContextLines = 2) => {
   const errorlineIndex = errorLine - 1;
 
   const startIndex = Math.max(0, errorlineIndex - numContextLines);
@@ -198,7 +197,6 @@ const createElementWithClass = (elementName, className) => {
 // to make the file input pretty take the filename from the form
 // and place it in a disabled input box right beside it :art:
 const filenameDisplayElement = document.getElementById('filename-display');
-const fileInputElement = document.getElementById('file-input');
 fileInputElement.addEventListener('change', function(e) {
   filenameDisplayElement.value = this.files[0].name;
   hideResults();

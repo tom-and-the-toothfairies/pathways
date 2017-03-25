@@ -32,8 +32,3 @@ export const generatePMLHref = ast => {
   const tokenParam = `authorization_token=${encodeURIComponent(apiAccessToken)}`;
   return `${endpoint}?${astParam}&${tokenParam}`;
 };
-
-export async function pml(ast) {
-  const resp = await fetch(generatePMLHref(ast), { method: 'GET' });
-  return resp.text();
-}
