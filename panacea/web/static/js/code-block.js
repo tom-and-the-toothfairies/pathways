@@ -1,4 +1,4 @@
-import * as Util from "./util"
+import * as Util from "./util";
 
 export const generate = (lines, highlightLineNumber, surroundingLines = 2) => {
   const highlightIndex = highlightLineNumber - 1;
@@ -8,34 +8,34 @@ export const generate = (lines, highlightLineNumber, surroundingLines = 2) => {
 
   const displayLines = lines.slice(startIndex, endIndex);
 
-  const codeBlock = Util.createElementWithClass('PRE', 'code-block');
+  const codeBlock = Util.createElementWithClass('pre', 'code-block');
 
   displayLines.forEach((lineContents, index) => {
     const lineNumber = startIndex + index + 1;
-    const isHighlighted = lineNumber == highlightLineNumber;
+    const isHighlighted = lineNumber === highlightLineNumber;
 
-    const line = generateLine(lineContents, lineNumber, isHighlighted)
+    const line = generateLine(lineContents, lineNumber, isHighlighted);
 
     codeBlock.appendChild(line);
-  })
+  });
 
   return codeBlock;
-}
+};
 
 const generateLine = (contents, lineNumber, isHighlighted) => {
-  const lineContainer = Util.createElementWithClass('SPAN', 'line');
+  const lineContainer = Util.createElementWithClass('span', 'line');
   if (isHighlighted) {
     lineContainer.classList.add('highlighted');
   }
 
-  const lineNumberSpan = Util.createElementWithClass('SPAN', 'ln');
+  const lineNumberSpan = Util.createElementWithClass('span', 'ln');
   lineNumberSpan.innerHTML = lineNumber;
 
-  const lineContentSpan = Util.createElementWithClass('SPAN', 'code');
+  const lineContentSpan = Util.createElementWithClass('span', 'code');
   lineContentSpan.innerHTML = contents;
 
   lineContainer.appendChild(lineNumberSpan);
   lineContainer.appendChild(lineContentSpan);
 
   return lineContainer;
-}
+};

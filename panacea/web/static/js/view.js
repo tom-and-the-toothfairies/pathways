@@ -1,5 +1,5 @@
-import * as CodeBlock from "./code-block"
-import * as Util from "./util"
+import * as CodeBlock from "./code-block";
+import * as Util from "./util";
 
 const drugsPanel              = document.getElementById('drugs-panel');
 const unidentifiedDrugsPanel  = document.getElementById('unidentified-drugs-panel');
@@ -41,15 +41,19 @@ export const displayUnnamed = (unnamed, pmlLines) => {
   const unnamedTextElement = document.getElementById('unnamed-text');
   unnamedTextElement.innerHTML = '';
 
-  const preamble = document.createElement('P');
+  const preamble = document.createElement('p');
   preamble.innerHTML = 'I found the following unnamed PML constructs:';
   unnamedTextElement.appendChild(preamble);
 
   for (const construct of unnamed) {
-    const details = document.createElement('STRONG');
-    details.innerHTML = `Unnamed ${construct.type} found on line ${construct.line}:`;
-    unnamedTextElement.appendChild(details);
-    unnamedTextElement.appendChild(CodeBlock.generate(pmlLines, construct.line));
+    const wrapper = Util.createElementWithClass('div', 'warning-wrapper');
+
+    const details = document.createElement('strong');
+    details.innerHTML = `${construct.type} on line ${construct.line}:`;
+    wrapper.appendChild(details);
+    wrapper.appendChild(CodeBlock.generate(pmlLines, construct.line));
+
+    unnamedTextElement.appendChild(wrapper);
   }
 
   showElement(unnamedPanel);
@@ -59,18 +63,18 @@ export const displayClashes = (clashes, pmlLines) => {
   const clashesTextElement = document.getElementById('clashes-text');
   clashesTextElement.innerHTML = '';
 
-  const preamble = document.createElement('P');
+  const preamble = document.createElement('p');
   preamble.innerHTML = 'I found the following PML construct name clashes:';
   clashesTextElement.appendChild(preamble);
 
   for (const clash of clashes) {
     const sorted = clash.occurrences.sort((a, b) => a.line - b.line);
 
-    const wrapper = Util.createElementWithClass('DIV', 'clash-wrapper');
+    const wrapper = Util.createElementWithClass('div', 'warning-wrapper');
 
     for (const occurrence of sorted) {
-      const details = document.createElement('STRONG');
-      details.innerHTML = `${occurrence.type} ${clash.name} found on line ${occurrence.line}:`;
+      const details = document.createElement('strong');
+      details.innerHTML = `${occurrence.type} ${clash.name} on line ${occurrence.line}:`;
       wrapper.appendChild(details);
       wrapper.appendChild(CodeBlock.generate(pmlLines, occurrence.line));
     }

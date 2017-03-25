@@ -17,6 +17,11 @@
   </div>
 </form>
 
+<div class="panel panel-danger hidden fades-in" id="error-panel">
+  <div class="panel-heading" id="error-title"></div>
+  <div class="panel-body" id="error-text"></div>
+</div>
+
 <div class="panel panel-success hidden fades-in" id="drugs-panel">
   <div class="panel-heading">Drugs Found</div>
   <div class="panel-body" id="drugs-text"></div>
@@ -40,11 +45,6 @@
 <div class="panel panel-success hidden fades-in" id="ddis-panel">
   <div class="panel-heading">Drug-Drug Interactions</div>
   <div class="panel-body" id="ddis-text"></div>
-</div>
-
-<div class="panel panel-danger hidden fades-in" id="error-panel">
-  <div class="panel-heading" id="error-title"></div>
-  <div class="panel-body" id="error-text"></div>
 </div>
 
 <div class="center hidden padded-bottom fades-in" id="pml-download-container">

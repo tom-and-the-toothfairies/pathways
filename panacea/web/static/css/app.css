@@ -45,7 +45,7 @@
   font-size: .8em;
   line-height: 1.4;
   white-space: normal;
-  font-family: menlo, consolas, monospace;
+  font-family: menlo, consolas, Ubuntu Mono, monospace;
   overflow: auto;
   max-width: 100%;
   border: none;
@@ -70,7 +70,7 @@
   user-select: none;
 }
 
-.clash-wrapper {
+.warning-wrapper {
   padding: 15px;
   margin: 10px;
   border: 1px solid #faebcc;
