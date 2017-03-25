@@ -4,9 +4,9 @@ export const generate = (lines, highlightLineNumber, surroundingLines = 2) => {
   const highlightIndex = highlightLineNumber - 1;
 
   const startIndex = Math.max(0, highlightIndex - surroundingLines);
-  const endIndex   = Math.min(lines.length - 1, highlightIndex + surroundingLines) + 1;
+  const endIndex   = Math.min(lines.length - 1, highlightIndex + surroundingLines);
 
-  const displayLines = lines.slice(startIndex, endIndex);
+  const displayLines = lines.slice(startIndex, endIndex + 1);
 
   const codeBlock = Util.createElementWithClass('pre', 'code-block');
 
