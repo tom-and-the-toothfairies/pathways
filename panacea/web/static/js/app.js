@@ -98,7 +98,6 @@ async function handleDdisResponse(response, urisToLabels) {
 
 const getFileContents = callback => {
   const file = View.fileInputElement.files[0];
-  const fileName = file.name;
   if (file) {
     const reader = new FileReader();
     reader.readAsText(file);

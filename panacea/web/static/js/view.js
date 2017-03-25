@@ -1,3 +1,6 @@
+import * as CodeBlock from "./code-block"
+import * as Util from "./util"
+
 const drugsPanel              = document.getElementById('drugs-panel');
 const unidentifiedDrugsPanel  = document.getElementById('unidentified-drugs-panel');
 const ddisPanel               = document.getElementById('ddis-panel');
@@ -46,7 +49,7 @@ export const displayUnnamed = (unnamed, pmlLines) => {
     const details = document.createElement('STRONG');
     details.innerHTML = `Unnamed ${construct.type} found on line ${construct.line}:`;
     unnamedTextElement.appendChild(details);
-    unnamedTextElement.appendChild(generateErrorHighlight(pmlLines, construct.line));
+    unnamedTextElement.appendChild(CodeBlock.generate(pmlLines, construct.line));
   }
 
   showElement(unnamedPanel);
@@ -63,13 +66,13 @@ export const displayClashes = (clashes, pmlLines) => {
   for (const clash of clashes) {
     const sorted = clash.occurrences.sort((a, b) => a.line - b.line);
 
-    const wrapper = createElementWithClass('DIV', 'clash-wrapper');
+    const wrapper = Util.createElementWithClass('DIV', 'clash-wrapper');
 
     for (const occurrence of sorted) {
       const details = document.createElement('STRONG');
       details.innerHTML = `${occurrence.type} ${clash.name} found on line ${occurrence.line}:`;
       wrapper.appendChild(details);
-      wrapper.appendChild(generateErrorHighlight(pmlLines, occurrence.line));
+      wrapper.appendChild(CodeBlock.generate(pmlLines, occurrence.line));
     }
 
     clashesTextElement.appendChild(wrapper);
@@ -155,44 +158,6 @@ export const restoreFileForm = () => {
   showElement(formElement);
   hideElement(loadingElement);
 };
-
-const generateErrorHighlight = (lines, errorLine, numContextLines = 2) => {
-  const errorlineIndex = errorLine - 1;
-
-  const startIndex = Math.max(0, errorlineIndex - numContextLines);
-  const endIndex = Math.min(lines.length-1, errorlineIndex + numContextLines);
-  const displayLines = lines.slice(startIndex, endIndex + 1); // slice extracts up to but not including end
-
-  const codeBlockElement = createElementWithClass('PRE','code-block');
-
-  displayLines.forEach((lineContents, currentIndex) => {
-    const currentLineIndex = startIndex + currentIndex;
-    const currentLineNum = currentLineIndex + 1;
-
-    const lineContainer = createElementWithClass('SPAN', 'line');
-    if (currentLineIndex === errorlineIndex) {
-      lineContainer.classList.add('highlighted');
-    }
-
-    const lineNumberSpan = createElementWithClass('SPAN', 'ln');
-    lineNumberSpan.innerHTML = currentLineNum;
-
-    const lineContentSpan = createElementWithClass('SPAN', 'code');
-    lineContentSpan.innerHTML = lineContents;
-
-    lineContainer.appendChild(lineNumberSpan);
-    lineContainer.appendChild(lineContentSpan);
-    codeBlockElement.appendChild(lineContainer);
-  });
-
-  return codeBlockElement;
-};
-
-const createElementWithClass = (elementName, className) => {
-  const element = document.createElement(elementName);
-  element.classList.add(className);
-  return element;
-}
 
 // to make the file input pretty take the filename from the form
 // and place it in a disabled input box right beside it :art:
