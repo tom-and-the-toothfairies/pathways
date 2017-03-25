@@ -37,51 +37,52 @@ export const displayDrugs = drugs => {
   showElement(drugsPanel);
 };
 
-export const displayUnnamed = (unnamed, pmlLines) => {
-  const unnamedTextElement = document.getElementById('unnamed-text');
-  unnamedTextElement.innerHTML = '';
+const displayWarnings = (container, preambleText, warnings, pml) => {
+  container.innerHTML = '';
 
   const preamble = document.createElement('p');
-  preamble.innerHTML = 'I found the following unnamed PML constructs:';
-  unnamedTextElement.appendChild(preamble);
+  preamble.innerHTML = preambleText;
+  container.appendChild(preamble);
 
-  for (const construct of unnamed) {
+  for (const warning of warnings) {
     const wrapper = Util.createElementWithClass('div', 'warning-wrapper');
 
-    const details = document.createElement('strong');
-    details.innerHTML = `${construct.type} on line ${construct.line}:`;
-    wrapper.appendChild(details);
-    wrapper.appendChild(CodeBlock.generate(pmlLines, construct.line));
+    for (const member of warning) {
+      const details = document.createElement('strong');
+      details.innerHTML = `${member.identifier} on line ${member.line}`;
+      wrapper.appendChild(details);
 
-    unnamedTextElement.appendChild(wrapper);
+      const codeBlock = CodeBlock.generate(pml, member.line);
+      wrapper.appendChild(codeBlock);
+    }
+
+    container.appendChild(wrapper);
   }
+};
 
+export const displayUnnamed = (unnamed, pmlLines) => {
+  const container = document.getElementById('unnamed-text');
+  const preamble = 'I found the following unnamed PML constructs:';
+  const warnings = unnamed.map(({type, line}) => {
+    return [{line, identifier: type}];
+  });
+
+  displayWarnings(container, preamble, warnings, pmlLines);
   showElement(unnamedPanel);
 };
 
 export const displayClashes = (clashes, pmlLines) => {
-  const clashesTextElement = document.getElementById('clashes-text');
-  clashesTextElement.innerHTML = '';
+  const container = document.getElementById('clashes-text');
+  const preamble = 'I found the following PML construct name clashes:';
+  const warnings = clashes.map(({occurrences, name}) => {
+    return occurrences
+      .sort((a, b) => a.line - b.line)
+      .map(({type, line}) => {
+        return {line, identifier: `${type} ${name}`};
+      });
+  });
 
-  const preamble = document.createElement('p');
-  preamble.innerHTML = 'I found the following PML construct name clashes:';
-  clashesTextElement.appendChild(preamble);
-
-  for (const clash of clashes) {
-    const sorted = clash.occurrences.sort((a, b) => a.line - b.line);
-
-    const wrapper = Util.createElementWithClass('div', 'warning-wrapper');
-
-    for (const occurrence of sorted) {
-      const details = document.createElement('strong');
-      details.innerHTML = `${occurrence.type} ${clash.name} on line ${occurrence.line}:`;
-      wrapper.appendChild(details);
-      wrapper.appendChild(CodeBlock.generate(pmlLines, occurrence.line));
-    }
-
-    clashesTextElement.appendChild(wrapper);
-  }
-
+  displayWarnings(container, preamble, warnings, pmlLines);
   showElement(clashesPanel);
 };
 
