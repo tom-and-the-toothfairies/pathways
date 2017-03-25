@@ -33,30 +33,47 @@ export const displayDrugs = drugs => {
   showElement(drugsPanel);
 };
 
-export const displayUnnamed = unnamed => {
+export const displayUnnamed = (unnamed, pml) => {
   const unnamedTextElement = document.getElementById('unnamed-text');
-  const preamble = 'I found the following unnamed PML constructs:';
-  const unnamedHTML = unnamed.map(x => `<li>Unnamed ${x.type} found on line ${x.line}</li>`).join('');
-  unnamedTextElement.innerHTML = `<p>${preamble}</p><ul>${unnamedHTML}</ul>`;
+  unnamedTextElement.innerHTML = '';
+
+  const preamble = document.createElement('P');
+  preamble.innerHTML = 'I found the following unnamed PML constructs:';
+  unnamedTextElement.appendChild(preamble);
+
+  for (const construct of unnamed) {
+    const details = document.createElement('STRONG');
+    details.innerHTML = `Unnamed ${construct.type} found on line ${construct.line}:`;
+    unnamedTextElement.appendChild(details);
+    unnamedTextElement.appendChild(generateErrorHighlight(pml, construct.line));
+  }
 
   showElement(unnamedPanel);
 };
 
-export const displayClashes = clashes => {
+export const displayClashes = (clashes, pml) => {
   const clashesTextElement = document.getElementById('clashes-text');
-  const preamble = 'I found the following PML construct name clashes:';
+  clashesTextElement.innerHTML = '';
 
-  const clashesHTML = clashes.map(clash => {
+  const preamble = document.createElement('P');
+  preamble.innerHTML = 'I found the following PML construct name clashes:';
+  clashesTextElement.appendChild(preamble);
+
+  for (const clash of clashes) {
     const sorted = clash.occurrences.sort((a, b) => a.line - b.line);
 
-    const occurrences = sorted.map(occurrence => {
-      return `${occurrence.type} on line ${occurrence.line}`;
-    }).join(', ');
+    const wrapper = document.createElement('DIV');
+    wrapper.classList.add('clash-wrapper');
 
-    return `<li>"${clash.name}" in ${occurrences}</li>`;
-  }).join('');
+    for (const occurrence of sorted) {
+      const details = document.createElement('STRONG');
+      details.innerHTML = `${occurrence.type} ${clash.name} found on line ${occurrence.line}:`;
+      wrapper.appendChild(details);
+      wrapper.appendChild(generateErrorHighlight(pml, occurrence.line));
+    }
 
-  clashesTextElement.innerHTML = `<p>${preamble}</p><ul>${clashesHTML}</ul>`;
+    clashesTextElement.appendChild(wrapper);
+  }
 
   showElement(clashesPanel);
 };
@@ -138,6 +155,45 @@ export const restoreFileForm = () => {
   showElement(formElement);
   hideElement(loadingElement);
 };
+
+export const generateErrorHighlight = (code, errorLine, numContextLines = 2) => {
+  const lines = code.split('\n');
+  const errorlineIndex = errorLine - 1;
+
+  const startIndex = Math.max(0, errorlineIndex - numContextLines);
+  const endIndex = Math.min(lines.length-1, errorlineIndex + numContextLines);
+  const displayLines = lines.slice(startIndex, endIndex + 1); // slice extracts up to but not including end
+
+  const codeBlockElement = createElementWithClass('PRE','code-block');
+
+  displayLines.forEach((lineContents, currentIndex) => {
+    const currentLineIndex = startIndex + currentIndex;
+    const currentLineNum = currentLineIndex + 1;
+
+    const lineContainer = createElementWithClass('SPAN', 'line');
+    if (currentLineIndex === errorlineIndex) {
+      lineContainer.classList.add('highlighted');
+    }
+
+    const lineNumberSpan = createElementWithClass('SPAN', 'ln');
+    lineNumberSpan.innerHTML = currentLineNum;
+
+    const lineContentSpan = createElementWithClass('SPAN', 'code');
+    lineContentSpan.innerHTML = lineContents;
+
+    lineContainer.appendChild(lineNumberSpan);
+    lineContainer.appendChild(lineContentSpan);
+    codeBlockElement.appendChild(lineContainer);
+  });
+
+  return codeBlockElement;
+};
+
+const createElementWithClass = (elementName, className) => {
+  const element = document.createElement(elementName);
+  element.classList.add(className);
+  return element;
+}
 
 // to make the file input pretty take the filename from the form
 // and place it in a disabled input box right beside it :art:

@@ -46,12 +46,15 @@ async function handleDrugsResponse(response) {
       View.displayNoDrugsError();
     }
 
+    // fetching the pml here, TODO: decide when is best to do this
+    const pml = await Request.pml(ast);
+
     if (unnamed.length > 0) {
-      View.displayUnnamed(unnamed);
+      View.displayUnnamed(unnamed, pml);
     }
 
     if (clashes.length > 0) {
-      View.displayClashes(clashes);
+      View.displayClashes(clashes, pml);
     }
   });
 }

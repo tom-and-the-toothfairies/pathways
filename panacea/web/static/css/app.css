@@ -38,3 +38,42 @@
 .padded-bottom {
   padding-bottom: 20px;
 }
+
+.code-block {
+  margin: 0;
+  padding: 12px 0;
+  font-size: .8em;
+  line-height: 1.4;
+  white-space: normal;
+  font-family: menlo, consolas, monospace;
+  overflow: auto;
+  max-width: 100%;
+  border: none;
+}
+
+.line {
+  white-space: pre;
+  display: block;
+  padding: 0 16px;
+}
+
+.highlighted {
+  background-color: #ffdcdc;
+}
+
+.ln {
+  color: #a0b0c0;
+  margin-right: 1.5em;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.clash-wrapper {
+  padding: 15px;
+  margin: 10px;
+  border: 1px solid #faebcc;
+  border-radius: 4px;
+  background: #fffffa;
+}
