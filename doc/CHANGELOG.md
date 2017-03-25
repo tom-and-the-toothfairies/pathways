@@ -10,6 +10,13 @@ All notable changes to this project will be documented in this file.
 - Parser now reports PML construct name clashes. These are then displayed to the
   user in a similar manner to other warnings.
 
+### Changed
+- Updated how warnings are displayed. Where possible, warnings now contain a
+  preview of the section of the PML file that caused the warning. This is
+  currently implemented for `Unnamed Constructs` and `PML Construct Name
+  Clashes`. We intend to use a similar design for other errors and warnings in
+  the future.
+
 ### Fixed
 - Running automated integration tests will now correctly test the release
   matching the current tag that is checked out.
