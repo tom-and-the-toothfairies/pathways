@@ -27,6 +27,36 @@ format. These `feature` files can be found [here](../athloi/features).
 To manually verify features, run the project as outlined in the [README].
 The homepage is available at [localhost:4000](http://localhost:4000).
 
+## Report Unnamed PML Construct
+
+### Description
+
+The system must identify PML constructs that are not named. The system must
+display useful error messages about such constructs to the user.
+
+### Testing
+
+Visit the [homepage] and select the file
+`panacea/test/fixtures/analysis/unnamed.pml`. Press `Submit`. A warning should
+now be visible outlining the `Unnamed PML Constructs` in the file.
+
+Specifically, it should highlight an unnamed `task` on line `2`.
+
+## Report PML Construct Name Clashes
+
+### Description
+
+The system must identify PML constructs that have the same name. The system
+must display useful error messages about such constructs to the user.
+
+### Testing
+
+Visit the [homepage] and select the file
+`panacea/test/fixtures/analysis/clashes.pml`. Press `Submit`. A warning should
+now be visible outlining the `PML Construct Name Clashes` in the file.
+
+Specifically, it should highlight name clashes for constructs named `clash1`
+and `clash2`.
 
 ## PML-TX Save PML to File - Complete
 

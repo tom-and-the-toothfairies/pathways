@@ -1,12 +1,10 @@
 process foo {
-  task {
-    action baz {
-    }
-    action baz2 {
-    }
-    action baz2{
-    }
-    action baz{
-    }
+  action clash1 {
+  }
+  action clash2 {
+  }
+  action clash2 {
+  }
+  action clash1 {
   }
 }
