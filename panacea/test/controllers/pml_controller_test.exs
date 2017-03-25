@@ -66,17 +66,17 @@ defmodule Panacea.PmlControllerTest do
       assert conn.status == 200
       assert response_body(conn) |> Map.get("clashes") == [
         %{
-          "name" => "baz",
+          "name" => "clash1",
           "occurrences" => [
-            %{"line" => 9, "type" => "action"},
-            %{"line" => 3, "type" => "action"}
+            %{"line" => 8, "type" => "action"},
+            %{"line" => 2, "type" => "action"}
           ]
         },
         %{
-          "name" => "baz2",
+          "name" => "clash2",
           "occurrences" => [
-            %{"line" => 7, "type" => "action"},
-            %{"line" => 5, "type" => "action"}
+            %{"line" => 6, "type" => "action"},
+            %{"line" => 4, "type" => "action"}
           ]
         }
       ]

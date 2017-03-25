@@ -46,10 +46,10 @@ Feature: File upload
     And I submit the upload form
     Then I should see the clashes panel
     And I should see the following warnings in the clashes panel:
-      | action baz on line 3  |
-      | action baz on line 9  |
-      | action baz2 on line 5 |
-      | action baz2 on line 7 |
+      | action clash1 on line 2 |
+      | action clash1 on line 8 |
+      | action clash2 on line 4 |
+      | action clash2 on line 6 |
 
   Scenario: uploading a binary file
     When I select "example.png"
