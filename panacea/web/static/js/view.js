@@ -1,9 +1,15 @@
-const drugsPanel = document.getElementById('drugs-panel');
-const unidentifiedDrugsPanel = document.getElementById('unidentified-drugs-panel');
-const ddisPanel = document.getElementById('ddis-panel');
-const errorPanel = document.getElementById('error-panel');
-const pmlDownloadContainer = document.getElementById('pml-download-container');
-const pmlDownloadAnchor = document.getElementById('pml-download-anchor');
+import * as CodeBlock from "./code-block";
+import * as Util from "./util";
+
+const drugsPanel              = document.getElementById('drugs-panel');
+const unidentifiedDrugsPanel  = document.getElementById('unidentified-drugs-panel');
+const ddisPanel               = document.getElementById('ddis-panel');
+const errorPanel              = document.getElementById('error-panel');
+const unnamedPanel            = document.getElementById('unnamed-panel');
+const clashesPanel            = document.getElementById('clashes-panel');
+const pmlDownloadContainer    = document.getElementById('pml-download-container');
+const pmlDownloadAnchor       = document.getElementById('pml-download-anchor');
+export const fileInputElement = document.getElementById('file-input');
 
 const hideElement = element => {
   element.classList.add('hidden');
@@ -17,6 +23,8 @@ export const hideResults = () => {
   hideElement(drugsPanel);
   hideElement(unidentifiedDrugsPanel);
   hideElement(ddisPanel);
+  hideElement(unnamedPanel);
+  hideElement(clashesPanel);
   hideElement(errorPanel);
 };
 
@@ -27,6 +35,55 @@ export const displayDrugs = drugs => {
   drugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
   showElement(drugsPanel);
+};
+
+const displayWarnings = (container, preambleText, warnings, pml) => {
+  container.innerHTML = '';
+
+  const preamble = document.createElement('p');
+  preamble.innerHTML = preambleText;
+  container.appendChild(preamble);
+
+  for (const warning of warnings) {
+    const wrapper = Util.createElementWithClass('div', 'warning-wrapper');
+
+    for (const member of warning) {
+      const details = document.createElement('strong');
+      details.innerHTML = `${member.identifier} on line ${member.line}`;
+      wrapper.appendChild(details);
+
+      const codeBlock = CodeBlock.generate(pml, member.line);
+      wrapper.appendChild(codeBlock);
+    }
+
+    container.appendChild(wrapper);
+  }
+};
+
+export const displayUnnamed = (unnamed, pmlLines) => {
+  const container = document.getElementById('unnamed-text');
+  const preamble = 'I found the following unnamed PML constructs:';
+  const warnings = unnamed.map(({type, line}) => {
+    return [{line, identifier: type}];
+  });
+
+  displayWarnings(container, preamble, warnings, pmlLines);
+  showElement(unnamedPanel);
+};
+
+export const displayClashes = (clashes, pmlLines) => {
+  const container = document.getElementById('clashes-text');
+  const preamble = 'I found the following PML construct name clashes:';
+  const warnings = clashes.map(({occurrences, name}) => {
+    return occurrences
+      .sort((a, b) => a.line - b.line)
+      .map(({type, line}) => {
+        return {line, identifier: `${type} ${name}`};
+      });
+  });
+
+  displayWarnings(container, preamble, warnings, pmlLines);
+  showElement(clashesPanel);
 };
 
 const displayDownloadButton = () => {
@@ -110,7 +167,6 @@ export const restoreFileForm = () => {
 // to make the file input pretty take the filename from the form
 // and place it in a disabled input box right beside it :art:
 const filenameDisplayElement = document.getElementById('filename-display');
-const fileInputElement = document.getElementById('file-input');
 fileInputElement.addEventListener('change', function(e) {
   filenameDisplayElement.value = this.files[0].name;
   hideResults();

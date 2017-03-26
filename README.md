@@ -1,15 +1,15 @@
 # Tom and the Toothfairies
 [![spacemacs badge]][spacemacs github] [![build status badge]][circle ci]
 
-*Note: this document is written Markdown. While it can be easily read in a text
-editor, we recommend viewing our documentation on
-Github [here](https://github.com/tom-and-the-toothfairies/pathways#readme) for
-maximum conveniece - the ability to click links for example.*
+*Note: this document is written in Markdown. While it can be easily read in a
+text editor, we recommend viewing our documentation [on
+Github](https://github.com/tom-and-the-toothfairies/pathways#readme) for
+maximum convenience - click-able links for example*
 
 This file contains instructions on how to install and run the project, as well
 as an overview of the project's design. The target platform is Ubuntu 16.04.
 
-At the time of writing the current release is `1.1`
+At the time of writing the current release is `1.2`
 
 ## Installing Dependencies
 
@@ -48,7 +48,15 @@ $ sudo docker-compose down
 
 ## Features
 
-The feature list for the project can be found [here](./doc/FEATURES.md)
+### Release 2
+
+The feature list for `Release 2` can be found [in the Release 2 features
+document](./doc/FEATURES_RELEASE_2.md).
+
+### Release 1
+
+The feature list for `Release 1` can be found [in the Release 1 features
+document](./doc/FEATURES_RELEASE_1.md).
 
 ## Change Log
 

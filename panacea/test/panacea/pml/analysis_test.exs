@@ -1,10 +1,10 @@
 defmodule Panacea.Pml.AnalysisTest do
   use ExUnit.Case
 
-  @fixtures_dir "test/fixtures"
+  @fixtures_dir "test/fixtures/analysis/"
 
-  defp analyse_test_file do
-    {:ok, pml} = Path.join(@fixtures_dir, "analysis_test.pml") |> File.read()
+  defp analyse_test_file(name) do
+    {:ok, pml} = Path.join(@fixtures_dir, name) |> File.read()
 
     {:ok, ast} = Panacea.Pml.Parser.parse(pml)
     {:ok, analysis} = Panacea.Pml.Analysis.run(ast)
@@ -13,7 +13,7 @@ defmodule Panacea.Pml.AnalysisTest do
 
   describe "run/1" do
     test "it identifies drugs in the AST" do
-      assert analyse_test_file().drugs ==
+      assert analyse_test_file("drugs.pml").drugs ==
         [
           %{label: "cocaine", line: 17},
           %{label: "paracetamol", line: 8}
@@ -21,7 +21,27 @@ defmodule Panacea.Pml.AnalysisTest do
     end
 
     test "it identifies unnamed constructs in the AST" do
-      assert analyse_test_file().unnamed == [%{type: :task, line: 2}]
+      assert analyse_test_file("unnamed.pml").unnamed == [%{type: :task, line: 2}]
+    end
+
+    test "it identifies construct name clashes in the AST" do
+      assert analyse_test_file("clashes.pml").clashes ==
+        [
+          %{
+            name: "clash1",
+            occurrences: [
+              %{line: 8, type: :action},
+              %{line: 2, type: :action}
+            ],
+          },
+          %{
+            name: "clash2",
+            occurrences: [
+              %{line: 6, type: :action},
+              %{line: 4, type: :action}
+            ],
+          }
+        ]
     end
   end
 end

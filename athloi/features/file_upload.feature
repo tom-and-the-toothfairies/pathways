@@ -34,6 +34,23 @@ Feature: File upload
     Then I should see the error panel
     And the error panel title should be "Syntax error"
 
+  Scenario: uploading a PML file with unnamed constructs
+    When I select "analysis/unnamed.pml"
+    And I submit the upload form
+    Then I should see the unnamed panel
+    And I should see the following warnings in the unnamed panel:
+      | task on line 2 |
+
+  Scenario: uploading a PML file with clashing construct names
+    When I select "analysis/clashes.pml"
+    And I submit the upload form
+    Then I should see the clashes panel
+    And I should see the following warnings in the clashes panel:
+      | action clash1 on line 2 |
+      | action clash1 on line 8 |
+      | action clash2 on line 4 |
+      | action clash2 on line 6 |
+
   Scenario: uploading a binary file
     When I select "example.png"
     And I submit the upload form

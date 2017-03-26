@@ -22,6 +22,8 @@ config :panacea, :asclepius,
   uri: URI.parse("http://localhost:5000"),
   api: Panacea.Asclepius.Remote.HTTP
 
+config :panacea, :composite_pml_constructs, [:task, :sequence, :branch, :selection, :iteration, :action, :process]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

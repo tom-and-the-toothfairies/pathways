@@ -33,7 +33,7 @@ async function handleResponse(response, handle) {
 }
 
 async function handleDrugsResponse(response) {
-  await handleResponse(response, async function ({drugs, ast}) {
+  await handleResponse(response, async function ({drugs, unnamed, clashes, ast}) {
     const labels = drugs.map(x => x.label);
 
     if (labels.length > 0) {
@@ -45,12 +45,23 @@ async function handleDrugsResponse(response) {
     } else {
       View.displayNoDrugsError();
     }
+
+    getFileContents(pml => {
+      const pmlLines = pml.split('\n');
+
+      if (unnamed.length > 0) {
+        View.displayUnnamed(unnamed, pmlLines);
+      }
+
+      if (clashes.length > 0) {
+        View.displayClashes(clashes, pmlLines);
+      }
+    });
   });
 }
 
 async function handleUrisResponse(response, ast) {
   await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
-    const uris = found.map(x => x.uri);
     const labels = found.map(x => x.label);
     const urisToLabels = found.reduce((acc, {uri, label}) => {
       acc[uri] = label;
@@ -67,9 +78,9 @@ async function handleUrisResponse(response, ast) {
       View.displayUnidentifiedDrugs(unidentifiedDrugs);
     }
 
-    if (uris.length > 1) {
+    if (found.length > 1) {
       try {
-        await handleDdisResponse(await Request.ddis(uris), urisToLabels);
+        await handleDdisResponse(await Request.ddis(found, ast), urisToLabels);
       } catch (e) {
         View.displayNetworkError(e);
       }
@@ -84,3 +95,18 @@ async function handleDdisResponse(response, urisToLabels) {
     View.displayDdis(ddis, urisToLabels);
   });
 }
+
+const getFileContents = callback => {
+  const file = View.fileInputElement.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = e => {
+      const contents = e.target.result;
+      callback(contents);
+    };
+  }
+  else {
+    throw 'file could not be read';
+  }
+};

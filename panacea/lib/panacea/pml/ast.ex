@@ -9,6 +9,34 @@ defmodule Panacea.Pml.Ast do
     do_unquote(ast, 0)
   end
 
+  def encode(ast) do
+    ast
+    |> :erlang.term_to_binary()
+    |> Base.encode64()
+  end
+
+  def decode(ast) do
+    ast
+    |> decode64()
+    |> to_erlang_term()
+  end
+
+  defp decode64(encoded_ast) do
+    case Base.decode64(encoded_ast) do
+      {:ok, binary} ->
+        {:ok, binary}
+      :error ->
+        {:error, {:encoding_error, "AST is not base64 encoded."}}
+    end
+  end
+
+  defp to_erlang_term({:ok, binary}) do
+    {:ok, :erlang.binary_to_term(binary)}
+  end
+  defp to_erlang_term({:error, reason}) do
+    {:error, reason}
+  end
+
   defp do_unquote({type, attrs, children}, depth) when type in @multi_line_constructs do
     optional_name = get_with_default(attrs, :name)
     optional_type = get_with_default(attrs, :type)
@@ -32,7 +60,7 @@ defmodule Panacea.Pml.Ast do
   defp get_with_default(attrs, key) do
     case Keyword.get(attrs, key) do
       nil -> ""
-      x   -> [" ", x]
+      x   -> [" ", to_string(x)]
     end
   end
 end

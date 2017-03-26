@@ -1,6 +1,25 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
+## [1.2] 2017-03-26
+
+### Added
+- Added a features document for Release 2.
+- Parser now reports unnamed PML constructs. These are then displayed to the
+  user in a similar manner to other warnings.
+- Parser now reports PML construct name clashes. These are then displayed to the
+  user in a similar manner to other warnings.
+
+### Changed
+- Updated how warnings are displayed. Where possible, warnings now contain a
+  preview of the section of the PML file that caused the warning. This is
+  currently implemented for `Unnamed Constructs` and `PML Construct Name
+  Clashes`. We intend to use a similar design for other errors and warnings in
+  the future.
+
+### Fixed
+- Running automated integration tests will now correctly test the release
+  matching the current tag that is checked out.
 
 ## [1.1] 2017-03-19
 
@@ -120,7 +139,8 @@ All notable changes to this project will be documented in this file.
   docker service: pathways.
 - Installation instructions in README
 
-[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.1...iteration-6
+[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.2...iteration-7
+[1.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.1...1.2
 [1.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.0...1.1
 [1.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.3...1.0
 [0.3]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.2...0.3

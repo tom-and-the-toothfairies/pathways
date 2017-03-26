@@ -52,11 +52,33 @@ defmodule Panacea.PmlControllerTest do
     end
 
     test "identifies unnamed constructs in correct pml", %{conn: conn} do
-      conn = post_to_upload(conn, "analysis_test.pml")
+      conn = post_to_upload(conn, "analysis/unnamed.pml")
 
       assert conn.status == 200
       assert response_body(conn) |> Map.get("unnamed") == [
         %{"type" => "task", "line" => 2}
+      ]
+    end
+
+    test "identifies name clashes between constructs in correct pml", %{conn: conn} do
+      conn = post_to_upload(conn, "analysis/clashes.pml")
+
+      assert conn.status == 200
+      assert response_body(conn) |> Map.get("clashes") == [
+        %{
+          "name" => "clash1",
+          "occurrences" => [
+            %{"line" => 8, "type" => "action"},
+            %{"line" => 2, "type" => "action"}
+          ]
+        },
+        %{
+          "name" => "clash2",
+          "occurrences" => [
+            %{"line" => 6, "type" => "action"},
+            %{"line" => 4, "type" => "action"}
+          ]
+        }
       ]
     end
 
@@ -73,12 +95,11 @@ defmodule Panacea.PmlControllerTest do
         |> File.read!()
         |> Panacea.Pml.Parser.parse()
 
-      received_ast =
+      {:ok, received_ast} =
         conn
         |> response_body()
         |> Map.get("ast")
-        |> Base.decode64!()
-        |> :erlang.binary_to_term()
+        |> Panacea.Pml.Ast.decode()
 
       assert received_ast == ast
     end
