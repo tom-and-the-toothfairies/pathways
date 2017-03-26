@@ -41,11 +41,7 @@ defmodule Panacea.AstControllerTest do
       |> String.replace_trailing("\n", "")
 
       {:ok, ast} = Panacea.Pml.Parser.parse(pml)
-
-      encoded_ast =
-        ast
-        |> :erlang.term_to_binary()
-        |> Base.encode64()
+      encoded_ast = Panacea.Pml.Ast.encode(ast)
 
       conn = get conn, ast_path(conn, :to_pml), %{ast: encoded_ast}
 

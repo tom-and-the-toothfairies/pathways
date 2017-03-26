@@ -1,7 +1,8 @@
 defmodule Panacea.AstController do
   use Panacea.Web, :controller
 
-  def to_pml(conn, %{"ast" => encoded_ast}) do encoded_ast
+  def to_pml(conn, %{"ast" => encoded_ast}) do
+    encoded_ast
     |> Panacea.Pml.Ast.decode()
     |> to_pml()
     |> respond(conn)

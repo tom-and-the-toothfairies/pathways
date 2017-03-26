@@ -4,11 +4,7 @@ defmodule Panacea.Pml.Analysis do
   defstruct [:ast, :clashes, :drugs, :unnamed]
 
   def run(ast) do
-    encoded_ast =
-      ast
-      |> :erlang.term_to_binary()
-      |> Base.encode64()
-
+    encoded_ast = Panacea.Pml.Ast.encode(ast)
     clashes = Clashes.run(ast)
     drugs = Drugs.run(ast)
     unnamed = Unnamed.run(ast)

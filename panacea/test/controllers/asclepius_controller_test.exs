@@ -13,9 +13,7 @@ defmodule Panacea.AsclepiusControllerTest do
     }
     """
     {:ok, ast} = Panacea.Pml.Parser.parse(pml)
-    ast
-    |> :erlang.term_to_binary()
-    |> Base.encode64()
+    Panacea.Pml.Ast.encode(ast)
   end
 
   describe "AsclepiusController.uris_for_labels/2" do

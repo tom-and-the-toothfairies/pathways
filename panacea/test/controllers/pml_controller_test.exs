@@ -95,12 +95,11 @@ defmodule Panacea.PmlControllerTest do
         |> File.read!()
         |> Panacea.Pml.Parser.parse()
 
-      received_ast =
+      {:ok, received_ast} =
         conn
         |> response_body()
         |> Map.get("ast")
-        |> Base.decode64!()
-        |> :erlang.binary_to_term()
+        |> Panacea.Pml.Ast.decode()
 
       assert received_ast == ast
     end
