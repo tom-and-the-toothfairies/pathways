@@ -1,7 +1,7 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
-## [Unreleased]
+## [1.2] 2017-03-26
 
 ### Added
 - Added a features document for Release 2.
@@ -139,7 +139,8 @@ All notable changes to this project will be documented in this file.
   docker service: pathways.
 - Installation instructions in README
 
-[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.1...iteration-6
+[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.2...iteration-7
+[1.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.1...1.2
 [1.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.0...1.1
 [1.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.3...1.0
 [0.3]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.2...0.3
