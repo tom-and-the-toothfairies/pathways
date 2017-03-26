@@ -9,6 +9,12 @@ defmodule Panacea.Pml.Ast do
     do_unquote(ast, 0)
   end
 
+  def encode(ast) do
+    ast
+    |> :erlang.term_to_binary()
+    |> Base.encode64()
+  end
+
   def decode(ast) do
     ast
     |> decode64()
