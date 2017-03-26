@@ -27,7 +27,7 @@ format. These `feature` files can be found [here](../athloi/features).
 To manually verify features, run the project as outlined in the [README].
 The homepage is available at [localhost:4000](http://localhost:4000).
 
-## Report Unnamed PML Construct
+## Report Unnamed PML Construct - Complete
 
 ### Description
 
@@ -42,7 +42,7 @@ now be visible outlining the `Unnamed PML Constructs` in the file.
 
 Specifically, it should highlight an unnamed `task` on line `2`.
 
-## Report PML Construct Name Clashes
+## Report PML Construct Name Clashes - Complete
 
 ### Description
 
