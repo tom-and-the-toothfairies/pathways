@@ -11,6 +11,11 @@ Rules.
 % keywords
 
 drug          : {token, {drug, TokenLine}}.
+time          : {token, {time, TokenLine}}.
+years         : {token, {years, TokenLine}}.
+days          : {token, {days, TokenLine}}.
+hours         : {token, {hours, TokenLine}}.
+minutes       : {token, {minutes, TokenLine}}.
 process       : {token, {process, TokenLine}}.
 task          : {token, {task, TokenLine}}.
 action        : {token, {action, TokenLine}}.

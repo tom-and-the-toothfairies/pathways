@@ -13,6 +13,8 @@ expr
 logical_combination
 operator
 requires_expr
+time_expr
+time_expr_list
 operation
 value
 variable
@@ -61,6 +63,11 @@ executable
 string
 ident
 drug
+time
+years
+days
+hours
+minutes
 number.
 
 Rootsymbol pml.
@@ -127,9 +134,24 @@ action_attribute ->
 
 requires_expr ->
     drug '{' string '}'            : construct('$1', [], value_of('$3')).
-
+requires_expr ->
+    time '{' time_expr_list '}'    : construct('$1', [], value_of_time('$3')).
 requires_expr ->
     expression : '$1'.
+
+time_expr ->
+    years '{' number '}'           : construct('$1', [], value_of('$3')).
+time_expr ->
+    days '{' number '}'            : construct('$1', [], value_of('$3')).
+time_expr ->
+    hours '{' number '}'           : construct('$1', [], value_of('$3')).
+time_expr ->
+    minutes '{' number '}'         : construct('$1', [], value_of('$3')).
+
+time_expr_list ->
+    '$empty'                       : [].
+time_expr_list ->
+    time_expr time_expr_list       : ['$1'|'$2'].
 
 expression -> expr logical_combination : construct(expression, [], join_with_spaces(['$1', '$2'])).
 
@@ -168,6 +190,45 @@ operator -> '<=' : "<=".
 operator -> '>=' : ">=".
 
 Erlang code.
+
+validate_time({TimeType, [{line, Line}], Val}) ->
+  NewVal = list_to_integer(Val),
+  case TimeType of
+    years when NewVal >= 100 ->
+      return_error(Line, "years cannot be more than 99 (was " ++ integer_to_list(NewVal) ++ ")");
+    days when NewVal >= 365 ->
+      return_error(Line, "days cannot be more than 364 (was " ++ integer_to_list(NewVal) ++ ")");
+    hours when NewVal >= 24 ->
+      return_error(Line, "hours cannot be more than 23 (was " ++ integer_to_list(NewVal) ++ ")");
+    minutes when NewVal >= 60 ->
+      return_error(Line, "minutes cannot be more than 59 (was " ++ integer_to_list(NewVal) ++ ")");
+    _Else ->
+      NewVal
+  end.
+
+get_times([], T) ->
+  T;
+get_times([Time = {TimeType, [{line, Line}], Val}|T], Accum) ->
+  case maps:is_key(TimeType,Accum) of
+    true ->
+      return_error(Line, "'" ++ atom_to_list(TimeType) ++ "' used more than once");
+    false ->
+      NewVal = list_to_integer(Val),
+      NewVal = validate_time(Time),
+      NewAccum = maps:put(TimeType, NewVal, Accum),
+      get_times(T, NewAccum)
+  end.
+
+sum_times(TimeMap) ->
+   Years = maps:get(years, TimeMap, 0),
+   Days = maps:get(days, TimeMap, 0),
+   Hours = maps:get(hours, TimeMap, 0),
+   Minutes = maps:get(minutes, TimeMap, 0),
+  (((((Years * 365) + Days) * 24) + Hours) * 60) + Minutes.
+
+value_of_time(TimeList) ->
+  TimeMap = get_times(TimeList, maps:new()),
+  sum_times(TimeMap).
 
 value_of({_, _, Value}) ->
     Value.
