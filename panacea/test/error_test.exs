@@ -4,6 +4,16 @@ defmodule Panacea.Web.ErrorTest do
 
   describe "from_reason/1" do
     test "it generates a nice error" do
+      assert {:invalid_data, "foo", %{line: 10}} |> Error.from_reason ==
+        %Error{
+          status_code: :unprocessable_entity,
+          title: "Invalid data",
+          detail: "foo",
+          meta: %{line: 10}
+        }
+    end
+
+    test "meta defaults to an empty map when no metadata is provided" do
       assert {:invalid_data, "foo"} |> Error.from_reason ==
         %Error{
           status_code: :unprocessable_entity,
@@ -17,12 +27,6 @@ defmodule Panacea.Web.ErrorTest do
   describe "title/1" do
     test "it converts the atom to a sentence" do
       assert Error.title(:encoding_error) == "Encoding error"
-    end
-  end
-
-  describe "meta/2" do
-    test "it generates a map of metadata for the error" do
-      assert Error.meta(:invalid_data, "foo") == %{}
     end
   end
 

@@ -39,7 +39,13 @@ defmodule Panacea.Pml.ParserTest do
       process foo {{
       """
 
-      assert Parser.parse(pml) == {:error,  {:syntax_error, "line 1 -- syntax error before: '{'"}}
+      assert Parser.parse(pml) == { :error,
+        {
+          :syntax_error,
+          "line 1 -- syntax error before: '{'",
+          %{line: 1}
+        }
+      }
     end
   end
 end
