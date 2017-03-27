@@ -2,12 +2,15 @@ defmodule Panacea.Web.Error do
   defstruct [:status_code, :title, :detail, :meta]
   alias __MODULE__
 
-  def from_reason({type, message}) do
-    %Error{
+  def from_reason({type, message}), do: new(type, message, %{})
+  def from_reason({type, message, meta}) when is_map(meta), do: new(type, message, meta)
+
+  defp new(type, message, meta) do
+   %Error{
       status_code: status_code(type),
       title: title(type),
       detail: message,
-      meta: meta(type, message)
+      meta: meta
     }
   end
 
@@ -29,6 +32,4 @@ defmodule Panacea.Web.Error do
     |> String.replace("_", " ")
     |> String.capitalize()
   end
-
-  def meta(_, _), do: %{}
 end
