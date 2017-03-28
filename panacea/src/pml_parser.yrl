@@ -211,9 +211,9 @@ validate_time(Time = {TimeType, _, Val}) ->
       NewVal
   end.
 
-get_times([], T) ->
+check_times([], T) ->
   T;
-get_times([Time = {TimeType, [{line, Line}], Val}|T], Accum) ->
+check_times([Time = {TimeType, [{line, Line}], Val}|T], Accum) ->
   case maps:is_key(TimeType,Accum) of
     true ->
       return_error(Line, "'" ++ atom_to_list(TimeType) ++ "' used more than once");
@@ -221,19 +221,12 @@ get_times([Time = {TimeType, [{line, Line}], Val}|T], Accum) ->
       NewVal = list_to_integer(Val),
       NewVal = validate_time(Time),
       NewAccum = maps:put(TimeType, NewVal, Accum),
-      get_times(T, NewAccum)
+      check_times(T, NewAccum)
   end.
 
-sum_times(TimeMap) ->
-   Years = maps:get(years, TimeMap, 0),
-   Days = maps:get(days, TimeMap, 0),
-   Hours = maps:get(hours, TimeMap, 0),
-   Minutes = maps:get(minutes, TimeMap, 0),
-  (((((Years * 365) + Days) * 24) + Hours) * 60) + Minutes.
-
 value_of_time(TimeList) ->
-  TimeMap = get_times(TimeList, maps:new()),
-  sum_times(TimeMap).
+  check_times(TimeList, maps:new()),
+  TimeList.
 
 value_of({_, _, Value}) ->
     Value.
