@@ -68,6 +68,7 @@ years
 days
 hours
 minutes
+natural
 number.
 
 Rootsymbol pml.
@@ -140,13 +141,13 @@ requires_expr ->
     expression : '$1'.
 
 time_expr ->
-    years '{' number '}'           : construct('$1', [], value_of('$3')).
+    years '{' natural '}'          : construct('$1', [], value_of('$3')).
 time_expr ->
-    days '{' number '}'            : construct('$1', [], value_of('$3')).
+    days '{' natural '}'           : construct('$1', [], value_of('$3')).
 time_expr ->
-    hours '{' number '}'           : construct('$1', [], value_of('$3')).
+    hours '{' natural '}'          : construct('$1', [], value_of('$3')).
 time_expr ->
-    minutes '{' number '}'         : construct('$1', [], value_of('$3')).
+    minutes '{' natural '}'        : construct('$1', [], value_of('$3')).
 
 time_expr_list ->
     '$empty'                       : [].
@@ -167,6 +168,7 @@ operation -> '$empty'       : "".
 value -> '!' expression     : "!" ++ value_of('$2').
 value -> '(' expression ')' : "(" ++ value_of('$2') ++ ")".
 value -> string             : value_of('$1').
+value -> natural            : value_of('$1').
 value -> number             : value_of('$1').
 value -> variable           : '$1'.
 
@@ -191,17 +193,20 @@ operator -> '>=' : ">=".
 
 Erlang code.
 
-validate_time({TimeType, [{line, Line}], Val}) ->
+time_out_of_range_error({TimeType, [{line, Line}], Val}, MaxVal) ->
+  return_error(Line, "'" ++ atom_to_list(TimeType) ++ "' cannot be more than " ++ MaxVal ++ " (was " ++ Val ++ ")").
+
+validate_time(Time = {TimeType, _, Val}) ->
   NewVal = list_to_integer(Val),
   case TimeType of
     years when NewVal >= 100 ->
-      return_error(Line, "years cannot be more than 99 (was " ++ integer_to_list(NewVal) ++ ")");
+      time_out_of_range_error(Time, "99");
     days when NewVal >= 365 ->
-      return_error(Line, "days cannot be more than 364 (was " ++ integer_to_list(NewVal) ++ ")");
+      time_out_of_range_error(Time, "364");
     hours when NewVal >= 24 ->
-      return_error(Line, "hours cannot be more than 23 (was " ++ integer_to_list(NewVal) ++ ")");
+      time_out_of_range_error(Time, "23");
     minutes when NewVal >= 60 ->
-      return_error(Line, "minutes cannot be more than 59 (was " ++ integer_to_list(NewVal) ++ ")");
+      time_out_of_range_error(Time, "59");
     _Else ->
       NewVal
   end.

@@ -1,9 +1,10 @@
 Definitions.
 
-IDENT = [a-zA-Z0-9_]+
-WS    = [\s\t\n\r]+
-NUMBER = ([0-9]+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?
-STRING = "[^"]*"
+IDENT   = [a-zA-Z0-9_]+
+WS      = [\s\t\n\r]+
+NATURAL = [0-9]+
+NUMBER  = ({NATURAL}(\.{NATURAL})?|\.{NATURAL})([eE][+-]?{NATURAL})?
+STRING  = "[^"]*"
 COMMENT = \/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/
 
 Rules.
@@ -55,6 +56,7 @@ executable    : {token, {executable, TokenLine}}.
 {COMMENT}     : skip_token.
 {WS}          : skip_token.
 {STRING}      : {token, {string, TokenLine, TokenChars}}.
+{NATURAL}     : {token, {natural, TokenLine, TokenChars}}.
 {NUMBER}      : {token, {number, TokenLine, TokenChars}}.
 {IDENT}       : {token, {ident, TokenLine, TokenChars}}.
 
