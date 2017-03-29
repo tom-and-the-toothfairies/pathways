@@ -119,7 +119,7 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       assert ddis |> Enum.count() == 2
     end
 
-    test "it adds the correct drug metadata" do
+    test "it adds the correct DDI metadata" do
       pml = """
       process repeated_alternative_ddis {
         iteration {
@@ -137,6 +137,8 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       ast = parse_pml(pml)
       [ddi] = Ddis.run(ast, test_ddis(), test_drugs())
 
+      assert ddi["category"] == :repeated_alternative
+
       assert ddi["drug_a"] == %{
         "uri" => "http://purl.com/paracetamol",
         "label" => "paracetamol",
@@ -148,6 +150,11 @@ defmodule Panacea.Pml.Analysis.DdisTest do
         "label" => "cocaine",
         "line" => 8
       }
+
+      assert ddi["enclosing_constructs"] == [
+        %{ "type" => :selection, "line" => 3 },
+        %{ "type" => :iteration, "line" => 2 }
+      ]
     end
   end
 end
