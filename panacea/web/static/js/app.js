@@ -63,10 +63,6 @@ async function handleDrugsResponse(response) {
 async function handleUrisResponse(response, ast) {
   await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
     const labels = found.map(x => x.label);
-    const urisToLabels = found.reduce((acc, {uri, label}) => {
-      acc[uri] = label;
-      return acc;
-    }, {});
 
     View.preparePMLDownloadButton(Request.generatePMLHref(ast));
 
@@ -80,7 +76,7 @@ async function handleUrisResponse(response, ast) {
 
     if (found.length > 1) {
       try {
-        await handleDdisResponse(await Request.ddis(found, ast), urisToLabels);
+        await handleDdisResponse(await Request.ddis(found, ast));
       } catch (e) {
         View.displayNetworkError(e);
       }
@@ -90,9 +86,9 @@ async function handleUrisResponse(response, ast) {
   });
 }
 
-async function handleDdisResponse(response, urisToLabels) {
+async function handleDdisResponse(response) {
   await handleResponse(response, ({ddis}) => {
-    View.displayDdis(ddis, urisToLabels);
+    View.displayDdis(ddis);
   });
 }
 
