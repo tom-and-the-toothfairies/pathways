@@ -166,7 +166,7 @@ plain English into a format that can be used when querying DINTO.
 This feature can be manually tested by uploading files.
 
 Visit the [homepage] and select a PML file that contains drugs; for example
-`panacea/text/fixtures/no_ddis.pml`. Press the `Submit` button. You should see
+`panacea/test/fixtures/no_ddis.pml`. Press the `Submit` button. You should see
 that "cocaine" and "paracetamol" have been identified as drugs in DINTO. Testing
 `panacea/test/fixtures/unidentifiable_drugs.pml` returns drugs that cannot be
 identified in DINTO and are highlighted with a warning as a result.
@@ -222,7 +222,7 @@ $ sudo docker-compose logs -f chiron
 ```
 
 Visit the [homepage] and select a PML file that contains drugs; for example
-`panacea/text/fixtures/ddis.pml`. Press the `Submit` button. You should see log
+`panacea/test/fixtures/ddis.pml`. Press the `Submit` button. You should see log
 entries indicating that queries were made (there will be requests such as `POST
 http://chiron:3030/dinto/query`) and the contents of those queries.
 
