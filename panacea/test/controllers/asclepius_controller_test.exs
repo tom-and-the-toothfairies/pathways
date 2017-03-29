@@ -102,8 +102,16 @@ defmodule Panacea.AsclepiusControllerTest do
         [
           %{
             "category" => "sequential",
-            "drug_a" => "http://purl.obolibrary.org/obo/DINTO_DB00214",
-            "drug_b" => "http://purl.obolibrary.org/obo/DINTO_DB00519",
+            "drug_a" => %{
+              "uri" => "http://purl.obolibrary.org/obo/DINTO_DB00214",
+              "label" => "torasemide",
+              "line" => 3
+            },
+            "drug_b" => %{
+              "uri" => "http://purl.obolibrary.org/obo/DINTO_DB00519",
+              "label" => "trandolapril",
+              "line" => 6
+            },
             "label" => "torasemide/trandolapril DDI",
             "uri"   => "http://purl.obolibrary.org/obo/DINTO_11031",
             "enclosing_constructs" => [

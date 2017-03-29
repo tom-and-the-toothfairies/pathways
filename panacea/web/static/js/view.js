@@ -108,16 +108,16 @@ export const displayUnidentifiedDrugs = drugs => {
   showElement(unidentifiedDrugsPanel);
 };
 
-export const displayDdis = (ddis, urisToLabels) => {
+export const displayDdis = (ddis) => {
   const ddisTextElement = document.getElementById('ddis-text');
 
   if (ddis.length > 0) {
     const preamble = 'I have identified interactions between the following drugs:';
-    const ddisHTML = ddis.map(({drug_a: uriA, drug_b: uriB}) => {
-      const drugA = urisToLabels[uriA];
-      const drugB = urisToLabels[uriB];
+    const ddisHTML = ddis.map(({drug_a, drug_b}) => {
+      const labelA = drug_a.label;
+      const labelB = drug_b.label;
 
-      return `<li><strong>${drugA}</strong> and <strong>${drugB}</strong></li>`;
+      return `<li><strong>${labelA}</strong> and <strong>${labelB}</strong></li>`;
     }).join('');
 
     ddisTextElement.innerHTML = `<p>${preamble}</p><ul>${ddisHTML}</ul>`;
