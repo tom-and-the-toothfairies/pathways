@@ -1,5 +1,5 @@
 defmodule Panacea.Pml.Analysis.DdisTest do
-  alias Panacea.Pml.Analysis
+  alias Panacea.Pml.Analysis.Ddis
   use ExUnit.Case
 
   defp parse_pml(pml) do
@@ -33,20 +33,8 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       }
       """
       ast = parse_pml(pml)
-
-      assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
-        %{
-          "category" => :sequential,
-          "drug_a" => "http://purl.com/paracetamol",
-          "drug_b" => "http://purl.com/cocaine",
-          "enclosing_constructs" => [
-            %{
-              "type" => :process,
-              "line" => 1
-            }
-          ]
-        }
-      ]
+      [%{"category" => category}] = Ddis.run(ast, test_ddis(), test_drugs())
+      assert category == :sequential
     end
 
     test "it categorizes Parallel DDIs correctly" do
@@ -63,20 +51,9 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       }
       """
       ast = parse_pml(pml)
+      [%{"category" => category}] = Ddis.run(ast, test_ddis(), test_drugs())
 
-      assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
-        %{
-          "category" => :parallel,
-          "drug_a" => "http://purl.com/paracetamol",
-          "drug_b" => "http://purl.com/cocaine",
-          "enclosing_constructs" => [
-            %{
-              "type" => :branch,
-              "line" => 2
-            }
-          ]
-        }
-      ]
+      assert category == :parallel
     end
 
     test "it categorizes Alternative non-DDIs correctly" do
@@ -93,20 +70,9 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       }
       """
       ast = parse_pml(pml)
+      [%{"category" => category}] = Ddis.run(ast, test_ddis(), test_drugs())
 
-      assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
-        %{
-          "category" => :alternative,
-          "drug_a" => "http://purl.com/paracetamol",
-          "drug_b" => "http://purl.com/cocaine",
-          "enclosing_constructs" => [
-            %{
-              "type" => :selection,
-              "line" => 2
-            }
-          ]
-        }
-      ]
+      assert category == :alternative
     end
 
     test "it categorizes Repeated Alternative DDIs correctly" do
@@ -125,24 +91,9 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       }
       """
       ast = parse_pml(pml)
+      [%{"category" => category}] = Ddis.run(ast, test_ddis(), test_drugs())
 
-      assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
-        %{
-          "category" => :repeated_alternative,
-          "drug_a" => "http://purl.com/paracetamol",
-          "drug_b" => "http://purl.com/cocaine",
-          "enclosing_constructs" => [
-            %{
-              "type" => :selection,
-              "line" => 3
-            },
-            %{
-              "type" => :iteration,
-              "line" => 2
-            }
-          ]
-        }
-      ]
+      assert category == :repeated_alternative
     end
 
     test "it can handle repeated drugs" do
@@ -163,108 +114,40 @@ defmodule Panacea.Pml.Analysis.DdisTest do
       """
 
       ast = parse_pml(pml)
+      ddis = Ddis.run(ast, test_ddis(), test_drugs())
 
-      assert Analysis.Ddis.run(ast, test_ddis(), test_drugs()) == [
-        %{
-          "category" => :alternative,
-          "drug_a" => "http://purl.com/paracetamol",
-          "drug_b" => "http://purl.com/cocaine",
-          "enclosing_constructs" => [
-            %{
-              "type" => :selection,
-              "line" => 2
-            }
-          ]
-        },
-        %{
-          "category" => :alternative,
-          "drug_a" => "http://purl.com/paracetamol",
-          "drug_b" => "http://purl.com/cocaine",
-          "enclosing_constructs" => [
-            %{
-              "type" => :selection,
-              "line" => 2
-            }
-          ]
-        }
-      ]
+      assert ddis |> Enum.count() == 2
     end
 
-    test "it can handle more complicated PML" do
+    test "it adds the correct drug metadata" do
       pml = """
-      process proc {
-        selection {
-          action bar {
-            requires { drug { "paracetamol" } }
-          }
-          branch {
-            action baz {
-              requires { drug { "flat seven up" } }
-            }
-            action foo {
-              requires { drug { "cocaine" } }
-            }
-          }
-          sequence {
+      process repeated_alternative_ddis {
+        iteration {
+          selection {
             action s1 {
-              requires { drug { "heroin" } }
+              requires { drug { "paracetamol" } }
             }
             action s2 {
-              requires { drug { "skittles" } }
+              requires { drug { "cocaine" } }
             }
           }
         }
       }
       """
-      ddis = [
-        %{"drug_a" => "http://purl.com/paracetamol", "drug_b" => "http://purl.com/cocaine"},
-        %{"drug_a" => "http://purl.com/cocaine", "drug_b" => "http://purl.com/flat_seven_up"},
-        %{"drug_a" => "http://purl.com/heroin", "drug_b" => "http://purl.com/skittles"}
-      ]
-      drugs = [
-        %{"label" => "paracetamol", "uri" => "http://purl.com/paracetamol"},
-        %{"label" => "cocaine", "uri" => "http://purl.com/cocaine"},
-        %{"label" => "flat seven up", "uri" => "http://purl.com/flat_seven_up"},
-        %{"label" => "heroin", "uri" => "http://purl.com/heroin"},
-        %{"label" => "skittles", "uri" => "http://purl.com/skittles"},
-      ]
       ast = parse_pml(pml)
+      [ddi] = Ddis.run(ast, test_ddis(), test_drugs())
 
-      assert Analysis.Ddis.run(ast, ddis, drugs) == [
-        %{
-          "category" => :alternative,
-          "drug_a" => "http://purl.com/paracetamol",
-          "drug_b" => "http://purl.com/cocaine",
-          "enclosing_constructs" => [
-            %{
-              "type" => :selection,
-              "line" => 2
-            }
-          ]
-        },
-        %{
-          "category" => :parallel,
-          "drug_a" => "http://purl.com/cocaine",
-          "drug_b" => "http://purl.com/flat_seven_up",
-          "enclosing_constructs" => [
-            %{
-              "type" => :branch,
-              "line" => 6
-            }
-          ]
-        },
-        %{
-          "category" => :sequential,
-          "drug_a" => "http://purl.com/heroin",
-          "drug_b" => "http://purl.com/skittles",
-          "enclosing_constructs" => [
-            %{
-              "type" => :sequence,
-              "line" => 14
-            }
-          ]
-        }
-      ]
+      assert ddi["drug_a"] == %{
+        "uri" => "http://purl.com/paracetamol",
+        "label" => "paracetamol",
+        "line" => 5
+      }
+
+      assert ddi["drug_b"] == %{
+        "uri" => "http://purl.com/cocaine",
+        "label" => "cocaine",
+        "line" => 8
+      }
     end
   end
 end
