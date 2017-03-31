@@ -31,9 +31,26 @@ export const hideResults = () => {
 
 export const displayDrugs = drugs => {
   const drugsTextElement = document.getElementById('drugs-text');
+  const preambleElement = document.createElement('p');
+  const drugsList = document.createElement('ul');
   const preamble = 'I recognised the following drugs:';
-  const drugsHTML = drugs.map(d => `<li><a target="_blank" href="${d.uri}">${d.label}</a></li>`).join('');
-  drugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
+
+  preambleElement.innerHTML = preamble;
+  drugsTextElement.innerHTML = '';
+
+  for (const drug of drugs) {
+    const drugListElement = document.createElement('li');
+    const drugLinkElement = document.createElement('a');
+    drugLinkElement.innerHTML = drug.label;
+    drugLinkElement.href = drug.uri;
+    drugLinkElement.target = '_blank';
+
+    drugListElement.appendChild(drugLinkElement);
+    drugsList.appendChild(drugListElement);
+  }
+
+  drugsTextElement.appendChild(preambleElement);
+  drugsTextElement.appendChild(drugsList);
 
   showElement(drugsPanel);
 };
