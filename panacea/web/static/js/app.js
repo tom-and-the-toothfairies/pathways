@@ -1,9 +1,8 @@
-import "babel-polyfill";
-import "phoenix_html";
-import "whatwg-fetch";
-import * as Request from "./request";
-import * as View from "./view";
-
+import 'babel-polyfill';
+import 'bootstrap';
+import 'whatwg-fetch';
+import * as Request from './request';
+import * as View from './view';
 
 document.getElementById('file-form').addEventListener('submit', e => {
   e.preventDefault();
@@ -101,8 +100,7 @@ const getFileContents = callback => {
       const contents = e.target.result;
       callback(contents);
     };
-  }
-  else {
+  } else {
     throw 'file could not be read';
   }
 };

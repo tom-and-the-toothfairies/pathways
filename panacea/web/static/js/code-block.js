@@ -1,4 +1,4 @@
-import * as Util from "./util";
+import * as Util from './util';
 
 export const generate = (lines, highlightLineNumber, surroundingLines = 2) => {
   const highlightIndex = highlightLineNumber - 1;
