@@ -9,7 +9,8 @@ const unnamedPanel            = document.getElementById('unnamed-panel');
 const clashesPanel            = document.getElementById('clashes-panel');
 const pmlDownloadContainer    = document.getElementById('pml-download-container');
 const pmlDownloadAnchor       = document.getElementById('pml-download-anchor');
-export const fileInputElement = document.getElementById('file-input');
+export const fileForm         = document.getElementById('file-form');
+export const fileInput        = document.getElementById('file-input');
 
 const hideElement = element => {
   element.classList.add('hidden');
@@ -31,7 +32,7 @@ export const hideResults = () => {
 export const displayDrugs = drugs => {
   const drugsTextElement = document.getElementById('drugs-text');
   const preamble = 'I recognised the following drugs:';
-  const drugsHTML = drugs.map(x => `<li>${x}</li>`).join('');
+  const drugsHTML = drugs.map(d => `<li><a target="_blank" href="${d.uri}">${d.label}</a></li>`).join('');
   drugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
   showElement(drugsPanel);
@@ -61,29 +62,37 @@ const displayWarnings = (container, preambleText, warnings, pml) => {
 };
 
 export const displayUnnamed = (unnamed, pmlLines) => {
-  const container = document.getElementById('unnamed-text');
-  const preamble = 'I found the following unnamed PML constructs:';
-  const warnings = unnamed.map(({type, line}) => {
-    return [{line, identifier: type}];
-  });
+  if (unnamed.length > 0){
+    const container = document.getElementById('unnamed-text');
+    const preamble = 'I found the following unnamed PML constructs:';
+    const warnings = unnamed.map(({type, line}) => {
+      return [{line, identifier: type}];
+    });
 
-  displayWarnings(container, preamble, warnings, pmlLines);
-  showElement(unnamedPanel);
+    displayWarnings(container, preamble, warnings, pmlLines);
+    showElement(unnamedPanel);
+  } else {
+    // no unnamed properties to display
+  }
 };
 
 export const displayClashes = (clashes, pmlLines) => {
-  const container = document.getElementById('clashes-text');
-  const preamble = 'I found the following PML construct name clashes:';
-  const warnings = clashes.map(({occurrences, name}) => {
-    return occurrences
-      .sort((a, b) => a.line - b.line)
-      .map(({type, line}) => {
-        return {line, identifier: `${type} ${name}`};
-      });
-  });
+  if (clashes.length > 0) {
+    const container = document.getElementById('clashes-text');
+    const preamble = 'I found the following PML construct name clashes:';
+    const warnings = clashes.map(({occurrences, name}) => {
+      return occurrences
+        .sort((a, b) => a.line - b.line)
+        .map(({type, line}) => {
+          return {line, identifier: `${type} ${name}`};
+        });
+    });
 
-  displayWarnings(container, preamble, warnings, pmlLines);
-  showElement(clashesPanel);
+    displayWarnings(container, preamble, warnings, pmlLines);
+    showElement(clashesPanel);
+  } else {
+    // no clashes to display
+  }
 };
 
 const displayDownloadButton = () => {
@@ -100,18 +109,19 @@ const hideDownloadButton = () => {
 };
 
 export const displayUnidentifiedDrugs = drugs => {
-  const unidentifiedDrugsTextElement = document.getElementById('unidentified-drugs-text');
-  const preamble = 'I did not recognise the following drugs:';
-  const drugsHTML = drugs.map(x => `<li>${x}</li>`).join('');
-  unidentifiedDrugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
+  if (drugs.length > 0) {
+    const unidentifiedDrugsTextElement = document.getElementById('unidentified-drugs-text');
+    const preamble = 'I did not recognise the following drugs:';
+    const drugsHTML = drugs.map(x => `<li>${x}</li>`).join('');
+    unidentifiedDrugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
-  showElement(unidentifiedDrugsPanel);
+    showElement(unidentifiedDrugsPanel);
+  }
 };
 
 export const displayDdis = (ddis) => {
-  const ddisTextElement = document.getElementById('ddis-text');
-
   if (ddis.length > 0) {
+    const ddisTextElement = document.getElementById('ddis-text');
     const preamble = 'I have identified interactions between the following drugs:';
     const ddisHTML = ddis.map(({drug_a, drug_b}) => {
       const labelA = drug_a.label;
@@ -121,9 +131,15 @@ export const displayDdis = (ddis) => {
     }).join('');
 
     ddisTextElement.innerHTML = `<p>${preamble}</p><ul>${ddisHTML}</ul>`;
+    showElement(ddisPanel);
   } else {
-    ddisTextElement.innerHTML = 'I have not identified any interactions between the drugs in this file.';
+    displayNoDdis();
   }
+};
+
+export const displayNoDdis = () => {
+  const ddisTextElement = document.getElementById('ddis-text');
+  ddisTextElement.innerHTML = 'I have not identified any interactions between the drugs in this file.';
   showElement(ddisPanel);
 };
 
@@ -167,7 +183,7 @@ export const restoreFileForm = () => {
 // to make the file input pretty take the filename from the form
 // and place it in a disabled input box right beside it :art:
 const filenameDisplayElement = document.getElementById('filename-display');
-fileInputElement.addEventListener('change', function() {
+fileInput.addEventListener('change', function() {
   filenameDisplayElement.value = this.files[0].name;
   hideResults();
   hideDownloadButton();
