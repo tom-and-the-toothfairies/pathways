@@ -6,7 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Added UI sections for displaying the different types of DDI sequencing
-  categories identified by the system: parallel, sequential, and alternative.
+  categories identified by the system: parallel, sequential, repeated
+  alternative, and alternative non-DDI
+
+### Changed
+- The syntax error UI now includes contextual line highlighting
+
 
 ## [1.2] 2017-03-26
 

@@ -16,7 +16,7 @@ export default class RequestChain {
       await handle(payload);
     } else {
       const {error} = await response.json();
-      View.displayError(error);
+      View.displayError(error, this.lines);
     }
   }
 

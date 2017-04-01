@@ -191,6 +191,14 @@ export const displayDdis = (ddis) => {
   }
 };
 
+const formatDdiCategoryAtom = category => {
+  let formattedCategory = category.replace('_',' ');
+  if (formattedCategory === 'alternative') {
+    formattedCategory += ' non-DDI';
+  }
+  return formattedCategory;
+};
+
 const generateDdiElement = ddi => {
   const ddiContainer = document.createElement('div');
   let containerClass = null;
@@ -215,7 +223,7 @@ const generateDdiElement = ddi => {
   const drugsInvolvedText = `${ddi.drug_a.label} on line ${ddi.drug_a.line} and ${ddi.drug_b.label} on line ${ddi.drug_b.line}`;
   const drugInfoElement = generateDdiInfoSnippet('Drugs Involved', drugsInvolvedText);
   const harmfulElement = generateDdiInfoSnippet('Disposition', ddi.harmful ? 'Harmful' : 'Not Harmful');
-  const categoryElement = generateDdiInfoSnippet('Category', ddi.category);
+  const categoryElement = generateDdiInfoSnippet('Category', formatDdiCategoryAtom(ddi.category));
   const spacingElement = generateDdiInfoSnippet('Spacing', `${ddi.spacing} days`);
 
   ddiContainer.appendChild(interactionContainer);
@@ -246,7 +254,7 @@ export const displayNoDdis = () => {
   showElement(ddisPanel);
 };
 
-export const displayError = error => {
+export const displayError = (error, pml) => {
   const errorTitleElement = document.getElementById('error-title');
   const errorTextElement = document.getElementById('error-text');
   const errorsBadge = document.getElementById('errors-badge');
@@ -256,6 +264,10 @@ export const displayError = error => {
   errorsTab.click();
   errorTitleElement.innerHTML = error.title;
   errorTextElement.innerHTML = error.detail;
+  if (error.meta && error.meta.line) {
+    const codeBlock = CodeBlock.generate(pml, error.meta.line);
+    errorTextElement.appendChild(codeBlock);
+  }
 
   showElement(errorPanel);
   showResults();
