@@ -1,4 +1,4 @@
-import 'bootstrap.native';
+import 'bootstrap';
 import 'whatwg-fetch';
 import RequestChain from './request-chain';
 import * as View from './view';
