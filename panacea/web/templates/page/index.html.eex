@@ -17,6 +17,17 @@
   </div>
 </form>
 
+<div id="loading-container" class="center hidden fades-in">
+  <%= img_tag(static_path(@conn, "/images/heart.svg"), class: "loading-icon") %>
+</div>
+
+<div class="center hidden margined fades-in" id="pml-download-container">
+  <a id="pml-download-anchor" class="btn btn-default btn-lg">
+    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+    Save PML to file
+  </a>
+</div>
+
 <div class="results hidden fades-in" id="results-container">
   <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active">
@@ -71,15 +82,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="center hidden margined fades-in" id="pml-download-container">
-  <a id="pml-download-anchor" class="btn btn-default btn-lg">
-    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-    Download PML TX File
-  </a>
-</div>
-
-<div id="loading-container" class="center hidden fades-in">
-  <%= img_tag(static_path(@conn, "/images/heart.svg"), class: "loading-icon") %>
 </div>

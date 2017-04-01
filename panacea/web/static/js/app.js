@@ -1,6 +1,6 @@
 import 'bootstrap.native';
 import 'whatwg-fetch';
-import { RequestChain } from './request-chain';
+import RequestChain from './request-chain';
 import * as View from './view';
 
 View.fileForm.addEventListener('submit', e => {

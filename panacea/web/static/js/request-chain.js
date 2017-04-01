@@ -1,7 +1,7 @@
 import * as View from './view';
 import * as Request from './request';
 
-export class RequestChain {
+export default class RequestChain {
   constructor(pml) {
     this.lines = pml.split('\n');
   }
