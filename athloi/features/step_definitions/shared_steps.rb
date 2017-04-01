@@ -14,3 +14,7 @@ end
 When(/^I submit the upload form$/) do
   click_on 'Submit'
 end
+
+When(/^I click the warnings tab$/) do
+  click_on 'Warnings'
+end
