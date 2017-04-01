@@ -68,8 +68,8 @@ years
 days
 hours
 minutes
-natural
-number.
+integer
+float.
 
 Rootsymbol pml.
 
@@ -141,13 +141,13 @@ requires_expr ->
     expression : '$1'.
 
 time_expr ->
-    years '{' natural '}'          : construct('$1', [], value_of('$3')).
+    years '{' integer '}'          : construct('$1', [], value_of('$3')).
 time_expr ->
-    days '{' natural '}'           : construct('$1', [], value_of('$3')).
+    days '{' integer '}'           : construct('$1', [], value_of('$3')).
 time_expr ->
-    hours '{' natural '}'          : construct('$1', [], value_of('$3')).
+    hours '{' integer '}'          : construct('$1', [], value_of('$3')).
 time_expr ->
-    minutes '{' natural '}'        : construct('$1', [], value_of('$3')).
+    minutes '{' integer '}'        : construct('$1', [], value_of('$3')).
 
 time_expr_list ->
     '$empty'                       : [].
@@ -168,8 +168,8 @@ operation -> '$empty'       : "".
 value -> '!' expression     : "!" ++ value_of('$2').
 value -> '(' expression ')' : "(" ++ value_of('$2') ++ ")".
 value -> string             : value_of('$1').
-value -> natural            : value_of('$1').
-value -> number             : value_of('$1').
+value -> integer            : value_of('$1').
+value -> float              : value_of('$1').
 value -> variable           : '$1'.
 
 variable -> ident accessor              : value_of('$1') ++ '$2'.

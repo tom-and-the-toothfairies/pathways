@@ -2,8 +2,8 @@ Definitions.
 
 IDENT   = [a-zA-Z0-9_]+
 WS      = [\s\t\n\r]+
-NATURAL = [0-9]+
-NUMBER  = ({NATURAL}(\.{NATURAL})?|\.{NATURAL})([eE][+-]?{NATURAL})?
+INTEGER = [0-9]+
+FLOAT   = {INTEGER}?\.{INTEGER}([eE][+-]?{INTEGER})?
 STRING  = "[^"]*"
 COMMENT = \/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/
 
@@ -56,8 +56,8 @@ executable    : {token, {executable, TokenLine}}.
 {COMMENT}     : skip_token.
 {WS}          : skip_token.
 {STRING}      : {token, {string, TokenLine, TokenChars}}.
-{NATURAL}     : {token, {natural, TokenLine, TokenChars}}.
-{NUMBER}      : {token, {number, TokenLine, TokenChars}}.
+{INTEGER}     : {token, {integer, TokenLine, TokenChars}}.
+{FLOAT}       : {token, {float, TokenLine, TokenChars}}.
 {IDENT}       : {token, {ident, TokenLine, TokenChars}}.
 
 Erlang code.
