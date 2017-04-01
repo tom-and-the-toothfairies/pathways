@@ -17,37 +17,63 @@
   </div>
 </form>
 
-<div class="panel panel-danger hidden fades-in" id="error-panel">
-  <div class="panel-heading" id="error-title"></div>
-  <div class="panel-body" id="error-text"></div>
+<div class="results hidden fades-in" id="results-container">
+  <ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active">
+      <a href="#analysis" id="analysis-tab" data-toggle="tab">
+        Analysis
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#warnings" id="warnings-tab" data-toggle="tab">
+        Warnings
+        <span class="badge warning-badge" id="warnings-badge"></span>
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#errors" id="errors-tab" data-toggle="tab">
+        Errors
+        <span class="badge error-badge" id="errors-badge"></span>
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane fade active in" id="analysis">
+      <div class="panel panel-success hidden fades-in" id="drugs-panel">
+        <div class="panel-heading">Drugs Found</div>
+        <div class="panel-body" id="drugs-text"></div>
+      </div>
+      <div class="panel panel-success hidden fades-in" id="ddis-panel">
+        <div class="panel-heading">Drug-Drug Interactions</div>
+        <div class="panel-body" id="ddis-text"></div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="warnings">
+      <div class="panel panel-warning hidden fades-in" id="unidentified-drugs-panel">
+        <div class="panel-heading">Unidentified Drugs Found</div>
+        <div class="panel-body" id="unidentified-drugs-text"></div>
+      </div>
+      <div class="panel panel-warning hidden fades-in" id="unnamed-panel">
+        <div class="panel-heading">Unnamed PML Constructs</div>
+        <div class="panel-body" id="unnamed-text"></div>
+      </div>
+      <div class="panel panel-warning hidden fades-in" id="clashes-panel">
+        <div class="panel-heading">PML Construct Name Clashes</div>
+        <div class="panel-body" id="clashes-text"></div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="errors">
+      <div class="panel panel-danger hidden fades-in" id="error-panel">
+        <div class="panel-heading" id="error-title"></div>
+        <div class="panel-body" id="error-text"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="panel panel-success hidden fades-in" id="drugs-panel">
-  <div class="panel-heading">Drugs Found</div>
-  <div class="panel-body" id="drugs-text"></div>
-</div>
-
-<div class="panel panel-warning hidden fades-in" id="unidentified-drugs-panel">
-  <div class="panel-heading">Unidentified Drugs Found</div>
-  <div class="panel-body" id="unidentified-drugs-text"></div>
-</div>
-
-<div class="panel panel-warning hidden fades-in" id="unnamed-panel">
-  <div class="panel-heading">Unnamed PML Constructs</div>
-  <div class="panel-body" id="unnamed-text"></div>
-</div>
-
-<div class="panel panel-warning hidden fades-in" id="clashes-panel">
-  <div class="panel-heading">PML Construct Name Clashes</div>
-  <div class="panel-body" id="clashes-text"></div>
-</div>
-
-<div class="panel panel-success hidden fades-in" id="ddis-panel">
-  <div class="panel-heading">Drug-Drug Interactions</div>
-  <div class="panel-body" id="ddis-text"></div>
-</div>
-
-<div class="center hidden padded-bottom fades-in" id="pml-download-container">
+<div class="center hidden margined fades-in" id="pml-download-container">
   <a id="pml-download-anchor" class="btn btn-default btn-lg">
     <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
     Download PML TX File

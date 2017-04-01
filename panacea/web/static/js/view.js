@@ -9,6 +9,7 @@ const unnamedPanel            = document.getElementById('unnamed-panel');
 const clashesPanel            = document.getElementById('clashes-panel');
 const pmlDownloadContainer    = document.getElementById('pml-download-container');
 const pmlDownloadAnchor       = document.getElementById('pml-download-anchor');
+const resultsContainer        = document.getElementById('results-container');
 export const fileForm         = document.getElementById('file-form');
 export const fileInput        = document.getElementById('file-input');
 
@@ -20,6 +21,10 @@ const showElement = element => {
   element.classList.remove('hidden');
 };
 
+const showResults = () => {
+  showElement(resultsContainer);
+};
+
 export const hideResults = () => {
   hideElement(drugsPanel);
   hideElement(unidentifiedDrugsPanel);
@@ -27,36 +32,61 @@ export const hideResults = () => {
   hideElement(unnamedPanel);
   hideElement(clashesPanel);
   hideElement(errorPanel);
+  hideElement(resultsContainer);
+  resetTabs();
 };
 
 export const displayDrugs = drugs => {
-  const drugsTextElement = document.getElementById('drugs-text');
-  const preambleElement = document.createElement('p');
-  const drugsList = document.createElement('ul');
-  const preamble = 'I recognised the following drugs:';
+  if (drugs.length > 0) {
+    const drugsTextElement = document.getElementById('drugs-text');
+    const preambleElement = document.createElement('p');
+    const drugsList = document.createElement('ul');
+    const preamble = 'I recognised the following drugs:';
 
-  preambleElement.innerHTML = preamble;
-  drugsTextElement.innerHTML = '';
+    preambleElement.innerHTML = preamble;
+    drugsTextElement.innerHTML = '';
 
-  for (const drug of drugs) {
-    const drugListElement = document.createElement('li');
-    const drugLinkElement = document.createElement('a');
-    drugLinkElement.innerHTML = drug.label;
-    drugLinkElement.href = drug.uri;
-    drugLinkElement.target = '_blank';
+    for (const drug of drugs) {
+      const drugListElement = document.createElement('li');
+      const drugLinkElement = document.createElement('a');
+      drugLinkElement.innerHTML = drug.label;
+      drugLinkElement.href = drug.uri;
+      drugLinkElement.target = '_blank';
 
-    drugListElement.appendChild(drugLinkElement);
-    drugsList.appendChild(drugListElement);
+      drugListElement.appendChild(drugLinkElement);
+      drugsList.appendChild(drugListElement);
+    }
+
+    drugsTextElement.appendChild(preambleElement);
+    drugsTextElement.appendChild(drugsList);
+
+    showElement(drugsPanel);
+    showResults();
   }
+};
 
-  drugsTextElement.appendChild(preambleElement);
-  drugsTextElement.appendChild(drugsList);
+const resetTabs = () => {
+  document.getElementById('warnings-badge').innerHTML = '';
+  document.getElementById('errors-badge').innerHTML = '';
+  document.getElementById('analysis-tab').click();
+};
 
-  showElement(drugsPanel);
+const updateWarningsBadge = warnings => {
+  const warningsBadge = document.getElementById('warnings-badge');
+  const currentWarningNumber = parseInt(warningsBadge.innerHTML);
+  let newWarningNumber = null;
+  if (!isNaN(currentWarningNumber)) {
+    newWarningNumber = currentWarningNumber + warnings.length;
+  } else {
+    newWarningNumber = warnings.length;
+  }
+  warningsBadge.innerHTML = newWarningNumber;
 };
 
 const displayWarnings = (container, preambleText, warnings, pml) => {
   container.innerHTML = '';
+
+  updateWarningsBadge(warnings);
 
   const preamble = document.createElement('p');
   preamble.innerHTML = preambleText;
@@ -77,6 +107,8 @@ const displayWarnings = (container, preambleText, warnings, pml) => {
 
     container.appendChild(wrapper);
   }
+
+  showResults();
 };
 
 export const displayUnnamed = (unnamed, pmlLines) => {
@@ -134,6 +166,8 @@ export const displayUnidentifiedDrugs = drugs => {
     unidentifiedDrugsTextElement.innerHTML = `<p>${preamble}</p><ul>${drugsHTML}</ul>`;
 
     showElement(unidentifiedDrugsPanel);
+    updateWarningsBadge(drugs);
+    showResults();
   }
 };
 
@@ -209,11 +243,16 @@ export const displayNoDdis = () => {
 export const displayError = error => {
   const errorTitleElement = document.getElementById('error-title');
   const errorTextElement = document.getElementById('error-text');
+  const errorsBadge = document.getElementById('errors-badge');
+  const errorsTab = document.getElementById('errors-tab');
 
+  errorsBadge.innerHTML = '1';
+  errorsTab.click();
   errorTitleElement.innerHTML = error.title;
   errorTextElement.innerHTML = error.detail;
 
   showElement(errorPanel);
+  showResults();
 };
 
 export const displayNetworkError = error => {

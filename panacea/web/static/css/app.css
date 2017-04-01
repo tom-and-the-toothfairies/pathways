@@ -130,3 +130,22 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
+
+.error-badge {
+  background-color: #f35656;
+}
+
+.warning-badge {
+  background-color: #ffd534;
+}
+
+.tab-content {
+  border: 1px solid #dddddd;
+  border-top: none;
+  padding: 20px;
+  padding-bottom: 0px;
+}
+
+.margined {
+  margin: 30px;
+}
