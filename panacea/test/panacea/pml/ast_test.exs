@@ -28,9 +28,11 @@ defmodule Panacea.Pml.AstTest do
             requires {
               time {
                 years { 40 }
+                weeks { 47 }
                 days { 12 }
                 hours { 7 }
                 minutes { 14 }
+                seconds { 34 }
               }
             }
           }
