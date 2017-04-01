@@ -121,8 +121,6 @@ export const displayUnnamed = (unnamed, pmlLines) => {
 
     displayWarnings(container, preamble, warnings, pmlLines);
     showElement(unnamedPanel);
-  } else {
-    // no unnamed properties to display
   }
 };
 
@@ -140,8 +138,6 @@ export const displayClashes = (clashes, pmlLines) => {
 
     displayWarnings(container, preamble, warnings, pmlLines);
     showElement(clashesPanel);
-  } else {
-    // no clashes to display
   }
 };
 
@@ -197,7 +193,16 @@ export const displayDdis = (ddis) => {
 
 const generateDdiElement = ddi => {
   const ddiContainer = document.createElement('div');
-  const containerClass = ddi.harmful ? 'danger' : 'success';
+  let containerClass = null;
+  if (ddi.harmful) {
+    if (ddi.category === 'alternative') {
+      containerClass = 'warning';
+    } else {
+      containerClass = 'danger';
+    }
+  } else {
+    containerClass = 'success';
+  }
   ddiContainer.classList.add('wrapper', containerClass);
 
   const interactionContainer = Util.createElementWithClass('h5', 'ddi-title');
@@ -207,10 +212,11 @@ const generateDdiElement = ddi => {
   interactionLink.target = '_blank';
   interactionContainer.appendChild(interactionLink);
 
-  const drugInfoElement = generateDdiInfoSnippet('Drugs Involved', `${ddi.drug_a.label} and ${ddi.drug_b.label}`);
+  const drugsInvolvedText = `${ddi.drug_a.label} on line ${ddi.drug_a.line} and ${ddi.drug_b.label} on line ${ddi.drug_b.line}`;
+  const drugInfoElement = generateDdiInfoSnippet('Drugs Involved', drugsInvolvedText);
   const harmfulElement = generateDdiInfoSnippet('Disposition', ddi.harmful ? 'Harmful' : 'Not Harmful');
   const categoryElement = generateDdiInfoSnippet('Category', ddi.category);
-  const spacingElement = generateDdiInfoSnippet('Spacing', `${ddi.spacing} hours`);
+  const spacingElement = generateDdiInfoSnippet('Spacing', `${ddi.spacing} days`);
 
   ddiContainer.appendChild(interactionContainer);
   ddiContainer.appendChild(drugInfoElement);
