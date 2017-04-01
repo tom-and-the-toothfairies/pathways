@@ -1,12 +1,13 @@
-from functools import lru_cache
 from hashlib import sha224
-
+import csv
+import sys
+import dinto
+import clize
+from clize.parameters import one_of
 
 def _sha_int(string):
     return int(sha224(string.encode()).hexdigest()[-8:], 16)
 
-
-@lru_cache()
 def _enrich(ddi):
     uri = ddi['uri']
     result = {
@@ -22,3 +23,18 @@ def _enrich(ddi):
 
 def enrich(ddis):
     return [_enrich(ddi) for ddi in ddis]
+
+
+def main(flavour:one_of('harmful', 'agonism')):
+    fieldnames = ('drug_a', 'drug_b', flavour, 'time', 'unit')
+
+    writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
+    writer.writeheader()
+
+    for ddi in enrich(dinto.all_ddis()):
+        ddi.update({'time': ddi['spacing'], 'unit': 'hr'})
+        writer.writerow({k: ddi[k] for k in fieldnames})
+
+
+if __name__ == '__main__':
+    clize.run(main)
