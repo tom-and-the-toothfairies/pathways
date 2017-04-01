@@ -14,14 +14,15 @@ const submitFile = formData => {
   View.hideFileForm();
   View.hideResults();
   try {
-    retrievePML(pml => {
+    retrievePML(async (pml) => {
       const requestChain = new RequestChain(pml);
-      requestChain.start(formData);
+      await requestChain.start(formData);
+      View.restoreFileForm();
     });
   } catch (e) {
     View.displayNetworkError(e);
+    View.restoreFileForm();
   }
-  View.restoreFileForm();
 };
 
 const retrievePML = callback => {
