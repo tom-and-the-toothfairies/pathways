@@ -7,14 +7,14 @@ defmodule Panacea.Pml.Parser.ErrorTest do
       {:error, error, _} = "process ," |> to_charlist |> :pml_lexer.string
 
 
-      assert error |> Error.format == "line 1 -- unrecognized token ','"
+      assert error |> Error.format == "unrecognized token ','"
     end
 
     test "it turns a parser error tuple into a nice string" do
       {:ok, tokens, _} = "process { foo }" |> to_charlist |> :pml_lexer.string
       {:error, error} = tokens |> :pml_parser.parse
 
-      assert error |> Error.format == "line 1 -- syntax error before: '{'"
+      assert error |> Error.format == "syntax error before: '{'"
     end
   end
 end

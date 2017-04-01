@@ -42,7 +42,7 @@ defmodule Panacea.Pml.ParserTest do
       assert Parser.parse(pml) == { :error,
         {
           :syntax_error,
-          "line 1 -- syntax error before: '{'",
+          "syntax error before: '{'",
           %{line: 1}
         }
       }
@@ -95,7 +95,7 @@ defmodule Panacea.Pml.ParserTest do
         """
 
         {status, result} = Parser.parse(pml)
-        message = "line 5 -- '#{unit}' cannot be more than #{value - 1} (was #{value})"
+        message = "'#{unit}' cannot be more than #{value - 1} (was #{value})"
 
         assert status == :error
         assert result == {:syntax_error, message, %{line: 5}}
@@ -117,7 +117,7 @@ defmodule Panacea.Pml.ParserTest do
       """
 
       {status, result} = Parser.parse(pml)
-      message = "line 6 -- 'years' used more than once in a single 'time' block"
+      message = "'years' used more than once in a single 'time' block"
 
       assert status == :error
       assert result == {:syntax_error, message, %{line: 6}}
@@ -137,7 +137,7 @@ defmodule Panacea.Pml.ParserTest do
       """
 
       {status, result} = Parser.parse(pml)
-      message = "line 5 -- syntax error before: 4.5"
+      message = "syntax error before: 4.5"
 
       assert status == :error
       assert result == {:syntax_error, message, %{line: 5}}
