@@ -16,5 +16,5 @@ When(/^I submit the upload form$/) do
 end
 
 When(/^I click the warnings tab$/) do
-  click_on 'Warnings'
+  click_on('Warnings', wait: 5)
 end

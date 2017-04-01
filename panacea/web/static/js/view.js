@@ -48,12 +48,7 @@ export const displayDrugs = drugs => {
 
     for (const drug of drugs) {
       const drugListElement = document.createElement('li');
-      const drugLinkElement = document.createElement('a');
-      drugLinkElement.innerHTML = drug.label;
-      drugLinkElement.href = drug.uri;
-      drugLinkElement.target = '_blank';
-
-      drugListElement.appendChild(drugLinkElement);
+      drugListElement.innerHTML = drug.label;
       drugsList.appendChild(drugListElement);
     }
 
@@ -172,7 +167,7 @@ export const displayDdis = (ddis) => {
     const ddisTextElement = document.getElementById('ddis-text');
     const preambleElement = document.createElement('p');
     const ddisContainer = document.createElement('div');
-    const preamble = 'I have identified interactions between the following drugs:';
+    const preamble = 'I have identified the following interactions:';
 
     preambleElement.innerHTML = preamble;
     ddisTextElement.innerHTML = '';
@@ -213,20 +208,15 @@ const generateDdiElement = ddi => {
   }
   ddiContainer.classList.add('wrapper', containerClass);
 
-  const interactionContainer = Util.createElementWithClass('h5', 'ddi-title');
-  const interactionLink = document.createElement('a');
-  interactionLink.innerHTML = ddi.label;
-  interactionLink.href = ddi.uri;
-  interactionLink.target = '_blank';
-  interactionContainer.appendChild(interactionLink);
-
+  const interactionNameElement = Util.createElementWithClass('h5', 'ddi-title');
+  interactionNameElement.innerHTML = ddi.label;
   const drugsInvolvedText = `${ddi.drug_a.label} on line ${ddi.drug_a.line} and ${ddi.drug_b.label} on line ${ddi.drug_b.line}`;
   const drugInfoElement = generateDdiInfoSnippet('Drugs Involved', drugsInvolvedText);
   const harmfulElement = generateDdiInfoSnippet('Disposition', ddi.harmful ? 'Harmful' : 'Not Harmful');
   const categoryElement = generateDdiInfoSnippet('Category', formatDdiCategoryAtom(ddi.category));
   const spacingElement = generateDdiInfoSnippet('Spacing', `${ddi.spacing} days`);
 
-  ddiContainer.appendChild(interactionContainer);
+  ddiContainer.appendChild(interactionNameElement);
   ddiContainer.appendChild(drugInfoElement);
   ddiContainer.appendChild(harmfulElement);
   ddiContainer.appendChild(categoryElement);
@@ -263,7 +253,7 @@ export const displayError = (error, pml) => {
   errorsBadge.innerHTML = '1';
   errorsTab.click();
   errorTitleElement.innerHTML = error.title;
-  errorTextElement.innerHTML = `<strong>${error.detail}</strong>`;
+  errorTextElement.innerHTML = error.detail;
   if (error.meta && error.meta.line) {
     const codeBlock = CodeBlock.generate(pml, error.meta.line);
     errorTextElement.appendChild(codeBlock);
