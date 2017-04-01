@@ -1,6 +1,13 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+### Added
+- Added UI sections for displaying the different types of DDI sequencing
+  categories identified by the system: parallel, sequential, and alternative.
+
 ## [1.2] 2017-03-26
 
 ### Added
