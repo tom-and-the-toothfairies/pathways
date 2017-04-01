@@ -53,13 +53,14 @@ exports.config = {
   plugins: {
     babel: {
       // Do not use ES6 compiler in vendor code
-      ignore: [/web\/static\/vendor/]
+      ignore: [/web\/static\/vendor/],
+      plugins: ["transform-runtime"]
     }
   },
 
   modules: {
     autoRequire: {
-      "js/app.js": ["babel-polyfill", "web/static/js/app"]
+      "js/app.js": ["web/static/js/app"]
     }
   },
 

@@ -1,9 +1,7 @@
-import "babel-polyfill";
-import "phoenix_html";
-import "whatwg-fetch";
-import * as Request from "./request";
-import * as View from "./view";
-
+import 'bootstrap.native';
+import 'whatwg-fetch';
+import * as Request from './request';
+import * as View from './view';
 
 document.getElementById('file-form').addEventListener('submit', e => {
   e.preventDefault();
@@ -63,10 +61,6 @@ async function handleDrugsResponse(response) {
 async function handleUrisResponse(response, ast) {
   await handleResponse(response, async function ({uris: {found, not_found: unidentifiedDrugs}}) {
     const labels = found.map(x => x.label);
-    const urisToLabels = found.reduce((acc, {uri, label}) => {
-      acc[uri] = label;
-      return acc;
-    }, {});
 
     View.preparePMLDownloadButton(Request.generatePMLHref(ast));
 
@@ -80,7 +74,7 @@ async function handleUrisResponse(response, ast) {
 
     if (found.length > 1) {
       try {
-        await handleDdisResponse(await Request.ddis(found, ast), urisToLabels);
+        await handleDdisResponse(await Request.ddis(found, ast));
       } catch (e) {
         View.displayNetworkError(e);
       }
@@ -90,9 +84,9 @@ async function handleUrisResponse(response, ast) {
   });
 }
 
-async function handleDdisResponse(response, urisToLabels) {
+async function handleDdisResponse(response) {
   await handleResponse(response, ({ddis}) => {
-    View.displayDdis(ddis, urisToLabels);
+    View.displayDdis(ddis);
   });
 }
 
@@ -105,8 +99,7 @@ const getFileContents = callback => {
       const contents = e.target.result;
       callback(contents);
     };
-  }
-  else {
+  } else {
     throw 'file could not be read';
   }
 };

@@ -1,5 +1,5 @@
-import * as CodeBlock from "./code-block";
-import * as Util from "./util";
+import * as CodeBlock from './code-block';
+import * as Util from './util';
 
 const drugsPanel              = document.getElementById('drugs-panel');
 const unidentifiedDrugsPanel  = document.getElementById('unidentified-drugs-panel');
@@ -108,16 +108,16 @@ export const displayUnidentifiedDrugs = drugs => {
   showElement(unidentifiedDrugsPanel);
 };
 
-export const displayDdis = (ddis, urisToLabels) => {
+export const displayDdis = (ddis) => {
   const ddisTextElement = document.getElementById('ddis-text');
 
   if (ddis.length > 0) {
     const preamble = 'I have identified interactions between the following drugs:';
-    const ddisHTML = ddis.map(({drug_a: uriA, drug_b: uriB}) => {
-      const drugA = urisToLabels[uriA];
-      const drugB = urisToLabels[uriB];
+    const ddisHTML = ddis.map(({drug_a, drug_b}) => {
+      const labelA = drug_a.label;
+      const labelB = drug_b.label;
 
-      return `<li><strong>${drugA}</strong> and <strong>${drugB}</strong></li>`;
+      return `<li><strong>${labelA}</strong> and <strong>${labelB}</strong></li>`;
     }).join('');
 
     ddisTextElement.innerHTML = `<p>${preamble}</p><ul>${ddisHTML}</ul>`;
@@ -138,13 +138,13 @@ export const displayError = error => {
 };
 
 export const displayNetworkError = error => {
-  const title = "Network error";
+  const title = 'Network error';
   const detail = `<h5>Something went wrong</h5><code>${error}<code>`;
   displayError({title, detail});
 };
 
 export const displayNoDrugsError = () => {
-  const title = "Pathway error";
+  const title = 'Pathway error';
   const detail = `<h5>No drugs were found in the given file.
 You can specify drugs in PML like this:</h5>
 <code>requires { drug { "paracetamol" } }</code>`;
@@ -167,7 +167,7 @@ export const restoreFileForm = () => {
 // to make the file input pretty take the filename from the form
 // and place it in a disabled input box right beside it :art:
 const filenameDisplayElement = document.getElementById('filename-display');
-fileInputElement.addEventListener('change', function(e) {
+fileInputElement.addEventListener('change', function() {
   filenameDisplayElement.value = this.files[0].name;
   hideResults();
   hideDownloadButton();

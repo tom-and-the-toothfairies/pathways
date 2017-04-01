@@ -65,7 +65,7 @@ The system must be able to allow saving of transformed PML files.
 
 ### Testing
 Visit the [homepage] and select a valid PML file; for example
-`panacea/text/fixtures/ddis.pml`. Press the `Submit` button. You should now see
+`panacea/test/fixtures/ddis.pml`. Press the `Submit` button. You should now see
 a `Download PML TX File` button. Clicking the button, depending on your
 browser, will either download the file automatically or prompt you to provide a
 filename and location and download the file.

@@ -15,14 +15,16 @@ defmodule Panacea.Pml.Analysis.Ddis do
     end)
 
     Enum.map(ddis, fn ddi ->
-      drug_a = uris_to_labels[ddi["drug_a"]]
-      drug_b = uris_to_labels[ddi["drug_b"]]
+      label_a = uris_to_labels[ddi["drug_a"]]
+      label_b = uris_to_labels[ddi["drug_b"]]
 
-      ancestries_a = Map.get(ancestries, drug_a, [])
-      ancestries_b = Map.get(ancestries, drug_b, [])
+      ancestries_a = Map.get(ancestries, label_a, [])
+      ancestries_b = Map.get(ancestries, label_b, [])
 
-      for ancestry_a <- ancestries_a, ancestry_b <- ancestries_b do
-        categorize_ddi(ddi, ancestry_a, ancestry_b)
+      for {ancestry_a, line_a} <- ancestries_a, {ancestry_b, line_b} <- ancestries_b do
+        ddi
+        |> categorize_ddi(ancestry_a, ancestry_b)
+        |> add_drug_metadata(label_a, line_a, label_b, line_b)
       end
     end)
     |> List.flatten()
@@ -39,6 +41,23 @@ defmodule Panacea.Pml.Analysis.Ddis do
      ddi
      |> Map.put("category", category)
      |> Map.put("enclosing_constructs", enclosing_constructs)
+  end
+
+  defp add_drug_metadata(ddi, label_a, line_a, label_b, line_b) do
+    drug_a = %{
+      "uri" => ddi["drug_a"],
+      "label" => label_a,
+      "line" => line_a
+    }
+    drug_b = %{
+      "uri" => ddi["drug_b"],
+      "label" => label_b,
+      "line" => line_b
+    }
+
+    ddi
+    |> Map.put("drug_a", drug_a)
+    |> Map.put("drug_b", drug_b)
   end
 
   defp analyse_ancestors({:branch, line, _}, _) do
@@ -71,10 +90,11 @@ defmodule Panacea.Pml.Analysis.Ddis do
       do_build_ancestries(child, new_ancestors, %{a|id: a.id + 1})
     end)
   end
-  defp do_build_ancestries({:requires, _, {:drug, _, label}}, ancestors, acc) do
+  defp do_build_ancestries({:requires, _, {:drug, [line: line], label}}, ancestors, acc) do
     key = Util.strip_quotes(label)
-    Map.update(acc, key, [ancestors], fn ancestries ->
-      [ancestors|ancestries]
+    value = {ancestors, line}
+    Map.update(acc, key, [value], fn ancestries ->
+      [value|ancestries]
     end)
   end
   defp do_build_ancestries(_, _, acc), do: acc
