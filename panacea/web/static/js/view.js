@@ -263,7 +263,7 @@ export const displayError = (error, pml) => {
   errorsBadge.innerHTML = '1';
   errorsTab.click();
   errorTitleElement.innerHTML = error.title;
-  errorTextElement.innerHTML = error.detail;
+  errorTextElement.innerHTML = `<strong>${error.detail}</strong>`;
   if (error.meta && error.meta.line) {
     const codeBlock = CodeBlock.generate(pml, error.meta.line);
     errorTextElement.appendChild(codeBlock);
