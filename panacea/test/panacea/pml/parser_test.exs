@@ -57,9 +57,11 @@ defmodule Panacea.Pml.ParserTest do
           requires {
             time {
               years { 10 }
+              weeks { 47 }
               days { 120 }
               hours { 12 }
               minutes { 44 }
+              seconds { 12 }
             }
           }
         }
@@ -71,9 +73,11 @@ defmodule Panacea.Pml.ParserTest do
 
     test "it rejects out of range times" do
       bad_times = [
+        {"seconds", 60},
         {"minutes", 60},
         {"hours", 24},
         {"days", 365},
+        {"weeks", 52},
         {"years", 100}
       ]
 
@@ -113,7 +117,7 @@ defmodule Panacea.Pml.ParserTest do
       """
 
       {status, result} = Parser.parse(pml)
-      message = "line 6 -- 'years' used more than once"
+      message = "line 6 -- 'years' used more than once in a single 'time' block"
 
       assert status == :error
       assert result == {:syntax_error, message, %{line: 6}}

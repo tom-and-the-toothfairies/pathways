@@ -21,7 +21,9 @@ defmodule Panacea.Pml.Ast do
     :output,
     :provides,
     :script,
+    :seconds,
     :tool,
+    :weeks,
     :years
   ]
 

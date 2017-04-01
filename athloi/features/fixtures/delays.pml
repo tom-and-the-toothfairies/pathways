@@ -25,9 +25,11 @@ process foo {
       requires {
         time {
           years { 20 }
+          weeks { 12 }
           days { 15 }
           hours { 10 }
           minutes { 6 }
+          seconds { 14 }
         }
       }
     }
