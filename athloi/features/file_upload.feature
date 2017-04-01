@@ -34,6 +34,17 @@ Feature: File upload
     Then I should see the error panel
     And the error panel title should be "Syntax error"
 
+  Scenario: uploading a PML file containing delays
+    When I select "delays.pml"
+    And I submit the upload form
+    Then I should see the found DDIs panel
+
+  Scenario: uploading a PML file with invalid delay timings
+    When I select "bad_delays.pml"
+    And I submit the upload form
+    Then I should see the error panel
+    And the error panel title should be "Syntax error"
+
   Scenario: uploading a PML file with unnamed constructs
     When I select "analysis/unnamed.pml"
     And I submit the upload form
