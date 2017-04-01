@@ -13,16 +13,16 @@ View.fileForm.addEventListener('submit', e => {
 const submitFile = formData => {
   View.hideFileForm();
   View.hideResults();
-  try {
-    retrievePML(async (pml) => {
+  retrievePML(async (pml) => {
+    try {
       const requestChain = new RequestChain(pml);
       await requestChain.start(formData);
+    } catch (e) {
+      View.displayNetworkError(e);
+    } finally {
       View.restoreFileForm();
-    });
-  } catch (e) {
-    View.displayNetworkError(e);
-    View.restoreFileForm();
-  }
+    }
+  });
 };
 
 const retrievePML = callback => {
