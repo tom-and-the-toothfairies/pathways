@@ -48,4 +48,75 @@ defmodule Panacea.Pml.ParserTest do
       }
     end
   end
+
+  describe "time validations" do
+    test "it parses valid times" do
+      pml = """
+      process foo {
+        action bar {
+          requires {
+            time {
+              years { 10 }
+              days { 120 }
+              hours { 12 }
+              minutes { 44 }
+            }
+          }
+        }
+      }
+      """
+
+      assert {:ok, _} = Parser.parse(pml)
+    end
+
+    test "it rejects out of range times" do
+      bad_times = [
+        {"minutes", 60},
+        {"hours", 24},
+        {"days", 365},
+        {"years", 100}
+      ]
+
+      for {unit, value} <- bad_times do
+        pml = """
+        process foo {
+          action bar {
+            requires {
+              time {
+                #{unit} { #{value} }
+              }
+            }
+          }
+        }
+        """
+
+        {status, result} = Parser.parse(pml)
+        message = "line 5 -- '#{unit}' cannot be more than #{value - 1} (was #{value})"
+
+        assert status == :error
+        assert result == {:syntax_error, message, %{line: 5}}
+      end
+    end
+
+    test "it rejects repeated times" do
+      pml = """
+      process foo {
+        action bar {
+          requires {
+            time {
+              years { 4 }
+              years { 4 }
+            }
+          }
+        }
+      }
+      """
+
+      {status, result} = Parser.parse(pml)
+      message = "line 6 -- 'years' used more than once"
+
+      assert status == :error
+      assert result == {:syntax_error, message, %{line: 6}}
+    end
+  end
 end
