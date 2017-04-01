@@ -63,7 +63,8 @@ const displayWarnings = (container, preambleText, warnings, pml) => {
   container.appendChild(preamble);
 
   for (const warning of warnings) {
-    const wrapper = Util.createElementWithClass('div', 'warning-wrapper');
+    const wrapper = Util.createElementWithClass('div', 'wrapper');
+    wrapper.classList.add('warning');
 
     for (const member of warning) {
       const details = document.createElement('strong');
@@ -139,19 +140,64 @@ export const displayUnidentifiedDrugs = drugs => {
 export const displayDdis = (ddis) => {
   if (ddis.length > 0) {
     const ddisTextElement = document.getElementById('ddis-text');
+    const preambleElement = document.createElement('p');
+    const ddisContainer = document.createElement('div');
     const preamble = 'I have identified interactions between the following drugs:';
-    const ddisHTML = ddis.map(({drug_a, drug_b}) => {
-      const labelA = drug_a.label;
-      const labelB = drug_b.label;
 
-      return `<li><strong>${labelA}</strong> and <strong>${labelB}</strong></li>`;
-    }).join('');
+    preambleElement.innerHTML = preamble;
+    ddisTextElement.innerHTML = '';
 
-    ddisTextElement.innerHTML = `<p>${preamble}</p><ul>${ddisHTML}</ul>`;
+    for (const ddi of ddis) {
+      const ddiContainer = generateDdiElement(ddi);
+      ddisContainer.appendChild(ddiContainer);
+    }
+
+    ddisTextElement.appendChild(preambleElement);
+    ddisTextElement.appendChild(ddisContainer);
+
     showElement(ddisPanel);
   } else {
     displayNoDdis();
   }
+};
+
+const generateDdiElement = ddi => {
+  const ddiContainer = document.createElement('div');
+  const containerClass = ddi.harmful ? 'danger' : 'success';
+  ddiContainer.classList.add('wrapper', containerClass);
+
+  const interactionContainer = Util.createElementWithClass('h5', 'ddi-title');
+  const interactionLink = document.createElement('a');
+  interactionLink.innerHTML = ddi.label;
+  interactionLink.href = ddi.uri;
+  interactionLink.target = '_blank';
+  interactionContainer.appendChild(interactionLink);
+
+  const drugInfoElement = generateDdiInfoSnippet('Drugs Involved', `${ddi.drug_a.label} and ${ddi.drug_b.label}`);
+  const harmfulElement = generateDdiInfoSnippet('Disposition', ddi.harmful ? 'Harmful' : 'Not Harmful');
+  const categoryElement = generateDdiInfoSnippet('Category', ddi.category);
+  const spacingElement = generateDdiInfoSnippet('Spacing', `${ddi.spacing} hours`);
+
+  ddiContainer.appendChild(interactionContainer);
+  ddiContainer.appendChild(drugInfoElement);
+  ddiContainer.appendChild(harmfulElement);
+  ddiContainer.appendChild(categoryElement);
+  ddiContainer.appendChild(spacingElement);
+
+  return ddiContainer;
+};
+
+const generateDdiInfoSnippet = (labelText, infoText) => {
+  const container = Util.createElementWithClass('div', 'ddi-info');
+  const label = Util.createElementWithClass('span', 'ddi-info-label');
+  const info = Util.createElementWithClass('span', 'ddi-info-text');
+
+  label.innerHTML = labelText;
+  info.innerHTML = infoText;
+  container.appendChild(label);
+  container.appendChild(info);
+
+  return container;
 };
 
 export const displayNoDdis = () => {
