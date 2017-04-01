@@ -118,5 +118,25 @@ defmodule Panacea.Pml.ParserTest do
       assert status == :error
       assert result == {:syntax_error, message, %{line: 6}}
     end
+
+    test "it rejects non-integer times" do
+      pml = """
+      process foo {
+        action bar {
+          requires {
+            time {
+              years { 4.5 }
+            }
+          }
+        }
+      }
+      """
+
+      {status, result} = Parser.parse(pml)
+      message = "line 5 -- syntax error before: 4.5"
+
+      assert status == :error
+      assert result == {:syntax_error, message, %{line: 5}}
+    end
   end
 end

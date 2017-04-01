@@ -228,6 +228,10 @@ value_of_time(TimeList) ->
   check_times(TimeList, maps:new()),
   TimeList.
 
+value_of({integer, _, Int}) ->
+  integer_to_list(Int);
+value_of({float, _, Float}) ->
+  float_to_list(Float);
 value_of({_, _, Value}) ->
     Value.
 
