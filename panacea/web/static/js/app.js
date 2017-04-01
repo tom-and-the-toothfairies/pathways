@@ -1,5 +1,4 @@
-import 'babel-polyfill';
-import 'bootstrap';
+import 'bootstrap.native';
 import 'whatwg-fetch';
 import * as Request from './request';
 import * as View from './view';
