@@ -11,7 +11,7 @@ tracked [here](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
 
 We have developed a suite of end to end tests that verify the whole system's
 functionality by automating interactions with a web browser. These can be run
-with the following command
+from the project's root directory with the following command
 
 ```bash
 $ sudo docker-compose -f docker-compose.e2e.yml -p integration run athloi; sudo docker-compose -f docker-compose.e2e.yml -p integration down
@@ -137,23 +137,48 @@ repeated alternative DDI and its enclosing constructs are the selection on line
 The system should provide a way to say, at any point in a sequential workflow,
 that the enactment of the pathway will pause/delay for a given time.
 
-Users can specify a delay using the following construct:
+To represent the notion of delays, we have introduced `time` as a primitive
+resource that can be used in `requires` blocks. To specify a delay, users can
+add a `requires` block containing a valid `time`.
 
-`time { ...list of time values }`
-
-For example:
+The new `time` primitive has the following format:
 
 ```
-process foo {
-  task bar {
+time { list of `time value`s }
+```
+
+Where a `time value` has the following format:
+
+```
+unit { duration }
+```
+
+A `duration` must be a positive integer. The supported `unit`s are:
+
+* years
+* weeks
+* days
+* hours
+* minutes
+* seconds
+
+`time value`s can be specified in any order. Each `unit` may only appear once
+within a given `time` block. The parser validates the correctness of `time`
+primitives.
+
+A simple example of a pathway containing a delay is given below:
+
+```
+process Delays {
+  task TakesTime {
     requires {
       time {
         years { 20 }
-        weeks { 12 }
         days { 15 }
-        hours { 10 }
         minutes { 6 }
+        hours { 10 }
         seconds { 14 }
+        weeks { 12 }
       }
     }
   }
