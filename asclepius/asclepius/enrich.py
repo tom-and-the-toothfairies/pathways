@@ -1,4 +1,4 @@
-from hashlib import sha224
+from hashlib import sha1
 import csv
 import sys
 import dinto
@@ -6,7 +6,7 @@ import clize
 from clize.parameters import one_of
 
 def _sha_int(string):
-    return int(sha224(string.encode()).hexdigest()[-8:], 16)
+    return int(sha1(string.encode()).hexdigest()[-8:], 16)
 
 def _enrich(ddi):
     uri = ddi['uri']
