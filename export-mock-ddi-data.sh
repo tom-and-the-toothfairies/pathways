@@ -46,8 +46,8 @@ main() {
             disown
 
             sudo docker-compose \
-                -p export_ddis run \
-                --rm asclepius python3 asclepius/enrich.py "$flavour" \
+                -p export_ddis \
+                run asclepius python3 asclepius/enrich.py "$flavour" \
                 > "$outfile"
 
             sudo docker-compose -p export_ddis down
