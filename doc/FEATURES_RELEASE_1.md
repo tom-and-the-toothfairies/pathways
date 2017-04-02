@@ -1,4 +1,4 @@
-# Features
+# Features - Release 1
 
 Each deliverable feature for Release 1 is outlined in this file. Each feature
 is given a short description. For completed features, instructions on how to
@@ -63,9 +63,10 @@ Visit the [homepage] and select a file. Press the `Submit` button. The file
 should be sent to the system, and analysis results should now be displayed.
 Invalid files should result in an error dialogue, which displays a meaningful
 error message. For example, `panacea/test/fixtures/bad.pml` should result in a
-`Syntax error` being displayed when submitted. Valid files should result in a
-success dialogue. See [PML File Loading](#pml-file-loading---complete) for an
-example.
+`Syntax error` being displayed in the errors tab when submitted. Valid files
+such as `panacea/test/fixtures/ddis.pml` should result in analysis being
+displayed in the analysis tab.
+See [PML File Loading](#pml-file-loading---complete) for an example.
 
 ## On-Screen PML Reporting - Complete
 
@@ -77,9 +78,10 @@ must be easily identified, and the error messages must be useful.
 Visit the [homepage] and select a file. Some useful files can be found in the
 [fixtures directory]. Press the `Submit` button. Analysis results should be
 displayed. `panacea/test/fixtures/example.png` is not UTF-8 encoded and should
-result in an `Encoding error`. `panacea/test/fixtures/bad.pml` contains invalid
-PML and should result in a `Syntax error`. `panacea/test/fixtures/ddis.pml`
-contains valid PML and should result in a successful analysis.
+result in an `Encoding error` in the errors tab. `panacea/test/fixtures/bad.pml`
+contains invalid PML and should result in a `Syntax error`.
+`panacea/test/fixtures/ddis.pml` contains valid PML and should result in a
+successful analysis displayed in the analysis tab.
 
 ## PML Log File Generation - Complete
 
@@ -88,15 +90,15 @@ The successful or unsuccessful loading of PML files into the system is output
 to the console logs of the panacea service.
 
 ### Testing
-First, open up the tail of the Panacea logs (the system must be running to do this):
+First, open up the tail of the Panacea logs (the system must be running to do
+this):
 ```bash
 $ sudo docker-compose logs -f panacea
 ```
 Visit the [homepage] and select a file. Some useful files can be found in the
 [fixtures directory]. Press the `Submit` button. You should see log entries
-created indicating either a successful parse of the PML file and the drugs
-contained in it or that an error occurred parsing the PML file and what the
-error was.
+created indicating either a successful parse of the PML file or that an error
+occurred parsing the PML file and what the error was.
 
 ## PML Error and Warning highlights - Complete
 
@@ -116,7 +118,6 @@ specify which file should be used in the `docker build` process.
 Instructions on how to specify an OWL file and releasing the new docker image
 can be found [here](./UPDATING_DINTO.md)
 
-
 ## Load Selected Ontology - Complete
 
 See [Select specific OWL Ontology](#select-specific-owl-ontology---complete)
@@ -131,7 +132,7 @@ Users can specify a drug using the following construct:
 `drug { "drug_name" }`
 
 Drugs to be administered to patients must be placed in `requires` blocks within
-the PML document. For example
+the PML document. For example:
 
 ```
 process foo {
@@ -154,7 +155,8 @@ and analysing it should result in `paracetamol` and `cocaine` being identified
 and presented in the UI.
 
 `no_drugs.pml` is a well-structured PML document that does not contain drug
-identifiers. Analysing it should result in no drugs being identified.
+identifiers. Analysing it should result in no drugs being identified with an
+error being displayed in the errors tab.
 
 ## Identify Drugs in DINTO - Complete
 
@@ -169,7 +171,8 @@ Visit the [homepage] and select a PML file that contains drugs; for example
 `panacea/test/fixtures/no_ddis.pml`. Press the `Submit` button. You should see
 that "cocaine" and "paracetamol" have been identified as drugs in DINTO. Testing
 `panacea/test/fixtures/unidentifiable_drugs.pml` returns drugs that cannot be
-identified in DINTO and are highlighted with a warning as a result.
+identified in DINTO and are highlighted with a warning in the warnings tab as a
+result.
 
 ## Identify DDIs - Complete
 
@@ -214,7 +217,7 @@ A record of queries made to DINTO (via Chiron/Asclepius) can be found in the
 console logs of the Chiron service.
 
 ### Testing
-This feature is tested manually by looking at the logs of the running sytem.
+This feature is tested manually by looking at the logs of the running system.
 
 First, open up the tail of the Chiron logs (the system must be running to do this):
 ```bash

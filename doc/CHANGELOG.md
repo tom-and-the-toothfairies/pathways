@@ -4,14 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-### Changed
+### Added
 - Added UI sections for displaying the different types of DDI sequencing
   categories identified by the system: parallel, sequential, repeated
   alternative, and alternative non-DDI
+- Added the ability to specify a delay in PML files
+
+### Changed
 - Redesigned the UI to use tabs for the different logical sections of the
   application: Analysis, Warnings, and Errors
 - The syntax error UI now includes contextual line highlighting
-
 
 ## [1.2] 2017-03-26
 

@@ -194,6 +194,12 @@ const formatDdiCategoryAtom = category => {
   return formattedCategory;
 };
 
+const formatDdiConstructs = constructs => {
+  return constructs.map(construct => {
+    return `${construct.type} on line ${construct.line}`;
+  }).join(', ');
+};
+
 const generateDdiElement = ddi => {
   const ddiContainer = document.createElement('div');
   let containerClass = null;
@@ -214,12 +220,14 @@ const generateDdiElement = ddi => {
   const drugInfoElement = generateDdiInfoSnippet('Drugs Involved', drugsInvolvedText);
   const harmfulElement = generateDdiInfoSnippet('Disposition', ddi.harmful ? 'Harmful' : 'Not Harmful');
   const categoryElement = generateDdiInfoSnippet('Category', formatDdiCategoryAtom(ddi.category));
+  const constructsElement = generateDdiInfoSnippet('Enclosing Constructs', formatDdiConstructs(ddi.enclosing_constructs));
   const spacingElement = generateDdiInfoSnippet('Spacing', `${ddi.spacing} days`);
 
   ddiContainer.appendChild(interactionNameElement);
   ddiContainer.appendChild(drugInfoElement);
   ddiContainer.appendChild(harmfulElement);
   ddiContainer.appendChild(categoryElement);
+  ddiContainer.appendChild(constructsElement);
   ddiContainer.appendChild(spacingElement);
 
   return ddiContainer;
