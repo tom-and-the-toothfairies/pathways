@@ -86,3 +86,15 @@ Then(/^I should see the following warnings in the clashes panel:$/) do |clashes|
     expect(body).to have_content(clash)
   end
 end
+
+Then(/^I should see "([^"]*)" in the warning number badge$/) do |number|
+  badge = find('#warnings-badge')
+
+  expect(badge).to have_content(number)
+end
+
+Then(/^I should see "([^"]*)" in the error number badge$/) do |number|
+  badge = find('#errors-badge')
+
+  expect(badge).to have_content(number)
+end

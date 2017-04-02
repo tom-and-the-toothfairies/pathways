@@ -1,4 +1,3 @@
-/* -*-tcl-*- */
 process martini {
     branch mix_and_prepare {
 	sequence mix {

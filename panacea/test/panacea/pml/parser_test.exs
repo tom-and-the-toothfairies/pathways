@@ -39,7 +39,108 @@ defmodule Panacea.Pml.ParserTest do
       process foo {{
       """
 
-      assert Parser.parse(pml) == {:error,  {:syntax_error, "line 1 -- syntax error before: '{'"}}
+      assert Parser.parse(pml) == { :error,
+        {
+          :syntax_error,
+          "syntax error before: '{'",
+          %{line: 1}
+        }
+      }
+    end
+  end
+
+  describe "time validations" do
+    test "it parses valid times" do
+      pml = """
+      process foo {
+        action bar {
+          requires {
+            time {
+              years { 10 }
+              weeks { 47 }
+              days { 120 }
+              hours { 12 }
+              minutes { 44 }
+              seconds { 12 }
+            }
+          }
+        }
+      }
+      """
+
+      assert {:ok, _} = Parser.parse(pml)
+    end
+
+    test "it rejects out of range times" do
+      bad_times = [
+        {"seconds", 60},
+        {"minutes", 60},
+        {"hours", 24},
+        {"days", 365},
+        {"weeks", 52},
+        {"years", 100}
+      ]
+
+      for {unit, value} <- bad_times do
+        pml = """
+        process foo {
+          action bar {
+            requires {
+              time {
+                #{unit} { #{value} }
+              }
+            }
+          }
+        }
+        """
+
+        {status, result} = Parser.parse(pml)
+        message = "'#{unit}' cannot be more than #{value - 1} (was #{value})"
+
+        assert status == :error
+        assert result == {:syntax_error, message, %{line: 5}}
+      end
+    end
+
+    test "it rejects repeated times" do
+      pml = """
+      process foo {
+        action bar {
+          requires {
+            time {
+              years { 4 }
+              years { 4 }
+            }
+          }
+        }
+      }
+      """
+
+      {status, result} = Parser.parse(pml)
+      message = "'years' used more than once in a single 'time' block"
+
+      assert status == :error
+      assert result == {:syntax_error, message, %{line: 6}}
+    end
+
+    test "it rejects non-integer times" do
+      pml = """
+      process foo {
+        action bar {
+          requires {
+            time {
+              years { 4.5 }
+            }
+          }
+        }
+      }
+      """
+
+      {status, result} = Parser.parse(pml)
+      message = "syntax error before: 4.5"
+
+      assert status == :error
+      assert result == {:syntax_error, message, %{line: 5}}
     end
   end
 end

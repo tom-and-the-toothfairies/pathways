@@ -13,6 +13,9 @@ expr
 logical_combination
 operator
 requires_expr
+time_expr
+time_expr_list
+time_unit
 operation
 value
 variable
@@ -42,6 +45,7 @@ manual
 executable
 
 % symbols
+
 '{'
 '}'
 '('
@@ -58,10 +62,19 @@ executable
 '!'
 
 % primitives
+
 string
 ident
 drug
-number.
+time
+years
+days
+weeks
+hours
+minutes
+seconds
+integer
+float.
 
 Rootsymbol pml.
 
@@ -127,9 +140,31 @@ action_attribute ->
 
 requires_expr ->
     drug '{' string '}'            : construct('$1', [], value_of('$3')).
-
+requires_expr ->
+    time '{' time_expr_list '}'    : construct('$1', [], value_of_time('$3')).
 requires_expr ->
     expression : '$1'.
+
+time_expr ->
+    time_unit '{' integer '}' : construct('$1', [], value_of('$3')).
+
+time_unit ->
+    years : '$1'.
+time_unit ->
+    weeks : '$1'.
+time_unit ->
+    days : '$1'.
+time_unit ->
+    hours : '$1'.
+time_unit ->
+    minutes : '$1'.
+time_unit ->
+    seconds : '$1'.
+
+time_expr_list ->
+    '$empty'                 : [].
+time_expr_list ->
+    time_expr time_expr_list : ['$1'|'$2'].
 
 expression -> expr logical_combination : construct(expression, [], join_with_spaces(['$1', '$2'])).
 
@@ -145,7 +180,8 @@ operation -> '$empty'       : "".
 value -> '!' expression     : "!" ++ value_of('$2').
 value -> '(' expression ')' : "(" ++ value_of('$2') ++ ")".
 value -> string             : value_of('$1').
-value -> number             : value_of('$1').
+value -> integer            : value_of('$1').
+value -> float              : value_of('$1').
 value -> variable           : '$1'.
 
 variable -> ident accessor              : value_of('$1') ++ '$2'.
@@ -169,6 +205,48 @@ operator -> '>=' : ">=".
 
 Erlang code.
 
+time_out_of_range_error(TimeType, Val, MaxVal, Line) ->
+    Type = atom_to_list(TimeType),
+    Time = integer_to_list(Val),
+    Message = "'" ++ Type ++ "' cannot be more than " ++ MaxVal ++ " (was " ++ Time ++")",
+    return_error(Line, Message).
+
+validate_time(years, Time, Line) when Time >= 100 ->
+    time_out_of_range_error(years, Time, "99", Line);
+validate_time(weeks, Time, Line) when Time >= 52 ->
+    time_out_of_range_error(weeks, Time, "51", Line);
+validate_time(days, Time, Line) when Time >= 365 ->
+    time_out_of_range_error(days, Time, "364", Line);
+validate_time(hours, Time, Line) when Time >= 24 ->
+    time_out_of_range_error(hours, Time, "23", Line);
+validate_time(minutes, Time, Line) when Time >= 60 ->
+    time_out_of_range_error(minutes, Time, "59", Line);
+validate_time(seconds, Time, Line) when Time >= 60 ->
+    time_out_of_range_error(seconds, Time, "59", Line);
+validate_time(_, Time, _) ->
+    Time.
+
+check_times([], T) ->
+    T;
+check_times([{TimeType, [{line, Line}], Val}|T], Accum) ->
+    case maps:is_key(TimeType,Accum) of
+        true ->
+            Message = "'" ++ atom_to_list(TimeType) ++ "' used more than once in a single 'time' block",
+            return_error(Line, Message);
+        false ->
+            TimeAsNumber = list_to_integer(Val),
+            validate_time(TimeType, TimeAsNumber, Line),
+            check_times(T, maps:put(TimeType, TimeAsNumber, Accum))
+    end.
+
+value_of_time(TimeList) ->
+    check_times(TimeList, maps:new()),
+    TimeList.
+
+value_of({integer, _, Int}) ->
+    integer_to_list(Int);
+value_of({float, _, Float}) ->
+    float_to_list(Float);
 value_of({_, _, Value}) ->
     Value.
 
