@@ -17,7 +17,9 @@ Feature: File upload
   Scenario: uploading a PML file with unidentifiable drugs
     When I select "unidentifiable_drugs.pml"
     And I submit the upload form
+    And I click the warnings tab
     Then I should see the unidentified drugs panel
+    And I should see "2" in the warning number badge
     And I should see the following drugs in the unidentified drugs panel:
       | marmalade           |
       | dimethylheptylpyran |
@@ -26,10 +28,23 @@ Feature: File upload
     When I select "no_drugs.pml"
     And I submit the upload form
     Then I should see the error panel
+    And I should see "1" in the error number badge
     And the error panel title should be "Pathway error"
 
   Scenario: uploading a PML file with syntax errors
     When I select "bad.pml"
+    And I submit the upload form
+    Then I should see the error panel
+    And I should see "1" in the error number badge
+    And the error panel title should be "Syntax error"
+
+  Scenario: uploading a PML file containing delays
+    When I select "delays.pml"
+    And I submit the upload form
+    Then I should see the found DDIs panel
+
+  Scenario: uploading a PML file with invalid delay timings
+    When I select "bad_delays.pml"
     And I submit the upload form
     Then I should see the error panel
     And the error panel title should be "Syntax error"
@@ -37,14 +52,18 @@ Feature: File upload
   Scenario: uploading a PML file with unnamed constructs
     When I select "analysis/unnamed.pml"
     And I submit the upload form
+    And I click the warnings tab
     Then I should see the unnamed panel
+    And I should see "1" in the warning number badge
     And I should see the following warnings in the unnamed panel:
       | task on line 2 |
 
   Scenario: uploading a PML file with clashing construct names
     When I select "analysis/clashes.pml"
     And I submit the upload form
+    And I click the warnings tab
     Then I should see the clashes panel
+    And I should see "2" in the warning number badge
     And I should see the following warnings in the clashes panel:
       | action clash1 on line 2 |
       | action clash1 on line 8 |
@@ -55,6 +74,7 @@ Feature: File upload
     When I select "example.png"
     And I submit the upload form
     Then I should see the error panel
+    And I should see "1" in the error number badge
     And the error panel title should be "Encoding error"
 
   Scenario: uploading a PML file with identifiable drugs that have an interaction
@@ -62,7 +82,7 @@ Feature: File upload
     And I submit the upload form
     Then I should see the found DDIs panel
     And I should see the following DDIs in the found DDIs panel:
-      | torasemide and trandolapril |
+      | torasemide on line 8 and trandolapril on line 17 |
 
   Scenario: uploading a PML file with identifiable drugs that don't have an interaction
     When I select "no_ddis.pml"

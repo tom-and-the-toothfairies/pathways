@@ -1,9 +1,10 @@
 Definitions.
 
-IDENT = [a-zA-Z0-9_]+
-WS    = [\s\t\n\r]+
-NUMBER = ([0-9]+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?
-STRING = "[^"]*"
+IDENT   = [a-zA-Z0-9_]+
+WS      = [\s\t\n\r]+
+INTEGER = [0-9]+
+FLOAT   = {INTEGER}?\.{INTEGER}([eE][+-]?{INTEGER})?
+STRING  = "[^"]*"
 COMMENT = \/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/
 
 Rules.
@@ -11,6 +12,13 @@ Rules.
 % keywords
 
 drug          : {token, {drug, TokenLine}}.
+time          : {token, {time, TokenLine}}.
+years         : {token, {years, TokenLine}}.
+weeks         : {token, {weeks, TokenLine}}.
+days          : {token, {days, TokenLine}}.
+hours         : {token, {hours, TokenLine}}.
+minutes       : {token, {minutes, TokenLine}}.
+seconds       : {token, {seconds, TokenLine}}.
 process       : {token, {process, TokenLine}}.
 task          : {token, {task, TokenLine}}.
 action        : {token, {action, TokenLine}}.
@@ -50,7 +58,8 @@ executable    : {token, {executable, TokenLine}}.
 {COMMENT}     : skip_token.
 {WS}          : skip_token.
 {STRING}      : {token, {string, TokenLine, TokenChars}}.
-{NUMBER}      : {token, {number, TokenLine, TokenChars}}.
+{INTEGER}     : {token, {integer, TokenLine, list_to_integer(TokenChars)}}.
+{FLOAT}       : {token, {float, TokenLine, list_to_float(TokenChars)}}.
 {IDENT}       : {token, {ident, TokenLine, TokenChars}}.
 
 Erlang code.

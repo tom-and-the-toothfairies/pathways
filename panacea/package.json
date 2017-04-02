@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.23.0",
-    "bootstrap.native": "^2.0.8",
+    "bootstrap": "^3.3.7",
     "jquery": "^3.2.1",
     "whatwg-fetch": "^2.0.3"
   },

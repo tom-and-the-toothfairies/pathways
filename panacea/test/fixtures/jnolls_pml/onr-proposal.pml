@@ -1,4 +1,4 @@
-/* -*-Tcl-*-
+/*
 Process for submitting proposals to ONR.
 */
 
@@ -6,7 +6,7 @@ process proposal_submit {
 
   action submit_proposal {
     /*requires { "proposal" }*/
-    script { 
+    script {
  "<p>Submit proposal contents.\
 <p>BAA to which this proposal responds: \
 <input name='baa' type='string' size=16 value='baa-12-96'>\
@@ -28,7 +28,7 @@ value='jnoll@usc.edu'>\
   }
 
   action submit_budget {
-    script { 
+    script {
  "<p>Submit budget.\
 <br>Proposal title: <input name='title' type='string' size=50 \
 value='Engineering a Procurement Process Architecture'>\
@@ -46,6 +46,3 @@ value='Engineering a Procurement Process Architecture'>\
     }
   }
 }
-
-
-
