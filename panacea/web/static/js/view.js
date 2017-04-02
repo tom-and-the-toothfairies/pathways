@@ -221,7 +221,7 @@ const generateDdiElement = ddi => {
   const harmfulElement = generateDdiInfoSnippet('Disposition', ddi.harmful ? 'Harmful' : 'Not Harmful');
   const categoryElement = generateDdiInfoSnippet('Category', formatDdiCategoryAtom(ddi.category));
   const constructsElement = generateDdiInfoSnippet('Enclosing Constructs', formatDdiConstructs(ddi.enclosing_constructs));
-  const spacingElement = generateDdiInfoSnippet('Spacing', `${ddi.spacing} days`);
+  const spacingElement = generateDdiInfoSnippet('Interaction Window', `${ddi.spacing} days`);
 
   ddiContainer.appendChild(interactionNameElement);
   ddiContainer.appendChild(drugInfoElement);
