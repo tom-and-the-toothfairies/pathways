@@ -11,7 +11,7 @@ tracked [here](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
 
 We have developed a suite of end to end tests that verify the whole system's
 functionality by automating interactions with a web browser. These can be run
-with the following command
+from the project's root directory with the following command
 
 ```bash
 $ sudo docker-compose -f docker-compose.e2e.yml -p integration run athloi; sudo docker-compose -f docker-compose.e2e.yml -p integration down
