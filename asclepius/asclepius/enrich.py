@@ -5,15 +5,18 @@ import dinto
 import clize
 from clize.parameters import one_of
 
+UNITS = ('hr', 'day')
+
 def _sha_int(string):
     return int(sha1(string.encode()).hexdigest()[-8:], 16)
 
 def _enrich(ddi):
     uri = ddi['uri']
+    sha = _sha_int(uri)
     result = {
-        'harmful': bool(_sha_int(uri) % 2),
-        'spacing': _sha_int(uri) % 14 + 1,
-
+        'harmful': bool(sha % 2),
+        'spacing': sha % 14 + 1,
+        'unit': UNITS[sha % len(UNITS)],
         # we want them to be a bit different
         'agonism': bool(_sha_int(''.join(sorted(uri))) % 2),
     }
@@ -32,7 +35,7 @@ def main(flavour:one_of('harmful', 'agonism')):
     writer.writeheader()
 
     for ddi in enrich(dinto.all_ddis()):
-        ddi.update({'time': ddi['spacing'], 'unit': 'hr'})
+        ddi.update({'time': ddi['spacing']})
         writer.writerow({k: ddi[k] for k in fieldnames})
 
 
