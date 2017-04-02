@@ -32,29 +32,40 @@ loading() {
 main() {
     if [ $# -ne 2 ]; then
         usage
-        exit 2
+        exit 1
     fi
 
-    local readonly flavour="$1"; shift
-    local readonly outfile="$1"; shift
+    local readonly flavour="$1"
+    local readonly outfile="$2"
+
     case "$flavour" in
         harmful|agonism)
             loading &
-            local readonly LOAD_PID="$!";
-            trap  "kill $LOAD_PID 2>&1 > /dev/null; exit" SIGTERM SIGKILL SIGINT
+            local readonly LOADING_SPINNER_PID="$!";
+            trap  "kill $LOADING_SPINNER_PID 2>&1 > /dev/null; exit" SIGTERM SIGKILL SIGINT
             disown
-            docker-compose --file docker-compose.dev.yml \
-                run --rm asclepius python3 asclepius/enrich.py "$flavour" \
+
+            sudo docker-compose \
+                -p export_ddis run \
+                --rm asclepius python3 asclepius/enrich.py "$flavour" \
                 > "$outfile"
-            kill "$LOAD_PID";
-            exit 1
+
+            sudo docker-compose -p export_ddis down
+
+            kill "$LOADING_SPINNER_PID";
+            exit 0
         ;;
 
         *)
             usage
-            exit 2
+            exit 1
         ;;
     esac
 }
+
+if [ $EUID != 0 ]; then
+    sudo "$0" "$@"
+    exit $?
+fi
 
 main "$@"
