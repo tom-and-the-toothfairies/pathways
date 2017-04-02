@@ -2,17 +2,17 @@ version: '2'
 
 services:
   asclepius:
-    image: tomtoothfairies/asclepius:1.2
+    image: tomtoothfairies/asclepius:1.3
     depends_on:
       - chiron
 
   panacea:
     depends_on:
       - asclepius
-    image: tomtoothfairies/panacea:1.2
+    image: tomtoothfairies/panacea:1.3
 
   chiron:
-    image: tomtoothfairies/chiron:1.2
+    image: tomtoothfairies/chiron:1.3
 
   selenium:
     image: selenium/standalone-firefox:latest
@@ -21,4 +21,4 @@ services:
     depends_on:
       - selenium
       - panacea
-    image: tomtoothfairies/athloi:1.2
+    image: tomtoothfairies/athloi:1.3

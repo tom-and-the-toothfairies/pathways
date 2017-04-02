@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.3] 2017-04-02
 
 ### Added
 - Added UI sections for displaying the different types of DDI sequencing
@@ -153,7 +153,8 @@ All notable changes to this project will be documented in this file.
   docker service: pathways.
 - Installation instructions in README
 
-[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.2...iteration-7
+[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.3...release-2
+[1.3]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.2...1.3
 [1.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.1...1.2
 [1.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.0...1.1
 [1.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/0.3...1.0
