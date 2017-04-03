@@ -42,7 +42,7 @@ main() {
         harmful|agonism)
             loading &
             local readonly LOADING_SPINNER_PID="$!";
-            trap  "kill $LOADING_SPINNER_PID 2>&1 > /dev/null; exit" SIGTERM SIGKILL SIGINT
+            trap  "kill $LOADING_SPINNER_PID 2>&1 > /dev/null; exit" SIGTERM SIGINT
             disown
 
             sudo docker-compose \
