@@ -9,7 +9,7 @@ maximum convenience - click-able links for example*
 This file contains instructions on how to install and run the project, as well
 as an overview of the project's design. The target platform is Ubuntu 16.04.
 
-At the time of writing the current release is `1.2`
+At the time of writing the current release is `1.3`
 
 ## Installing Dependencies
 

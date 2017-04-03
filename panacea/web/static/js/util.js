@@ -3,4 +3,3 @@ export const createElementWithClass = (elementName, className) => {
   element.classList.add(className);
   return element;
 };
-

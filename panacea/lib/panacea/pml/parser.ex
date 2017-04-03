@@ -25,7 +25,7 @@ defmodule Panacea.Pml.Parser do
 
   defp log_result({:error, reason = {line, _, _}}) do
     formatted = Error.format(reason)
-    Logger.error("PML Parsing error: #{formatted}")
+    Logger.error("PML Parsing error: line #{line} -- #{formatted}")
 
     {:error, {:syntax_error, formatted, %{line: line}}}
   end
