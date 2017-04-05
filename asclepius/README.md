@@ -5,8 +5,15 @@ Flask endpoint for querying DINTO. Supports querying for all drugs listed, as we
 
 This application acts as an adaptor to Chiron - an instance of Apache Fuseki, Chiron must be running before any queries can be served.
 
-Endpoints
----------
+CSV File Exporting
+------------------
+
+When run as a program, the `enrich` module will export DDIs, along with mock timing and agonism/harmfulness information. 
+
+Run as `python3 enrich.py <harmful|agonism> > outfile.csv` to export to a CSV file.
+
+HTTP Endpoints
+-------------
 
 ### `/all_drugs`
 
@@ -59,15 +66,21 @@ Endpoints
 [
   {
     "label": "torasemide/trandolapril DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_11031"
+    "uri": "http://purl.obolibrary.org/obo/DINTO_11031",
+    "drug_a": "torasemide",
+    "drug_b": "trandolapril"
   },
   {
     "label": "cimetidine/heroin DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_02733"
+    "uri": "http://purl.obolibrary.org/obo/DINTO_02733",
+    "drug_a": "cimetidine",
+    "drug_b": "heroin"
   },
   {
     "label": "methylergonovine/telithromycin DDI",
-    "uri": "http://purl.obolibrary.org/obo/DINTO_10154"
+    "uri": "http://purl.obolibrary.org/obo/DINTO_10154",
+    "drug_a": "methylergonovine",
+    "drug_b": "telithromycin"
   }
 ]
 ```

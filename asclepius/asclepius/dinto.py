@@ -83,10 +83,19 @@ def drugs(labels=None):
 def all_ddis():
     return f'''
     {PREFIXES}
-    SELECT ?uri ?label
+    SELECT ?drug_a ?drug_b ?uri ?label
     WHERE {{
-        ?uri rdfs:subClassOf {DDI}.
-        ?uri rdfs:label ?label
+        ?drug_a_uri rdfs:label ?drug_a.
+        ?drug_b_uri rdfs:label ?drug_b.
+        ?uri rdfs:label ?label.
+        ?uri rdfs:subClassOf {DDI} .
+        ?uri owl:equivalentClass ?equivalance .
+        ?equivalance owl:intersectionOf ?restrictions .
+        ?restrictions rdf:first ?drug1Restriction .
+        ?restrictions rdf:rest  ?tail .
+        ?tail rdf:first ?drug2Restriction .
+        ?drug1Restriction owl:someValuesFrom ?drug_a_uri .
+        ?drug2Restriction owl:someValuesFrom ?drug_b_uri .
     }}
     '''
 

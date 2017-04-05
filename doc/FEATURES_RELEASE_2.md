@@ -1,11 +1,11 @@
 # Features - Release 2
 
-Each deliverable feature for Release 2 is outlined in this file. Each feature
-is given a short description. For completed features, instructions on how to
-verify the feature are provided.
+Each deliverable feature for Release 2 is outlined in this file. Each feature is
+given a short description. For completed features, instructions on how to verify
+the feature are provided.
 
 Continuous integration testing has been set up for the project and can be
-tracked [here](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
+tracked on [the CI dashboard](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
 
 ## End to End Automated Testing
 
@@ -26,6 +26,70 @@ format. These `feature` files can be found [here](../athloi/features).
 
 To manually verify features, run the project as outlined in the [README].
 The homepage is available at [localhost:4000](http://localhost:4000).
+
+## Mock DDI Characterisation Data - Complete
+
+### Description
+
+The system must provide and display mock data on DDI Harmfulness and DDI
+interaction windows.
+
+### Testing
+
+Visit the [homepage]. Select `panacea/test/fixtures/ddis.pml` which contains a
+DDI. Press `Submit`. The system should display the DDI information
+for the DDI found, including whether its disposition is `Good` or `Bad`,
+the timing window and units of this timing window, as well as the drugs involved.
+
+
+## Real DDI Mock Good-Bad Time Generator - Complete
+
+### Description
+
+The system must provide a means of generating mock data about the disposition of
+a DDI - whether it is `Good` or `Bad`.
+
+_A Good DDI is one which has an overall beneficial pharmacological effect._
+
+_A Bad DDI is one which has an overall detrimental pharmacological effect._
+
+### Testing
+
+Enter the root of the repository. Run the command
+
+```bash
+$ ./export-mock-ddi-data.sh harmful harmful.csv
+```
+
+The file `harmful.csv` will be constructed, which can be viewed in a text editor.
+The output of this command is also readily available to view in the
+[mock-enriched-ddis directory](../mock-enriched-ddis/harmful.csv) of our repository.
+
+
+## Real DDI Mock Agonist-Antagonist Time Generator - Complete
+
+### Description
+
+The system must provide a means of generating mock data about the agonism disposition of
+a DDI - whether it is an `Agonism` or an `Antagonism`.
+
+_An agonism involving `Drug 1` and `Drug 2` is a DDI such that `Drug 1` **increases** the
+effect of `Drug 2`_
+
+_An antagonism involving `Drug 1` and `Drug 2` is a DDI such that `Drug 1` **decreases** the
+effect of `Drug 2`_
+
+### Testing
+
+Enter the root of the repository. Run the command
+
+```bash
+$ ./export-mock-ddi-data.sh agonism agonism.csv
+```
+
+The file `agonism.csv` will be constructed, which can be viewed in a text editor.
+The output of this command is also readily available to view in the
+[mock-enriched-ddis directory](../mock-enriched-ddis/agonism.csv) of our repository.
 
 ## Report Unnamed PML Construct - Complete
 
