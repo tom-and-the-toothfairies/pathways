@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Added tool to generate mock DDI data, for both badness and agonism
+- Added exported data from running this tool
+
+### Fixed
+- Mock DDI data is deterministic across different runs of the app
+- Display correct spacing time units in frontend
+
 ## [1.3] 2017-04-02
 
 ### Added
