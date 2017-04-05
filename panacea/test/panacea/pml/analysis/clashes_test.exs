@@ -15,15 +15,15 @@ defmodule Panacea.Pml.Analysis.ClashesTest do
           %{
             name: "clash1",
             occurrences: [
-              %{line: 8, type: :action},
+              %{line: 9, type: :action},
               %{line: 2, type: :action}
             ]
           },
           %{
             name: "clash2",
             occurrences: [
-              %{line: 6, type: :action},
-              %{line: 4, type: :action}
+              %{line: 7, type: :action},
+              %{line: 5, type: :action}
             ]
           }
         ]
