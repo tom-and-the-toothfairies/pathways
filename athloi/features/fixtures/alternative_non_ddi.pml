@@ -1,5 +1,5 @@
 process alternative_non_ddis {
-  selection {
+  selection sel1 {
     action s1 {
       requires { drug { "trandolapril" } }
     }

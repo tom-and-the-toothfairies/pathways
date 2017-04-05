@@ -1,5 +1,5 @@
 process parallel_ddis {
-  branch {
+  branch br1 {
     action b1 {
       requires { drug { "trandolapril" } }
     }

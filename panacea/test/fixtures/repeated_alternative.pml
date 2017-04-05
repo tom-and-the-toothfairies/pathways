@@ -1,6 +1,6 @@
 process repeated_alternative_ddis {
-  iteration {
-    selection {
+  iteration it1 {
+    selection sel1 {
       action s1 {
         requires { drug { "trandolapril" } }
       }
