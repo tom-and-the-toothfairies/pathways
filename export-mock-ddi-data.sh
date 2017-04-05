@@ -3,31 +3,15 @@ usage() {
 cat <<EOF
 Export a CSV file of Drug-Drug interactions from the Pathways system.
 
-Writes out to <outfile>
+Writes mock enriched DDI data out to <outfile>
 
 Resultant CSV file is of the format:
-  drug_a, drug_b, {agonism or harmful}, time, unit
+  Drug 1, Drug 2, DDI Type, Time, Unit
 
 Usage:
     $0 <agonism|harmful> <outfile>
 EOF
 }
-
-
-loading() {
-    echo 'Exporting'
-    while true; do
-        printf "\r | "
-        sleep 0.125
-        printf "\r / "
-        sleep 0.125
-        printf "\r - "
-        sleep 0.125
-        printf "\r \\ "
-        sleep 0.125
-    done
-}
-
 
 main() {
     if [ $# -ne 2 ]; then
@@ -40,19 +24,8 @@ main() {
 
     case "$flavour" in
         harmful|agonism)
-            loading &
-            local readonly LOADING_SPINNER_PID="$!";
-            trap  "kill $LOADING_SPINNER_PID 2>&1 > /dev/null; exit" SIGTERM SIGINT
-            disown
-
-            sudo docker-compose \
-                -p export_ddis \
-                run asclepius python3 asclepius/enrich.py "$flavour" \
-                > "$outfile"
-
-            sudo docker-compose -p export_ddis down
-
-            kill "$LOADING_SPINNER_PID";
+            sudo docker-compose -p export run asclepius python3 asclepius/enrich.py "$flavour" > "$outfile"
+            sudo docker-compose -p export down
             exit 0
         ;;
 
@@ -62,10 +35,5 @@ main() {
         ;;
     esac
 }
-
-if [ $EUID != 0 ]; then
-    sudo "$0" "$@"
-    exit $?
-fi
 
 main "$@"
