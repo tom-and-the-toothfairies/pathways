@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0] 2017-04-09
 
 ### Added
 - Added tool to generate mock DDI data, for both badness and agonism
@@ -163,7 +163,7 @@ All notable changes to this project will be documented in this file.
   docker service: pathways.
 - Installation instructions in README
 
-[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.3...release-2
+[2.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.3...2.0
 [1.3]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.2...1.3
 [1.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.1...1.2
 [1.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.0...1.1
