@@ -66,9 +66,9 @@ Feature: File upload
     And I should see "2" in the warning number badge
     And I should see the following warnings in the clashes panel:
       | action clash1 on line 2 |
-      | action clash1 on line 8 |
-      | action clash2 on line 4 |
-      | action clash2 on line 6 |
+      | action clash1 on line 9 |
+      | action clash2 on line 5 |
+      | action clash2 on line 7 |
 
   Scenario: uploading a binary file
     When I select "example.png"

@@ -1,11 +1,11 @@
 # Features - Release 2
 
-Each deliverable feature for Release 2 is outlined in this file. Each feature
-is given a short description. For completed features, instructions on how to
-verify the feature are provided.
+Each deliverable feature for Release 2 is outlined in this file. Each feature is
+given a short description. For completed features, instructions on how to verify
+the feature are provided.
 
 Continuous integration testing has been set up for the project and can be
-tracked [here](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
+tracked on [the CI dashboard](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
 
 ## End to End Automated Testing
 
@@ -20,19 +20,101 @@ $ sudo docker-compose -f docker-compose.e2e.yml -p integration run athloi; sudo 
 Our to end to end tests are written using the Cucumber
 behaviour-driven-development test framework which allows tests to be written
 according to user stories in plain English in the friendly "Given When Then"
-format. These `feature` files can be found [here](../athloi/features).
+format. These `feature` files can be
+found [in the Athloi directory](../athloi/features).
 
 ## Manually Verifying Features
 
 To manually verify features, run the project as outlined in the [README].
 The homepage is available at [localhost:4000](http://localhost:4000).
 
+## Mock DDI Characterisation Data - Complete
+
+### Description
+
+The system must provide and display mock data on DDI Harmfulness and DDI
+interaction windows.
+
+### Testing
+
+Facilities to export this mock characterisation data as a CSV file indicating
+whether an interaction is `Good`/`Bad` or an `Antagonism`/`Agonism` has been
+provided by the
+[Real DDI Mock Good-Bad Time Generator](#real-ddi-mock-good-bad-time-generator---complete) and
+[Real DDI Mock Agonist-Antagonist Time Generator](#real-ddi-mock-agonist-antagonist-time-generator---complete) features.
+
+This mock DDI characterisation data is displayed in the user interface. Visit
+the [homepage]. Select `panacea/test/fixtures/ddis.pml` which contains a DDI.
+Press `Submit`. The system should display the DDI information for the DDI found,
+including whether its disposition is `Not Harmful`(Good) or `Harmful`(Bad), the
+timing window and units of this timing window, as well as the drugs involved.
+
+Specifically, it should display that the mock classification for the
+torasemide/trandolapril interaction is "Harmful" and that the mock interaction
+window is "2 years".
+
+## Real DDI Mock Good-Bad Time Generator - Complete
+
+### Description
+
+The system must provide a means of generating mock data about the disposition of
+a DDI - whether it is `Good` or `Bad`.
+
+_A Good DDI is one which has an overall beneficial pharmacological effect._
+
+_A Bad DDI is one which has an overall detrimental pharmacological effect._
+
+### Testing
+
+Enter the root of the repository. Run the command
+
+```bash
+$ ./export-mock-ddi-data.sh harmful harmful.csv
+```
+
+The file `harmful.csv` will be constructed, which can be viewed in a text
+editor. The output of this command is also readily available to view in
+the [mock-enriched-ddis directory](../mock-enriched-ddis/harmful.csv) of our
+repository.
+
+This is the same data that our production services use and will display to the
+user.
+
+## Real DDI Mock Agonist-Antagonist Time Generator - Complete
+
+### Description
+
+The system must provide a means of generating mock data about the agonism disposition of
+a DDI - whether it is an `Agonism` or an `Antagonism`.
+
+_An agonism involving `Drug 1` and `Drug 2` is a DDI such that `Drug 1` **increases** the
+effect of `Drug 2`_
+
+_An antagonism involving `Drug 1` and `Drug 2` is a DDI such that `Drug 1` **decreases** the
+effect of `Drug 2`_
+
+### Testing
+
+Enter the root of the repository. Run the command
+
+```bash
+$ ./export-mock-ddi-data.sh agonism agonism.csv
+```
+
+The file `agonism.csv` will be constructed, which can be viewed in a text
+editor. The output of this command is also readily available to view in
+the [mock-enriched-ddis directory](../mock-enriched-ddis/agonism.csv) of our
+repository.
+
+This is the same data that our production services use and will display to the
+user.
+
 ## Report Unnamed PML Construct - Complete
 
 ### Description
 
 The system must identify PML constructs that are not named. The system must
-display useful error messages about such constructs to the user.
+display useful warning messages about such constructs to the user.
 
 ### Testing
 
@@ -48,7 +130,7 @@ Specifically, it should highlight an unnamed `task` on line `2`.
 ### Description
 
 The system must identify PML constructs that have the same name. The system
-must display useful error messages about such constructs to the user.
+must display useful warning messages about such constructs to the user.
 
 ### Testing
 
@@ -171,14 +253,16 @@ A simple example of a pathway containing a delay is given below:
 ```
 process Delays {
   task TakesTime {
-    requires {
-      time {
-        years { 20 }
-        days { 15 }
-        minutes { 6 }
-        hours { 10 }
-        seconds { 14 }
-        weeks { 12 }
+    action timetaker {
+      requires {
+        time {
+          years { 20 }
+          days { 15 }
+          minutes { 6 }
+          hours { 10 }
+          seconds { 14 }
+          weeks { 12 }
+        }
       }
     }
   }

@@ -1,5 +1,6 @@
 process foo {
   action clash1 {
+    requires { drug { "paracetamol" } }
   }
   action clash2 {
   }

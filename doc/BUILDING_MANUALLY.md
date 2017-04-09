@@ -1,7 +1,7 @@
 # Building Manually
 
-There are DNS problems when running containers in *Ubuntu* within the *TCD
-network*. This can be resolved while on the TCD network by editing the Docker
+There are DNS problems when running containers in **Ubuntu** within the **TCD
+network**. This can be resolved while on the TCD network by editing the Docker
 DNS config.
 
 ```bash

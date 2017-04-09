@@ -200,6 +200,20 @@ const formatDdiConstructs = constructs => {
   }).join(', ');
 };
 
+const formatSpacingInfo = (spacing, unit) => {
+  const table = {
+    sec: 'second',
+    min: 'minute',
+    hr: 'hour',
+    day: 'day',
+    week: 'week',
+    yr: 'year'
+  };
+
+  const niceUnit = `${table[unit]}${spacing === 1 ? '' : 's'}`;
+  return `${spacing} ${niceUnit}`;
+};
+
 const generateDdiElement = ddi => {
   const ddiContainer = document.createElement('div');
   let containerClass = null;
@@ -221,8 +235,7 @@ const generateDdiElement = ddi => {
   const harmfulElement = generateDdiInfoSnippet('Disposition', ddi.harmful ? 'Harmful' : 'Not Harmful');
   const categoryElement = generateDdiInfoSnippet('Category', formatDdiCategoryAtom(ddi.category));
   const constructsElement = generateDdiInfoSnippet('Enclosing Constructs', formatDdiConstructs(ddi.enclosing_constructs));
-  const spacingUnit = ddi.spacing === 1 ? 'day' : 'days';
-  const spacingElement = generateDdiInfoSnippet('Interaction Window', `${ddi.spacing} ${spacingUnit}`);
+  const spacingElement = generateDdiInfoSnippet('Interaction Window', formatSpacingInfo(ddi.spacing, ddi.unit));
 
   ddiContainer.appendChild(interactionNameElement);
   ddiContainer.appendChild(drugInfoElement);

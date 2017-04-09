@@ -147,8 +147,10 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
       },
       "label": "torasemide/trandolapril DDI",
       "uri": "http://purl.obolibrary.org/obo/DINTO_11031",
-      "harmful": false,
-      "spacing": 3,
+      "harmful": true,
+      "spacing": 2,
+      "unit": "yr",
+      "agonism": true,
       "category": "sequential",
       "enclosing_constructs": [
         {
@@ -160,6 +162,15 @@ Tokens can be generated using: `Panacea.AccessToken.generate()`
   ]
 }
 ```
+
+### `/api/ast`
+
+|             |                                                                          |
+|-------------|------------------------------------------------------------------------- |
+| Description | Convert an PML AST into a PML Document                                   |
+| Methods     | `POST`                                                                   |
+| Parameters  | An object containing the *pml ast* to be converted                       |
+| Returns     | The PML document as an attachment named `pml-tx.pml`, or an error object |
 
 ### Error Objects
 
@@ -175,12 +186,3 @@ All error responses take have the following format:
   }
 }
 ```
-
-### `/api/ast`
-
-|             |                                                                          |
-|-------------|------------------------------------------------------------------------- |
-| Description | Convert an PML AST into a PML Document                                   |
-| Methods     | `POST`                                                                   |
-| Parameters  | An object containing the *pml ast* to be converted                       |
-| Returns     | The PML document as an attachment named `pml-tx.pml`, or an error object |

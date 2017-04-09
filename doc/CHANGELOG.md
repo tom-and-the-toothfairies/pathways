@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0] 2017-04-09
+
+### Added
+- Added tool to generate mock DDI data, for both badness and agonism
+- Added exported data from running the mock DDI data generation tool
+
+### Fixed
+- Mock DDI data is deterministic across different runs of the app
+- Display correct spacing time units in frontend
+
 ## [1.3] 2017-04-02
 
 ### Added
@@ -153,7 +163,7 @@ All notable changes to this project will be documented in this file.
   docker service: pathways.
 - Installation instructions in README
 
-[Unreleased]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.3...release-2
+[2.0]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.3...2.0
 [1.3]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.2...1.3
 [1.2]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.1...1.2
 [1.1]: https://github.com/tom-and-the-toothfairies/pathways/compare/1.0...1.1
