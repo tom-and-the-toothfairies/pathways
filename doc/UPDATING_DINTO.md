@@ -5,7 +5,7 @@ This file contains instructions on how to change the OWL file used in the system
 # Background
 
 As described in the [README], our system builds a queryable database out of the
-OWL file. This database is built into a docker image (Chiron) that is then deployed to
+OWL file. This database is built into a Docker image (Chiron) that is then deployed to
 the production environment. Within Chiron's [Dockerfile], the environment variable
 `OWL_FILE` specifies which file is used.
 
@@ -23,14 +23,14 @@ the specified *URL*.
 # Rebuilding and Releasing new image
 
 Once the [Dockerfile] has been updated, the changes can be committed and merged
-into the master branch after passing CI and code review.
+into the `master` branch after passing CI and code review.
 
-The docker images are automatically built on [Docker Hub] when a new git tag is
-pushed to github. After the changes have made it into master, trigger a new
+The Docker images are automatically built on [Docker Hub] when a new git tag is
+pushed to Github. After the changes have made it into `master`, trigger a new
 build by tagging the release. The built images are tagged with the git tag.
 
-In production, the [docker compose file] is used to pull and start the services.
-Edit the [docker compose file] and update Chiron's version number to the new tag.
+In production, the [Docker Compose file] is used to pull and start the services.
+Edit the [Docker Compose file] and update Chiron's version number to the new tag.
 
 The new images can then be deployed to production.
 

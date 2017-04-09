@@ -13,8 +13,8 @@ At the time of writing the current release is `1.3`
 
 ## Installing Dependencies
 
-This project uses Docker and Docker Compose. For Ubuntu 16.04, an installation
-script `install-docker.sh` is provided for convenience.
+This project uses Docker and Docker Compose. An installation script,
+`install-docker.sh`, is provided for Ubuntu 16.04.
 
 ```bash
 $ ./install-docker.sh
@@ -22,9 +22,9 @@ $ ./install-docker.sh
 
 For platforms other than Ubuntu, follow the installation instructions on
 the [Docker Website][install docker ce]. Note - on other platforms, sudo is not
-required for docker commands.
+required for Docker commands.
 
-You can test your docker installation by running docker's built in hello-world:
+You can test your Docker installation by running Docker's built in hello-world:
 
 ```bash
 $ sudo docker run hello-world
@@ -32,7 +32,7 @@ $ sudo docker run hello-world
 
 ## Running
 
-The project can be run with `docker compose`
+The project can be run with Docker Compose:
 
 ```bash
 $ sudo docker-compose up -d
@@ -40,7 +40,7 @@ $ sudo docker-compose up -d
 
 The system is then accessible at [localhost:4000](http://localhost:4000).
 
-To stop the project, run the following command
+To stop the system, run the following command
 
 ```bash
 $ sudo docker-compose down
@@ -60,14 +60,13 @@ document](./doc/FEATURES_RELEASE_1.md).
 
 ## Change Log
 
-The change log for the project can be found [here](./doc/CHANGELOG.md)
-
+Changes to the project are recorded in the [change log](./doc/CHANGELOG.md).
 
 ## Architecture Overview
 
 The system is split into three distinct services; Panacea, Asclepius and Chiron.
 The auxiliary service, Athloi, is used for automated testing.
-They each run inside a docker container. The containers can be easily managed
+They each run inside a Docker container. The containers can be easily managed
 using `docker-compose` as mentioned earlier.
 
 ### Panacea
@@ -75,14 +74,14 @@ using `docker-compose` as mentioned earlier.
 Panacea is responsible for the UI and PML analysis. It is a web application that
 serves the UI and exposes an API for uploading PML files for analysis.
 
-More information about Panacea can be found [here](./panacea/README.md).
+More information about Panacea can be found [in the Panacea README](./panacea/README.md).
 
 ### Chiron
 
 Chiron houses the DINTO data. The data is compiled into a triple store. Chiron
 exposes a HTTP API for querying the triple store.
 
-More information about Chiron can be found [here](./chiron/README.md).
+More information about Chiron can be found [in the Chiron README](./chiron/README.md).
 
 ### Asclepius
 
@@ -90,20 +89,20 @@ Asclepius acts as an intermediary between Panacea and Chiron. It accepts
 requests to identify DDIs from Panacea, creates the necessary SPARQL query and
 passes it on to Chiron.
 
-More information about Asclepius can be found [here](./asclepius/README.md).
+More information about Asclepius can be found [in the Asclepius README](./asclepius/README.md).
 
 ### Athloi
 
 Athloi is the service that runs our end to end tests.
 
-More information about Athloi can be found [here](./athloi/README.md).
+More information about Athloi can be found [in the Athloi README](./athloi/README.md).
 
 ## Building Manually
 
-Docker compose will pull down the required versions of each service from [Docker
+Docker Compose will pull down the required versions of each service from [Docker
 Hub] when you run the project. If for some reason you wish to build these
 services manually, instructions for doing so can be
-found [here](./doc/BUILDING_MANUALLY.md).
+found [in the manual build documentation](./doc/BUILDING_MANUALLY.md).
 
 
 

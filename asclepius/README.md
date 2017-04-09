@@ -1,14 +1,17 @@
 Asclepius ⚕
 ===========
 
-Flask endpoint for querying DINTO. Supports querying for all drugs listed, as well as finding all, or specific drug-drug interactions.
+Flask endpoint for querying DINTO. Supports querying for all drugs listed, as
+well as finding all, or specific drug-drug interactions.
 
-This application acts as an adaptor to Chiron - an instance of Apache Fuseki, Chiron must be running before any queries can be served.
+This application acts as an adaptor to Chiron - an instance of Apache Fuseki,
+Chiron must be running before any queries can be served.
 
 CSV File Exporting
 ------------------
 
-When run as a program, the `enrich` module will export DDIs, along with mock timing and agonism/harmfulness information. 
+When run as a program, the `enrich` module will export DDIs, along with mock
+timing and agonism/harmfulness information.
 
 Run as `python3 enrich.py <harmful|agonism> > outfile.csv` to export to a CSV file.
 
@@ -51,12 +54,12 @@ HTTP Endpoints
 
 ### `/all_ddis`
 
-|             |                                                                                                        |
-|-------------|--------------------------------------------------------------------------------------------------------|
-| Description | Find all drug-drug interactions (DDIs) in the DINTO ontology                                           |
-| Methods     | `GET`                                                                                                  |
-| Parameters  | None                                                                                                   |
-| Returns     | A list containing pairs of the canonical URI for a drug-drug interaction, as well as its English Label |
+|             |                                                                                                                                             |
+|-------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| Description | Find all drug-drug interactions (DDIs) in the DINTO ontology                                                                                |
+| Methods     | `GET`                                                                                                                                       |
+| Parameters  | None                                                                                                                                        |
+| Returns     | A list containing pairs of the canonical URI for a drug-drug interaction, as well as its English label and the labels of the drugs involved |
 
 #### Example
 
@@ -87,12 +90,13 @@ HTTP Endpoints
 
 ### `/ddis`
 
-|              |                                                                                                  |
-|--------------|--------------------------------------------------------------------------------------------------|
-| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the *given* drugs |
-| Methods      | `POST`                                                                                           |
-| Request Body | An object containing a list of *DINTO URIs*                                                      |
-| Returns      | A list of DDI objects; its label, its URI, the identifiers of the two drugs involved, the spacing between dosages required to avoid the DDI (in days) as well as whether or not it is a harmful interaction |
+|              |                                                                                                                                                                                                                             |
+|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Description  | Find all drug-drug interactions (DDI) in the DINTO ontology which involve only the *given* drugs                                                                                                                            |
+| Methods      | `POST`                                                                                                                                                                                                                      |
+| Request Body | An object containing a list of *DINTO URIs*                                                                                                                                                                                 |
+| Returns      | A list of DDI objects; its label, its URI, the identifiers of the two drugs involved, the spacing between dosages required to avoid the DDI as well as whether or not it is a harmful interaction and an agonism/antagonism |
+|              |                                                                                                                                                                                                                             |
 
 #### Example
 ##### Request Body
@@ -114,8 +118,10 @@ HTTP Endpoints
     "drug_b": "http://purl.obolibrary.org/obo/DINTO_DB00519",
     "label": "torasemide/trandolapril DDI",
     "uri": "http://purl.obolibrary.org/obo/DINTO_11031",
-    "harmful": false,
-    "spacing": 3
+    "harmful": true,
+    "spacing": 2,
+    "unit": "yr",
+    "agonism": true
   }
 ]
 ```

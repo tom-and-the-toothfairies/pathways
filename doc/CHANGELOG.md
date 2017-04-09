@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Added tool to generate mock DDI data, for both badness and agonism
-- Added exported data from running this tool
+- Added exported data from running the mock DDI data generation tool
 
 ### Fixed
 - Mock DDI data is deterministic across different runs of the app

@@ -1,11 +1,11 @@
 # Features - Release 1
 
-Each deliverable feature for Release 1 is outlined in this file. Each feature
-is given a short description. For completed features, instructions on how to
-verify the feature are provided.
+Each deliverable feature for Release 1 is outlined in this file. Each feature is
+given a short description. For completed features, instructions on how to verify
+the feature are provided.
 
 Continuous integration testing has been set up for the project and can be
-tracked [here](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
+tracked on [the CI dashboard](https://circleci.com/gh/tom-and-the-toothfairies/pathways).
 
 ## End to End Automated Testing
 
@@ -20,7 +20,8 @@ $ sudo docker-compose -f docker-compose.e2e.yml -p integration run athloi; sudo 
 Our to end to end tests are written using the Cucumber
 behaviour-driven-development test framework which allows tests to be written
 according to user stories in plain English in the friendly "Given When Then"
-format. These `feature` files can be found [here](../athloi/features).
+format. These `feature` files can be
+found [in the Athloi directory](../athloi/features).
 
 ## Manually Verifying Features
 
@@ -34,7 +35,7 @@ The system allows users to upload PML files for analysis. Users must be able to
 select these files from their local file system.
 
 ### Testing
-Visit the [homepage]. Click the `Choose File` button and select a file
+Visit the [homepage]. Click the `Choose PML File` button and select a file
 (`panacea/test/fixtures/ddis.pml` for example). The name of the chosen file
 should be displayed beside the file selection button. If you have selected the
 file suggested above, you should see `ddis.pml`.
@@ -87,7 +88,7 @@ successful analysis displayed in the analysis tab.
 
 ### Description
 The successful or unsuccessful loading of PML files into the system is output
-to the console logs of the panacea service.
+to the console logs of the Panacea service.
 
 ### Testing
 First, open up the tail of the Panacea logs (the system must be running to do
@@ -111,11 +112,11 @@ Administrative users must have the ability to update the OWL file used as the
 source of DDI information.
 
 As described in the [README], our system builds a queryable database out of the
-OWL file. This database is built into a docker image that is then deployed to
+OWL file. This database is built into a Docker image that is then deployed to
 the production environment. To change the OWL file, users must be able to
 specify which file should be used in the `docker build` process.
 
-Instructions on how to specify an OWL file and releasing the new docker image
+Instructions on how to specify an OWL file and releasing the new Docker image
 can be found [here](./UPDATING_DINTO.md)
 
 ## Load Selected Ontology - Complete
